@@ -20,8 +20,7 @@ public class LocationModel {
         String name = jsonObject.getString(TAG_NAME);
         String url = jsonObject.getString(TAG_URL);
 
-        LocationModel location = new LocationModel(name, url);
-        return location;
+        return new LocationModel(name, url);
     }
 
     public String getName() {

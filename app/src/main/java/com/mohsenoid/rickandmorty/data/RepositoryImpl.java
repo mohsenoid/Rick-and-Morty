@@ -15,13 +15,15 @@ public class RepositoryImpl implements Repository {
 
     private Datastore datastore;
     private ApiClient apiClient;
-    private TaskExecutor taskExecutor;
+    private TaskExecutor ioTaskExecutor;
+    private TaskExecutor mainTaskExecutor;
     private ConfigProvider configProvider;
 
-    public RepositoryImpl(Datastore datastore, ApiClient apiClient, TaskExecutor taskExecutor, ConfigProvider configProvider) {
+    public RepositoryImpl(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
         this.datastore = datastore;
         this.apiClient = apiClient;
-        this.taskExecutor = taskExecutor;
+        this.ioTaskExecutor = ioTaskExecutor;
+        this.mainTaskExecutor = mainTaskExecutor;
         this.configProvider = configProvider;
     }
 
@@ -35,7 +37,7 @@ public class RepositoryImpl implements Repository {
     }
 
     private void queryEpisodesApi(int page, DataCallback<List<EpisodeModel>> callback) {
-        taskExecutor.execute(() -> {
+        ioTaskExecutor.execute(() -> {
             try {
                 List<EpisodeModel> episodes = apiClient.getEpisodes(page);
 
@@ -43,7 +45,9 @@ public class RepositoryImpl implements Repository {
                     datastore.insertEpisode(episode);
                 }
 
-                if (callback != null) callback.onSuccess(episodes);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onSuccess(episodes);
+                });
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -53,62 +57,72 @@ public class RepositoryImpl implements Repository {
     }
 
     private void queryEpisodesDb(int page, DataCallback<List<EpisodeModel>> callback) {
-        taskExecutor.execute(() -> {
+        ioTaskExecutor.execute(() -> {
             try {
                 List<EpisodeModel> episodes = datastore.queryAllEpisodes(page);
 
-                if (episodes.size() > 0) {
-                    if (callback != null) callback.onSuccess(episodes);
-                } else {
-                    if (callback != null) callback.onError(new EndOfListException());
-                }
+                mainTaskExecutor.execute(() -> {
+                    if (episodes.size() > 0) {
+                        if (callback != null) callback.onSuccess(episodes);
+                    } else {
+                        if (callback != null) callback.onError(new EndOfListException());
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
-                if (callback != null) callback.onError(e);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onError(e);
+                });
             }
         });
     }
 
     @Override
-    public void queryCharacters(int page, DataCallback<List<CharacterModel>> callback) {
+    public void queryCharacters(List<Integer> characterIds, DataCallback<List<CharacterModel>> callback) {
         if (configProvider.isOnline()) {
-            queryCharactersApi(page, callback);
+            queryCharactersApi(characterIds, callback);
         } else {
-            queryCharactersDb(page, callback);
+            queryCharactersDb(characterIds, callback);
         }
     }
 
-    private void queryCharactersApi(int page, DataCallback<List<CharacterModel>> callback) {
-        taskExecutor.execute(() -> {
+    private void queryCharactersApi(List<Integer> characterIds, DataCallback<List<CharacterModel>> callback) {
+        ioTaskExecutor.execute(() -> {
             try {
-                List<CharacterModel> characters = apiClient.getCharacters(page);
+                List<CharacterModel> characters = apiClient.getCharacters(characterIds);
 
                 for (CharacterModel character : characters) {
                     datastore.insertCharacter(character);
                 }
 
-                if (callback != null) callback.onSuccess(characters);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onSuccess(characters);
+                });
             } catch (Exception e) {
                 e.printStackTrace();
 
-                queryCharactersDb(page, callback);
+                queryCharactersDb(characterIds, callback);
             }
         });
     }
 
-    private void queryCharactersDb(int page, DataCallback<List<CharacterModel>> callback) {
-        taskExecutor.execute(() -> {
+    private void queryCharactersDb(List<Integer> characterIds, DataCallback<List<CharacterModel>> callback) {
+        ioTaskExecutor.execute(() -> {
             try {
-                List<CharacterModel> characters = datastore.queryAllCharacters(page);
+                List<CharacterModel> characters = datastore.queryAllCharacters(characterIds);
 
-                if (characters.size() > 0) {
-                    if (callback != null) callback.onSuccess(characters);
-                } else {
-                    if (callback != null) callback.onError(new EndOfListException());
-                }
+                mainTaskExecutor.execute(() -> {
+                    if (characters.size() > 0) {
+                        if (callback != null) callback.onSuccess(characters);
+                    } else {
+                        if (callback != null) callback.onError(new EndOfListException());
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
-                if (callback != null) callback.onError(e);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onError(e);
+                });
             }
         });
     }
@@ -123,13 +137,15 @@ public class RepositoryImpl implements Repository {
     }
 
     private void queryCharacterDetailsApi(int characterId, DataCallback<CharacterModel> callback) {
-        taskExecutor.execute(() -> {
+        ioTaskExecutor.execute(() -> {
             try {
                 CharacterModel character = apiClient.getCharacterDetails(characterId);
 
                 datastore.insertCharacter(character);
 
-                if (callback != null) callback.onSuccess(character);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onSuccess(character);
+                });
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -139,18 +155,22 @@ public class RepositoryImpl implements Repository {
     }
 
     private void queryCharacterDetailsDb(int characterId, DataCallback<CharacterModel> callback) {
-        taskExecutor.execute(() -> {
+        ioTaskExecutor.execute(() -> {
             try {
                 CharacterModel character = datastore.queryCharacter(characterId);
 
-                if (character != null) {
-                    if (callback != null) callback.onSuccess(character);
-                } else {
-                    if (callback != null) callback.onError(new NoOfflineDataException());
-                }
+                mainTaskExecutor.execute(() -> {
+                    if (character != null) {
+                        if (callback != null) callback.onSuccess(character);
+                    } else {
+                        if (callback != null) callback.onError(new NoOfflineDataException());
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
-                if (callback != null) callback.onError(e);
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onError(e);
+                });
             }
         });
     }

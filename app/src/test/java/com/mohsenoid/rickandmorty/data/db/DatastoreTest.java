@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -73,32 +74,33 @@ public class DatastoreTest {
     public void testInsertCharacter() {
         // GIVEN
         CharacterModel character = CharacterDataFactory.makeCharacter();
+        List<Integer> ids = Collections.singletonList(character.getId());
 
         // WHEN
         datastore.insertCharacter(character);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters(1);
+        List<CharacterModel> result = datastore.queryAllCharacters(ids);
         assertTrue(result.contains(character));
     }
 
     @Test
     public void testUpdateCharacter() {
         // GIVEN
-        int characterId = DataFactory.randomInt();
-
         CharacterModel oldCharacter = CharacterDataFactory.makeCharacter();
-        oldCharacter.setId(characterId);
+        Integer characterId = oldCharacter.getId();
 
         CharacterModel updatedCharacter = CharacterDataFactory.makeCharacter();
         updatedCharacter.setId(characterId);
+
+        List<Integer> ids = Collections.singletonList(characterId);
 
         // WHEN
         datastore.insertCharacter(oldCharacter);
         datastore.insertCharacter(updatedCharacter);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters(1);
+        List<CharacterModel> result = datastore.queryAllCharacters(ids);
         assertFalse(result.contains(oldCharacter));
         assertTrue(result.contains(updatedCharacter));
     }

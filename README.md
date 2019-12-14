@@ -3,4 +3,5 @@ This repository contains GuestLogix assignment Android application.
 
 
 ## References
+Endless RecyclerView: [@nesquena](https://gist.github.com/nesquena/d09dc68ff07e845cc622)
 App Launcher Icon Copyright: [freepngimg.com](http://freepngimg.com)

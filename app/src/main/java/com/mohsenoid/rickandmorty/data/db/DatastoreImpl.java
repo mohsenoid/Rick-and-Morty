@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.mohsenoid.rickandmorty.data.Serializer;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.model.LocationModel;
@@ -175,10 +176,13 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
     }
 
     @Override
-    synchronized public List<CharacterModel> queryAllCharacters(int page) {
-        List<CharacterModel> characters = new ArrayList<>();
+    synchronized public List<CharacterModel> queryAllCharacters(List<Integer> characterIds) {
+        if (characterIds == null) return null;
 
-        String sql = String.format("SELECT * FROM %s LIMIT %s OFFSET %s", DatastoreConstants.Character.TABLE_NAME, DatastoreConstants.PAGE_SIZE, calculatePageOffset(page));
+        List<CharacterModel> characters = new ArrayList<>();
+        if (characterIds.size() == 0) return characters;
+
+        String sql = String.format("SELECT * FROM %s WHERE %s IN (%s)", DatastoreConstants.Character.TABLE_NAME, DatastoreConstants.Character.ID, Serializer.serializeIntegerList(characterIds));
         try (Cursor cursor = db.rawQuery(sql, null)) {
             while (cursor.moveToNext()) {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ID));

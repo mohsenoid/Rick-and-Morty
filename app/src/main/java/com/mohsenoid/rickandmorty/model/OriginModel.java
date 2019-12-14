@@ -20,8 +20,7 @@ public class OriginModel {
         String name = jsonObject.getString(TAG_NAME);
         String url = jsonObject.getString(TAG_URL);
 
-        OriginModel origin = new OriginModel(name, url);
-        return origin;
+        return new OriginModel(name, url);
     }
 
     public String getName() {

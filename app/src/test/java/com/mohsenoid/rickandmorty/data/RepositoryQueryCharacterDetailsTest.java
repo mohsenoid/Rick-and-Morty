@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 public class RepositoryQueryCharacterDetailsTest extends RepositoryTest {
 
     @Test
-    public void testIFQueryCharacterDetailsCallsApiClientMethodWhenInOnline() throws Exception {
+    public void testIFQueryCharacterDetailsCallsApiClientMethodWhenIsOnline() throws Exception {
         // GIVEN
         stubConfigProviderIsOnline(true);
         int page = 1;
@@ -22,7 +22,7 @@ public class RepositoryQueryCharacterDetailsTest extends RepositoryTest {
     }
 
     @Test
-    public void testIFQueryCharacterDetailsCallsApiClientMethodWhenInOffline() throws Exception {
+    public void testIFQueryCharacterDetailsCallsApiClientMethodWhenIsOffline() throws Exception {
         // GIVEN
         stubConfigProviderIsOnline(false);
         int page = 1;

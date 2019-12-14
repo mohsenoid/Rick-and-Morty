@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.data.service;
 
+import com.mohsenoid.rickandmorty.data.Serializer;
 import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -48,11 +50,15 @@ public class ApiClientTest {
     @Test
     public void testGetCharacters() throws Exception {
         // GIVEN
-        stubNetworkRequestData(ApiConstants.CHARACTER_ENDPOINT, ApiResponseFactory.Characters.CHARACTERS_JSON);
+        List<Integer> characterIds = Collections.singletonList(1);
+
+        String characterEndpoint = ApiConstants.CHARACTER_ENDPOINT + "[" + Serializer.serializeIntegerList(characterIds) + "]";
+        stubNetworkRequestData(characterEndpoint, ApiResponseFactory.Characters.CHARACTERS_JSON);
+
         List<CharacterModel> expected = ApiResponseFactory.Characters.characterssResponse();
 
         // WHEN
-        List<CharacterModel> actual = apiClient.getCharacters(1);
+        List<CharacterModel> actual = apiClient.getCharacters(characterIds);
 
         // THEN
         assertEquals(expected, actual);

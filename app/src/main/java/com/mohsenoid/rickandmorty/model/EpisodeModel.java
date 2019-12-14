@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.model;
 
-import com.mohsenoid.rickandmorty.utils.Serializer;
+import com.mohsenoid.rickandmorty.data.Serializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +19,8 @@ public class EpisodeModel implements Serializable {
     private static final String TAG_URL = "url";
     private static final String TAG_CREATED = "created";
     private static final String TAG_CHARACTERS = "characters";
+
+    private static final String SEPARATOR = "/";
 
     private Integer id;
     private String name;
@@ -60,7 +62,7 @@ public class EpisodeModel implements Serializable {
         return episodes;
     }
 
-    public static EpisodeModel fromJson(JSONObject jsonObject) throws JSONException {
+    private static EpisodeModel fromJson(JSONObject jsonObject) throws JSONException {
         int id = jsonObject.getInt(TAG_ID);
         String name = jsonObject.getString(TAG_NAME);
         String airDate = jsonObject.getString(TAG_AIR_DATE);
@@ -75,8 +77,7 @@ public class EpisodeModel implements Serializable {
             characters.add(character);
         }
 
-        EpisodeModel newEpisode = new EpisodeModel(id, name, airDate, episode, characters, url, created);
-        return newEpisode;
+        return new EpisodeModel(id, name, airDate, episode, characters, url, created);
     }
 
     public Integer getId() {
@@ -117,6 +118,17 @@ public class EpisodeModel implements Serializable {
 
     public void setCharacters(List<String> characters) {
         this.characters = characters;
+    }
+
+    public List<Integer> getCharacterIds() {
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        for (String url : characters) {
+            String[] parts = url.split(SEPARATOR);
+            String id = parts[parts.length - 1];
+            ids.add(Integer.parseInt(id));
+        }
+        return ids;
     }
 
     public String getSerializedCharacters() {

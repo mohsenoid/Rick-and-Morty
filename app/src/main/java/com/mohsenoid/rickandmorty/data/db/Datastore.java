@@ -13,7 +13,7 @@ public interface Datastore {
 
     void insertCharacter(CharacterModel character);
 
-    List<CharacterModel> queryAllCharacters(int page);
+    List<CharacterModel> queryAllCharacters(List<Integer> characterIds);
 
     CharacterModel queryCharacter(int characterId);
 }

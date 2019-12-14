@@ -1,4 +1,6 @@
-package com.mohsenoid.rickandmorty.utils;
+package com.mohsenoid.rickandmorty.data.db;
+
+import com.mohsenoid.rickandmorty.data.Serializer;
 
 import org.junit.Test;
 
@@ -6,8 +8,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SerializerTest {
+
+    @Test
+    public void testSerializeIntegerArray() {
+        // GIVEN
+        List<Integer> input = new ArrayList<>();
+        input.add(2);
+        input.add(8);
+        input.add(10);
+
+        String expected = "2,8,10";
+
+        // WHEN
+        String actual = Serializer.serializeIntegerList(input);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSerializeEmptyIntegerArray() {
+        // GIVEN
+        List<Integer> input = new ArrayList<>();
+        String expected = "";
+
+        // WHEN
+        String actual = Serializer.serializeIntegerList(input);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testSerializeNullIntegerArray() {
+        assertNull(Serializer.serializeIntegerList(null));
+    }
 
     @Test
     public void testSerializeStringArray() {
@@ -17,7 +55,7 @@ public class SerializerTest {
         input.add("BC");
         input.add("DE");
 
-        String expected = "A" + Serializer.SEPARATOR + "BC" + Serializer.SEPARATOR + "DE" + Serializer.SEPARATOR;
+        String expected = "A,BC,DE";
 
         // WHEN
         String actual = Serializer.serializeStringList(input);
@@ -40,9 +78,14 @@ public class SerializerTest {
     }
 
     @Test
+    public void testSerializeNullStringArray() {
+        assertNull(Serializer.serializeStringList(null));
+    }
+
+    @Test
     public void testDeserializeStringArray() {
         // GIVEN
-        String input = "A" + Serializer.SEPARATOR + "BC" + Serializer.SEPARATOR + "DE" + Serializer.SEPARATOR;
+        String input = "A,BC,DE";
 
         List<String> expected = new ArrayList<>();
         expected.add("A");
@@ -67,5 +110,10 @@ public class SerializerTest {
 
         // THEN
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testDeserializeNullStringArray() {
+        assertNull(Serializer.deserializeStringList(null));
     }
 }

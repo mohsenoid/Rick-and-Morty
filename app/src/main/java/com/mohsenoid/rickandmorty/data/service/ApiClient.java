@@ -12,7 +12,7 @@ public interface ApiClient {
 
     List<EpisodeModel> getEpisodes(int page) throws IOException, JSONException;
 
-    List<CharacterModel> getCharacters(int page) throws IOException, JSONException;
+    List<CharacterModel> getCharacters(List<Integer> characterIds) throws IOException, JSONException;
 
     CharacterModel getCharacterDetails(int characterId) throws IOException, JSONException;
 }

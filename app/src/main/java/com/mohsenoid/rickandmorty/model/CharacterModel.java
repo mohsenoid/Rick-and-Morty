@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.model;
 
-import com.mohsenoid.rickandmorty.utils.Serializer;
+import com.mohsenoid.rickandmorty.data.Serializer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,7 +84,7 @@ public class CharacterModel {
         return fromJson(jsonObject);
     }
 
-    public static CharacterModel fromJson(JSONObject jsonObject) throws JSONException {
+    private static CharacterModel fromJson(JSONObject jsonObject) throws JSONException {
         int id = jsonObject.getInt(TAG_ID);
         String name = jsonObject.getString(TAG_NAME);
         String status = jsonObject.getString(TAG_STATUS);
@@ -104,8 +104,7 @@ public class CharacterModel {
             episodes.add(episode);
         }
 
-        CharacterModel character = new CharacterModel(id, name, status, species, type, gender, origin, location, image, episodes, url, created);
-        return character;
+        return new CharacterModel(id, name, status, species, type, gender, origin, location, image, episodes, url, created);
     }
 
     public Integer getId() {

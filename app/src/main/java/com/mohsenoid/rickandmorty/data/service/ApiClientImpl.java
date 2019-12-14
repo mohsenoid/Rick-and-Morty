@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.data.service;
 
+import com.mohsenoid.rickandmorty.data.Serializer;
 import com.mohsenoid.rickandmorty.data.service.model.CharactersResponse;
 import com.mohsenoid.rickandmorty.data.service.model.EpisodesResponse;
 import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
@@ -32,11 +33,12 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
-    public List<CharacterModel> getCharacters(int page) throws IOException, JSONException {
-        ArrayList<NetworkHelper.Param> params = new ArrayList<>();
-        params.add(new NetworkHelper.Param(ApiConstants.PARAM_KEY_PAGE, page + ""));
+    public List<CharacterModel> getCharacters(List<Integer> characterIds) throws IOException, JSONException {
+        if (characterIds == null || characterIds.size() == 0) return null;
 
-        String jsonResponse = networkHelper.requestData(ApiConstants.CHARACTER_ENDPOINT, params);
+        String characterEndpoint = ApiConstants.CHARACTER_ENDPOINT + "[" + Serializer.serializeIntegerList(characterIds) + "]";
+
+        String jsonResponse = networkHelper.requestData(characterEndpoint, null);
         CharactersResponse charactersResponse = CharactersResponse.fromJson(jsonResponse);
 
         return charactersResponse.getResults();
