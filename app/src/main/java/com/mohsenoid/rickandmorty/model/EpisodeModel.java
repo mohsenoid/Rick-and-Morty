@@ -2,10 +2,24 @@ package com.mohsenoid.rickandmorty.model;
 
 import com.mohsenoid.rickandmorty.utils.Serializer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EpisodeModel implements Serializable {
+
+    private static final String TAG_ID = "id";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_AIR_DATE = "air_date";
+    private static final String TAG_EPISODE = "episode";
+    private static final String TAG_URL = "url";
+    private static final String TAG_CREATED = "created";
+    private static final String TAG_CHARACTERS = "characters";
+
     private Integer id;
     private String name;
     private String airDate;
@@ -32,6 +46,37 @@ public class EpisodeModel implements Serializable {
         this.characters = characters;
         this.url = url;
         this.created = created;
+    }
+
+    public static List<EpisodeModel> fromJson(JSONArray jsonArray) throws JSONException {
+        List<EpisodeModel> episodes = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject episodeJsonObject = jsonArray.getJSONObject(i);
+            EpisodeModel episode = EpisodeModel.fromJson(episodeJsonObject);
+            episodes.add(episode);
+        }
+
+        return episodes;
+    }
+
+    public static EpisodeModel fromJson(JSONObject jsonObject) throws JSONException {
+        int id = jsonObject.getInt(TAG_ID);
+        String name = jsonObject.getString(TAG_NAME);
+        String airDate = jsonObject.getString(TAG_AIR_DATE);
+        String episode = jsonObject.getString(TAG_EPISODE);
+        String url = jsonObject.getString(TAG_URL);
+        String created = jsonObject.getString(TAG_CREATED);
+
+        JSONArray charactersJsonArray = jsonObject.getJSONArray(TAG_CHARACTERS);
+        List<String> characters = new ArrayList<>();
+        for (int i = 0; i < charactersJsonArray.length(); i++) {
+            String character = charactersJsonArray.getString(i);
+            characters.add(character);
+        }
+
+        EpisodeModel newEpisode = new EpisodeModel(id, name, airDate, episode, characters, url, created);
+        return newEpisode;
     }
 
     public Integer getId() {

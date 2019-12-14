@@ -39,8 +39,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.robolectric:robolectric:$robolectricVersion"
 
     // Android Jetpack
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -49,4 +47,10 @@ dependencies {
     testImplementation "androidx.test:core:$androidxTestCoreVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxTestExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspressoVersion"
+
+    // Test
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.json:json:$jsonVersion"
 }

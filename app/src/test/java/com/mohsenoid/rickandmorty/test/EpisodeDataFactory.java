@@ -21,7 +21,7 @@ public class EpisodeDataFactory {
         );
     }
 
-    public static List<EpisodeModel> makeEpisodeList(int count) {
+    public static List<EpisodeModel> makeEpisodesList(int count) {
         List<EpisodeModel> episodes = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {

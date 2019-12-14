@@ -16,5 +16,7 @@ ext {
 
     // Test
     junitVersion = '4.12'
+    mockitoVersion = '2.27.0'
     robolectricVersion = '4.3'
+    jsonVersion = '20190722'
 }
