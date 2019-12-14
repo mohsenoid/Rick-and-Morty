@@ -1,4 +1,3 @@
-  
 name: Android CI
 
 on: [push]
@@ -19,3 +18,11 @@ jobs:
 
       - name: Test and Build
         run: ./gradlew build
+
+      - name: Generate Code-Coverage report
+        run: ./gradlew jacocoReport
+
+      - name: Push Code-Coverage Report to codecov.io
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash)
