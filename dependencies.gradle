@@ -5,6 +5,7 @@ ext {
 
     // Project
     toolsBuildGradleVersion = '3.5.3'
+    jacocoVersion = '0.8.3'
 
     // Android Jetpack
     androidxAppCompatVersion = '1.1.0'

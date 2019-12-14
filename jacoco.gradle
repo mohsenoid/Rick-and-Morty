@@ -1,0 +1,47 @@
+apply from: "$rootDir/dependencies.gradle"
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "$jacocoVersion"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+tasks.create(name: "jacocoReport", type: JacocoReport, dependsOn: ["test", "testDebugUnitTest", "createDebugCoverageReport"]) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for build."
+
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
+
+    def excludes = [
+            '**/*_Provide*/**',
+            '**/*_Factory*/**',
+            '**/*_MembersInjector.class',
+            '**/*Dagger*',
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*'
+    ]
+    def javaClasses = fileTree(dir: "$project.buildDir/intermediates/javac/debug", excludes: excludes)
+    classDirectories = files([javaClasses])
+
+    sourceDirectories = files([
+            "$project.projectDir/src/main/java",
+            "$project.projectDir/src/debug/java",
+    ])
+
+    def includes = [
+            'jacoco/testDebugUnitTest.exec',
+            'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'
+    ]
+    executionData = fileTree(dir: project.buildDir, includes: includes)
+}
