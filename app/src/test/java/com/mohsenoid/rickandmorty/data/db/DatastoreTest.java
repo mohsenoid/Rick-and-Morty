@@ -44,7 +44,7 @@ public class DatastoreTest {
         datastore.insertEpisode(episode);
 
         // THEN
-        List<EpisodeModel> result = datastore.queryAllEpisodes();
+        List<EpisodeModel> result = datastore.queryAllEpisodes(1);
         assertTrue(result.contains(episode));
     }
 
@@ -64,7 +64,7 @@ public class DatastoreTest {
         datastore.insertEpisode(updatedEpisode);
 
         // THEN
-        List<EpisodeModel> result = datastore.queryAllEpisodes();
+        List<EpisodeModel> result = datastore.queryAllEpisodes(1);
         assertFalse(result.contains(oldEpisode));
         assertTrue(result.contains(updatedEpisode));
     }
@@ -78,7 +78,7 @@ public class DatastoreTest {
         datastore.insertCharacter(character);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters();
+        List<CharacterModel> result = datastore.queryAllCharacters(1);
         assertTrue(result.contains(character));
     }
 
@@ -98,7 +98,7 @@ public class DatastoreTest {
         datastore.insertCharacter(updatedCharacter);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters();
+        List<CharacterModel> result = datastore.queryAllCharacters(1);
         assertFalse(result.contains(oldCharacter));
         assertTrue(result.contains(updatedCharacter));
     }

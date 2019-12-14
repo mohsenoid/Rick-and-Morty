@@ -11,7 +11,7 @@ public class NetworkHelperImpl implements NetworkHelper {
 
     private String baseUrl;
 
-    NetworkHelperImpl(String baseUrl) {
+    public NetworkHelperImpl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 

@@ -9,11 +9,11 @@ public interface Datastore {
 
     void insertEpisode(EpisodeModel episode);
 
-    List<EpisodeModel> queryAllEpisodes();
+    List<EpisodeModel> queryAllEpisodes(int page);
 
     void insertCharacter(CharacterModel character);
 
-    List<CharacterModel> queryAllCharacters();
+    List<CharacterModel> queryAllCharacters(int page);
 
     CharacterModel queryCharacter(int characterId);
 }

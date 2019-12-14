@@ -184,12 +184,12 @@ public class CharacterModel {
         return episodes;
     }
 
-    public String getSerializedEpisodes() {
-        return Serializer.serializeStringList(this.episodes);
-    }
-
     public void setEpisodes(List<String> episode) {
         this.episodes = episode;
+    }
+
+    public String getSerializedEpisodes() {
+        return Serializer.serializeStringList(this.episodes);
     }
 
     public String getUrl() {

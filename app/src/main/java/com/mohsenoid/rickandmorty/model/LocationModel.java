@@ -16,6 +16,14 @@ public class LocationModel {
         this.url = url;
     }
 
+    static LocationModel fromJson(JSONObject jsonObject) throws JSONException {
+        String name = jsonObject.getString(TAG_NAME);
+        String url = jsonObject.getString(TAG_URL);
+
+        LocationModel location = new LocationModel(name, url);
+        return location;
+    }
+
     public String getName() {
         return name;
     }
@@ -30,14 +38,6 @@ public class LocationModel {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    static LocationModel fromJson(JSONObject jsonObject) throws JSONException {
-        String name = jsonObject.getString(TAG_NAME);
-        String url = jsonObject.getString(TAG_URL);
-
-        LocationModel location = new LocationModel(name, url);
-        return location;
     }
 
     @Override

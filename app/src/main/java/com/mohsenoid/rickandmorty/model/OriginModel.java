@@ -16,6 +16,14 @@ public class OriginModel {
         this.url = url;
     }
 
+    static OriginModel fromJson(JSONObject jsonObject) throws JSONException {
+        String name = jsonObject.getString(TAG_NAME);
+        String url = jsonObject.getString(TAG_URL);
+
+        OriginModel origin = new OriginModel(name, url);
+        return origin;
+    }
+
     public String getName() {
         return name;
     }
@@ -30,14 +38,6 @@ public class OriginModel {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    static OriginModel fromJson(JSONObject jsonObject) throws JSONException {
-        String name  = jsonObject.getString(TAG_NAME);
-        String url  = jsonObject.getString(TAG_URL);
-
-        OriginModel origin = new OriginModel(name, url);
-        return origin;
     }
 
     @Override

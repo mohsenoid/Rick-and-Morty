@@ -33,7 +33,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testGetEpisodes() throws IOException {
+    public void testGetEpisodes() throws Exception {
         // GIVEN
         stubNetworkRequestData(ApiConstants.EPISODE_ENDPOINT, ApiResponseFactory.Episode.EPISODES_JSON);
         List<EpisodeModel> expected = ApiResponseFactory.Episode.episodesResponse();
@@ -46,7 +46,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testGetCharacters() throws IOException {
+    public void testGetCharacters() throws Exception {
         // GIVEN
         stubNetworkRequestData(ApiConstants.CHARACTER_ENDPOINT, ApiResponseFactory.Characters.CHARACTERS_JSON);
         List<CharacterModel> expected = ApiResponseFactory.Characters.characterssResponse();
@@ -59,7 +59,7 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testGetCharacterDetails() throws IOException {
+    public void testGetCharacterDetails() throws Exception {
         // GIVEN
         int characterId = 1;
         stubNetworkRequestData(ApiConstants.CHARACTER_ENDPOINT + characterId, ApiResponseFactory.CharacterDetails.CHARACTER_DETAILS_JSON);
@@ -72,7 +72,7 @@ public class ApiClientTest {
         assertEquals(expected, actual);
     }
 
-    void stubNetworkRequestData(String episodeEndpoint, String response) throws IOException {
+    private void stubNetworkRequestData(String episodeEndpoint, String response) throws IOException {
         when(helper.requestData(eq(episodeEndpoint), any()))
                 .thenReturn(response);
     }

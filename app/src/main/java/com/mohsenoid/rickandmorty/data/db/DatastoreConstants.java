@@ -5,6 +5,8 @@ class DatastoreConstants {
     static final String DATABASE_NAME = "rickandmorty.db";
     static final int DATABASE_VERSION = 1;
 
+    public static int PAGE_SIZE = 20;
+
     private DatastoreConstants() { /* this will prevent making a new object of this type */}
 
     class Episode {
