@@ -5,7 +5,9 @@ import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
+import com.mohsenoid.rickandmorty.test.CharacterDataFactory;
 import com.mohsenoid.rickandmorty.test.DataFactory;
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory;
 
@@ -17,6 +19,7 @@ import org.robolectric.annotation.Config;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -64,5 +67,55 @@ public class DatastoreTest {
         List<EpisodeModel> result = datastore.queryAllEpisodes();
         assertFalse(result.contains(oldEpisode));
         assertTrue(result.contains(updatedEpisode));
+    }
+
+    @Test
+    public void testInsertCharacter() {
+        // GIVEN
+        CharacterModel character = CharacterDataFactory.makeCharacter();
+
+        // WHEN
+        datastore.insertCharacter(character);
+
+        // THEN
+        List<CharacterModel> result = datastore.queryAllCharacters();
+        assertTrue(result.contains(character));
+    }
+
+    @Test
+    public void testUpdateCharacter() {
+        // GIVEN
+        int characterId = DataFactory.randomInt();
+
+        CharacterModel oldCharacter = CharacterDataFactory.makeCharacter();
+        oldCharacter.setId(characterId);
+
+        CharacterModel updatedCharacter = CharacterDataFactory.makeCharacter();
+        updatedCharacter.setId(characterId);
+
+        // WHEN
+        datastore.insertCharacter(oldCharacter);
+        datastore.insertCharacter(updatedCharacter);
+
+        // THEN
+        List<CharacterModel> result = datastore.queryAllCharacters();
+        assertFalse(result.contains(oldCharacter));
+        assertTrue(result.contains(updatedCharacter));
+    }
+
+    @Test
+    public void testQueryCharacter() {
+        // GIVEN
+        int characterId = DataFactory.randomInt();
+
+        CharacterModel expected = CharacterDataFactory.makeCharacter();
+        expected.setId(characterId);
+
+        // WHEN
+        datastore.insertCharacter(expected);
+
+        // THEN
+        CharacterModel actual = datastore.queryCharacter(characterId);
+        assertEquals(expected, actual);
     }
 }

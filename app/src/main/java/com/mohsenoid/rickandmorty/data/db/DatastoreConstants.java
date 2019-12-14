@@ -17,4 +17,22 @@ class DatastoreConstants {
         static final String URL = "url";
         static final String CREATED = "created";
     }
+
+    class Character {
+        static final String TABLE_NAME = "characters";
+        static final String ID = "_id";
+        static final String NAME = "name";
+        static final String STATUS = "status";
+        static final String SPECIES = "species";
+        static final String TYPE = "type";
+        static final String GENDER = "gender";
+        static final String ORIGIN_NAME = "origin_name";
+        static final String ORIGIN_URL = "origin_url";
+        static final String LOCATION_NAME = "location_name";
+        static final String LOCATION_URL = "location_url";
+        static final String IMAGE = "image";
+        static final String EPISODE = "episode";
+        static final String URL = "url";
+        static final String CREATED = "created";
+    }
 }
