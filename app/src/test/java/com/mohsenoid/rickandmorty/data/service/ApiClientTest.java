@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.data.service;
 
 import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
+import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.test.ApiResponseFactory;
 
@@ -31,21 +32,48 @@ public class ApiClientTest {
         apiClient = new ApiClientImpl(helper);
     }
 
-    void stubNetworkRequestData(String response) throws IOException {
-        when(helper.requestData(eq(ApiConstants.EPISODE_ENDPOINT), any()))
-                .thenReturn(response);
-    }
-
     @Test
     public void testGetEpisodes() throws IOException {
         // GIVEN
-        stubNetworkRequestData(ApiResponseFactory.EPISODES_JSON);
-        List<EpisodeModel> expected = ApiResponseFactory.episodesResponse();
+        stubNetworkRequestData(ApiConstants.EPISODE_ENDPOINT, ApiResponseFactory.Episode.EPISODES_JSON);
+        List<EpisodeModel> expected = ApiResponseFactory.Episode.episodesResponse();
 
         // WHEN
         List<EpisodeModel> actual = apiClient.getEpisodes(1);
 
         // THEN
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetCharacters() throws IOException {
+        // GIVEN
+        stubNetworkRequestData(ApiConstants.CHARACTER_ENDPOINT, ApiResponseFactory.Characters.CHARACTERS_JSON);
+        List<CharacterModel> expected = ApiResponseFactory.Characters.characterssResponse();
+
+        // WHEN
+        List<CharacterModel> actual = apiClient.getCharacters(1);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testGetCharacterDetails() throws IOException {
+        // GIVEN
+        int characterId = 1;
+        stubNetworkRequestData(ApiConstants.CHARACTER_ENDPOINT + characterId, ApiResponseFactory.CharacterDetails.CHARACTER_DETAILS_JSON);
+        CharacterModel expected = ApiResponseFactory.CharacterDetails.characterResponse();
+
+        // WHEN
+        CharacterModel actual = apiClient.getCharacterDetails(characterId);
+
+        // THEN
+        assertEquals(expected, actual);
+    }
+
+    void stubNetworkRequestData(String episodeEndpoint, String response) throws IOException {
+        when(helper.requestData(eq(episodeEndpoint), any()))
+                .thenReturn(response);
     }
 }

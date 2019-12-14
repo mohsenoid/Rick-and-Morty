@@ -1,6 +1,13 @@
 package com.mohsenoid.rickandmorty.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class OriginModel {
+
+    private static final String TAG_NAME = "name";
+    private static final String TAG_URL = "url";
+
     private String name;
     private String url;
 
@@ -23,6 +30,14 @@ public class OriginModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    static OriginModel fromJson(JSONObject jsonObject) throws JSONException {
+        String name  = jsonObject.getString(TAG_NAME);
+        String url  = jsonObject.getString(TAG_URL);
+
+        OriginModel origin = new OriginModel(name, url);
+        return origin;
     }
 
     @Override

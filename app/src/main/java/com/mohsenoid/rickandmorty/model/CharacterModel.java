@@ -2,9 +2,28 @@ package com.mohsenoid.rickandmorty.model;
 
 import com.mohsenoid.rickandmorty.utils.Serializer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterModel {
+
+    private static final String TAG_ID = "id";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_STATUS = "status";
+    private static final String TAG_SPECIES = "species";
+    private static final String TAG_TYPE = "type";
+    private static final String TAG_GENDER = "gender";
+    private static final String TAG_ORIGIN = "origin";
+    private static final String TAG_LOCATION = "location";
+    private static final String TAG_IMAGE = "image";
+    private static final String TAG_EPISODE = "episode";
+    private static final String TAG_URL = "url";
+    private static final String TAG_CREATED = "created";
+
     private Integer id;
     private String name;
     private String status;
@@ -46,6 +65,47 @@ public class CharacterModel {
         this.episodes = episodes;
         this.url = url;
         this.created = created;
+    }
+
+    public static List<CharacterModel> fromJson(JSONArray jsonArray) throws JSONException {
+        List<CharacterModel> characters = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject characterJsonObject = jsonArray.getJSONObject(i);
+            CharacterModel character = CharacterModel.fromJson(characterJsonObject);
+            characters.add(character);
+        }
+
+        return characters;
+    }
+
+    public static CharacterModel fromJson(String json) throws JSONException {
+        JSONObject jsonObject = new JSONObject(json);
+        return fromJson(jsonObject);
+    }
+
+    public static CharacterModel fromJson(JSONObject jsonObject) throws JSONException {
+        int id = jsonObject.getInt(TAG_ID);
+        String name = jsonObject.getString(TAG_NAME);
+        String status = jsonObject.getString(TAG_STATUS);
+        String species = jsonObject.getString(TAG_SPECIES);
+        String type = jsonObject.getString(TAG_TYPE);
+        String gender = jsonObject.getString(TAG_GENDER);
+        OriginModel origin = OriginModel.fromJson(jsonObject.getJSONObject(TAG_ORIGIN));
+        LocationModel location = LocationModel.fromJson(jsonObject.getJSONObject(TAG_LOCATION));
+        String image = jsonObject.getString(TAG_IMAGE);
+        String url = jsonObject.getString(TAG_URL);
+        String created = jsonObject.getString(TAG_CREATED);
+
+        JSONArray episodesJsonArray = jsonObject.getJSONArray(TAG_EPISODE);
+        List<String> episodes = new ArrayList<>();
+        for (int i = 0; i < episodesJsonArray.length(); i++) {
+            String episode = episodesJsonArray.getString(i);
+            episodes.add(episode);
+        }
+
+        CharacterModel character = new CharacterModel(id, name, status, species, type, gender, origin, location, image, episodes, url, created);
+        return character;
     }
 
     public Integer getId() {
