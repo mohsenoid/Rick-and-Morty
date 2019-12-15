@@ -12,11 +12,15 @@ public class CharacterListContract {
 
         void onNoOfflineData();
 
-        void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters);
+        void onCharactersQueryResult(List<CharacterModel> characters);
+
+        void onCharacterKilled(CharacterModel character);
     }
 
     public interface Presenter extends BasePresenter<View> {
 
         void loadCharacters(List<Integer> characterIds);
+
+        void killCharacter(CharacterModel character);
     }
 }

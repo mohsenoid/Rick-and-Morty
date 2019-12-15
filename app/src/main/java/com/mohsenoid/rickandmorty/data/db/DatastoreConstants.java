@@ -36,5 +36,6 @@ class DatastoreConstants {
         static final String EPISODE = "episode";
         static final String URL = "url";
         static final String CREATED = "created";
+        static final String KILLED_BY_USER = "killed_by_user";
     }
 }

@@ -30,6 +30,15 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHold
         this.characters = characters;
     }
 
+    public void updateCharacter(CharacterModel character) {
+        for (int i = 0; i < this.characters.size(); i++) {
+            if (this.characters.get(i).getId().equals(character.getId())) {
+                this.characters.set(i, character);
+                break;
+            }
+        }
+    }
+
     @NonNull
     @Override
     public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,7 +54,11 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHold
         holder.setCharacter(character);
 
         holder.view.setOnClickListener(v -> {
-            if (listener != null) listener.onClick(character);
+            if (listener != null) listener.onCharacterRowClick(character);
+        });
+
+        holder.characterStatus.setOnClickListener(v -> {
+            if (listener != null) listener.onCharacterStatusClick(character);
         });
     }
 
@@ -55,6 +68,9 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHold
     }
 
     public interface ClickListener {
-        void onClick(CharacterModel character);
+
+        void onCharacterRowClick(CharacterModel character);
+
+        void onCharacterStatusClick(CharacterModel character);
     }
 }

@@ -9,7 +9,9 @@
     <string name="character_origin">ORIGIN</string>
     <string name="character_last_location">LAST LOCATION</string>
 
-    <string name="character_details_format">id: %1$d - created %2$s</string>
+    <string name="character_details_format">id: %1$d - created: %2$s</string>
 
     <string name="no_offline_data">No offline data!\nConnect network connection and try again…</string>
+
+    <string name="character_killed_by_user">(Killed)</string>
 </resources>

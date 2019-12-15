@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 public class RepositoryQueryCharactersTest extends RepositoryTest {
 
     @Test
-    public void testIFQueryCharactersCallsApiClientMethodWhenIsOnline() throws Exception {
+    public void testIfQueryCharactersCallsApiClientMethodWhenIsOnline() throws Exception {
         // GIVEN
         stubConfigProviderIsOnline(true);
 
@@ -16,12 +16,12 @@ public class RepositoryQueryCharactersTest extends RepositoryTest {
         repository.queryCharacters(null, null);
 
         // THEN
-        verify(datastore, times(0)).queryAllCharacters(null);
+        verify(datastore, times(1)).queryAllCharacters(null);
         verify(apiClient, times(1)).getCharacters(null);
     }
 
     @Test
-    public void testIFQueryCharactersCallsApiClientMethodWhenIsOffline() throws Exception {
+    public void testIfQueryCharactersCallsApiClientMethodWhenIsOffline() throws Exception {
         // GIVEN
         stubConfigProviderIsOnline(false);
 

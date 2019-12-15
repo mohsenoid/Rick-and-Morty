@@ -17,15 +17,13 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
     public final View view;
 
+    ImageView characterStatus;
+
     private ImageDownloader imageDownloader;
-
     private CharacterModel character;
-
     private ImageView characterImage;
     private ProgressBar characterImageProgress;
     private TextView characterName;
-    private ImageView characterDead;
-    private ImageView characterAlive;
 
     CharacterViewHolder(View view, ImageDownloader imageDownloader) {
         super(view);
@@ -35,8 +33,7 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
         characterImage = view.findViewById(R.id.character_image);
         characterImageProgress = view.findViewById(R.id.character_image_progress);
         characterName = view.findViewById(R.id.character_name);
-        characterDead = view.findViewById(R.id.character_dead);
-        characterAlive = view.findViewById(R.id.character_alive);
+        characterStatus = view.findViewById(R.id.character_status);
     }
 
     public CharacterModel getCharacter() {
@@ -51,11 +48,9 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
         characterName.setText(character.getName());
 
         if (character.isAlive()) {
-            characterAlive.setVisibility(View.VISIBLE);
-            characterDead.setVisibility(View.GONE);
+            characterStatus.setImageResource(R.drawable.ic_alive);
         } else {
-            characterAlive.setVisibility(View.GONE);
-            characterDead.setVisibility(View.VISIBLE);
+            characterStatus.setImageResource(R.drawable.ic_dead);
         }
     }
 }

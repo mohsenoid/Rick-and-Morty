@@ -57,9 +57,7 @@ public class RepositoryImpl implements Repository {
                     datastore.insertEpisode(episode);
                 }
 
-                mainTaskExecutor.execute(() -> {
-                    if (callback != null) callback.onSuccess(episodes);
-                });
+                queryEpisodesDb(page, callback);
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -107,9 +105,7 @@ public class RepositoryImpl implements Repository {
                     datastore.insertCharacter(character);
                 }
 
-                mainTaskExecutor.execute(() -> {
-                    if (callback != null) callback.onSuccess(characters);
-                });
+                queryCharactersDb(characterIds, callback);
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -155,9 +151,7 @@ public class RepositoryImpl implements Repository {
 
                 datastore.insertCharacter(character);
 
-                mainTaskExecutor.execute(() -> {
-                    if (callback != null) callback.onSuccess(character);
-                });
+                queryCharacterDetailsDb(characterId, callback);
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -169,6 +163,29 @@ public class RepositoryImpl implements Repository {
     private void queryCharacterDetailsDb(int characterId, DataCallback<CharacterModel> callback) {
         ioTaskExecutor.execute(() -> {
             try {
+                CharacterModel character = datastore.queryCharacter(characterId);
+
+                mainTaskExecutor.execute(() -> {
+                    if (character != null) {
+                        if (callback != null) callback.onSuccess(character);
+                    } else {
+                        if (callback != null) callback.onError(new NoOfflineDataException());
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                mainTaskExecutor.execute(() -> {
+                    if (callback != null) callback.onError(e);
+                });
+            }
+        });
+    }
+
+    @Override
+    public void killCharacter(int characterId, DataCallback<CharacterModel> callback) {
+        ioTaskExecutor.execute(() -> {
+            try {
+                datastore.killCharacter(characterId);
                 CharacterModel character = datastore.queryCharacter(characterId);
 
                 mainTaskExecutor.execute(() -> {

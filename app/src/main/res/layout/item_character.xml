@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -42,30 +41,14 @@
             android:textAppearance="@style/textAppearanceListItemTitle"
             tools:text="Character Name" />
 
-        <ImageView
-            android:id="@+id/character_dead"
+        <ImageButton
+            android:id="@+id/character_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/characterListStatusBackground"
             android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_dead"
-            android:tint="@color/ic_dead"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/character_alive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_alive"
-            android:tint="@color/ic_alive"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
+            android:src="@drawable/ic_dead" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

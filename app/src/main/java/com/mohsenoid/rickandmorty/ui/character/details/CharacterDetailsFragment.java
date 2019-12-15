@@ -35,6 +35,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     private TextView characterName;
     private TextView characterDetails;
     private TextView characterStatus;
+    private TextView characterKilledByUser;
     private TextView characterSpecies;
     private TextView characterGender;
     private TextView characterOrigin;
@@ -88,6 +89,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
         characterName = view.findViewById(R.id.character_name);
         characterDetails = view.findViewById(R.id.character_details);
         characterStatus = view.findViewById(R.id.character_status);
+        characterKilledByUser = view.findViewById(R.id.character_killed_by_user);
         characterSpecies = view.findViewById(R.id.character_species);
         characterGender = view.findViewById(R.id.character_gender);
         characterOrigin = view.findViewById(R.id.character_origin);
@@ -155,6 +157,13 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
 
         characterName.setText(character.getName());
         characterDetails.setText(getString(R.string.character_details_format, character.getId(), character.getCreated()));
+
+        if (character.getIsKilledByUser()) {
+            characterKilledByUser.setVisibility(View.VISIBLE);
+        } else {
+            characterKilledByUser.setVisibility(View.GONE);
+        }
+
         characterStatus.setText(character.getStatus());
         characterSpecies.setText(character.getSpecies());
         characterGender.setText(character.getGender());

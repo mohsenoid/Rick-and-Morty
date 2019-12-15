@@ -9,10 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.VisibleForTesting;
 
 import com.mohsenoid.rickandmorty.data.Serializer;
+import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.model.LocationModel;
 import com.mohsenoid.rickandmorty.model.OriginModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +63,7 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
     synchronized private void createCharacterTable(SQLiteDatabase db) {
         String sql = String
                 .format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                                "%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT)",
+                                "%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s INTEGER DEFAULT 0)",
                         DatastoreConstants.Character.TABLE_NAME,
                         DatastoreConstants.Character.ID,
                         DatastoreConstants.Character.NAME,
@@ -75,7 +78,8 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
                         DatastoreConstants.Character.IMAGE,
                         DatastoreConstants.Character.EPISODE,
                         DatastoreConstants.Character.URL,
-                        DatastoreConstants.Character.CREATED);
+                        DatastoreConstants.Character.CREATED,
+                        DatastoreConstants.Character.KILLED_BY_USER);
         db.execSQL(sql);
     }
 
@@ -197,24 +201,7 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
         String sql = String.format("SELECT * FROM %s WHERE %s IN (%s)", DatastoreConstants.Character.TABLE_NAME, DatastoreConstants.Character.ID, Serializer.serializeIntegerList(characterIds));
         try (Cursor cursor = db.rawQuery(sql, null)) {
             while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ID));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.NAME));
-                String status = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.STATUS));
-                String species = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.SPECIES));
-                String type = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.TYPE));
-                String gender = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.GENDER));
-                String originName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_NAME));
-                String originUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_URL));
-                String locationName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_NAME));
-                String locationUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_URL));
-                String image = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.IMAGE));
-                String episode = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.EPISODE));
-                String url = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.URL));
-                String created = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.CREATED));
-
-                OriginModel characterOrigin = new OriginModel(originName, originUrl);
-                LocationModel characterLocation = new LocationModel(locationName, locationUrl);
-                CharacterModel newCharacter = new CharacterModel(id, name, status, species, type, gender, characterOrigin, characterLocation, image, episode, url, created);
+                CharacterModel newCharacter = getCursorCharacterDetails(cursor);
                 characters.add(newCharacter);
             }
         }
@@ -232,27 +219,49 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
 
         try (Cursor cursor = getSelectCharacterCursor(characterId)) {
             if (cursor.moveToFirst()) {
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ID));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.NAME));
-                String status = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.STATUS));
-                String species = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.SPECIES));
-                String type = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.TYPE));
-                String gender = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.GENDER));
-                String originName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_NAME));
-                String originUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_URL));
-                String locationName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_NAME));
-                String locationUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_URL));
-                String image = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.IMAGE));
-                String episode = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.EPISODE));
-                String url = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.URL));
-                String created = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.CREATED));
-
-                OriginModel characterOrigin = new OriginModel(originName, originUrl);
-                LocationModel characterLocation = new LocationModel(locationName, locationUrl);
-                character = new CharacterModel(id, name, status, species, type, gender, characterOrigin, characterLocation, image, episode, url, created);
+                character = getCursorCharacterDetails(cursor);
             }
         }
 
         return character;
+    }
+
+    @NotNull
+    private CharacterModel getCursorCharacterDetails(Cursor cursor) {
+        int id = cursor.getInt(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ID));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.NAME));
+        String status = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.STATUS));
+        String species = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.SPECIES));
+        String type = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.TYPE));
+        String gender = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.GENDER));
+        String originName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_NAME));
+        String originUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.ORIGIN_URL));
+        String locationName = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_NAME));
+        String locationUrl = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.LOCATION_URL));
+        String image = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.IMAGE));
+        String episode = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.EPISODE));
+        String url = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.URL));
+        String created = cursor.getString(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.CREATED));
+        boolean isKilledByUser = cursor.getInt(cursor.getColumnIndexOrThrow(DatastoreConstants.Character.KILLED_BY_USER)) == 1;
+
+        OriginModel characterOrigin = new OriginModel(originName, originUrl);
+        LocationModel characterLocation = new LocationModel(locationName, locationUrl);
+
+        return new CharacterModel(id, name, status, species, type, gender, characterOrigin, characterLocation, image, episode, url, created, isKilledByUser);
+    }
+
+    @Override
+    public void killCharacter(int characterId) throws NoOfflineDataException {
+        Cursor selectEpisodeCursor = getSelectCharacterCursor(characterId);
+        if (selectEpisodeCursor.moveToFirst()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatastoreConstants.Character.KILLED_BY_USER, 1);
+
+            String whereClause = DatastoreConstants.Character.ID + "=?";
+            String[] args = {selectEpisodeCursor.getInt(selectEpisodeCursor.getColumnIndexOrThrow(DatastoreConstants.Episode.ID)) + ""};
+            db.update(DatastoreConstants.Character.TABLE_NAME, contentValues, whereClause, args);
+        } else {
+            throw new NoOfflineDataException();
+        }
     }
 }

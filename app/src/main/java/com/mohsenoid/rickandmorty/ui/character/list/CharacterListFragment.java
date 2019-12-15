@@ -131,8 +131,14 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
-    public void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters) {
+    public void onCharactersQueryResult(List<CharacterModel> characters) {
         adapter.setCharacters(characters);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCharacterKilled(CharacterModel character) {
+        adapter.updateCharacter(character);
         adapter.notifyDataSetChanged();
     }
 
@@ -142,8 +148,13 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
-    public void onClick(CharacterModel character) {
+    public void onCharacterRowClick(CharacterModel character) {
         Intent characterDetailsIntent = CharacterDetailsActivity.newIntent(getContext(), character.getId());
         startActivity(characterDetailsIntent);
+    }
+
+    @Override
+    public void onCharacterStatusClick(CharacterModel character) {
+        presenter.killCharacter(character);
     }
 }

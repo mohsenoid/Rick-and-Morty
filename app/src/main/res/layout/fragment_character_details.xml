@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@color/characterTitleBackground"
+                android:background="@color/characterDetailsNameBackground"
                 android:padding="@dimen/keyLine1">
 
                 <LinearLayout
@@ -86,6 +86,17 @@
                 android:gravity="end"
                 android:textAppearance="@style/textAppearanceListItemText"
                 tools:text="Alive" />
+
+            <TextView
+                android:id="@+id/character_killed_by_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="@string/character_killed_by_user"
+                android:textAppearance="@style/textAppearanceListItemText"
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout

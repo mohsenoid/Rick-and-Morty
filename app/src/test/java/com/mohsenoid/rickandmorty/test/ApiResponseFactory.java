@@ -118,7 +118,7 @@ public class ApiResponseFactory {
             List<String> episodes = new ArrayList<>();
             episodes.add(VALUE_EPISODE);
 
-            CharacterModel character = new CharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED);
+            CharacterModel character = new CharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED, false);
 
             return character;
         }

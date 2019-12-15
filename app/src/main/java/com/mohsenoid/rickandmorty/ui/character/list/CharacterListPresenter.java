@@ -15,6 +15,8 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
     private Repository repository;
     private ConfigProvider configProvider;
 
+    private List<Integer> characterIds;
+
     public CharacterListPresenter(Repository repository, ConfigProvider configProvider) {
         this.repository = repository;
         this.configProvider = configProvider;
@@ -33,11 +35,12 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
     @Override
     public void loadCharacters(List<Integer> characterIds) {
         if (view != null) view.showLoading();
+        this.characterIds = characterIds;
 
-        queryCharacters(characterIds);
+        queryCharacters();
     }
 
-    private void queryCharacters(List<Integer> characterIds) {
+    private void queryCharacters() {
         if (!configProvider.isOnline()) {
             if (view != null) view.showOfflineMessage(false);
         }
@@ -47,7 +50,7 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
             @Override
             public void onSuccess(List<CharacterModel> characters) {
                 if (view != null) {
-                    view.onCharactersQueryResult(characterIds, characters);
+                    view.onCharactersQueryResult(characters);
                     view.hideLoading();
                 }
             }
@@ -63,6 +66,24 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
                 } else {
                     if (view != null) view.showMessage(exception.getMessage());
                 }
+            }
+        });
+    }
+
+    @Override
+    public void killCharacter(CharacterModel character) {
+        if (!character.isAlive()) return;
+
+        repository.killCharacter(character.getId(), new DataCallback<CharacterModel>() {
+
+            @Override
+            public void onSuccess(CharacterModel character) {
+                view.onCharacterKilled(character);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                if (view != null) view.showMessage(exception.getMessage());
             }
         });
     }

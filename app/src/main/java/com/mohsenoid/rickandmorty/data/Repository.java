@@ -12,4 +12,6 @@ public interface Repository {
     void queryCharacters(List<Integer> characterIds, DataCallback<List<CharacterModel>> callback);
 
     void queryCharacterDetails(int characterId, DataCallback<CharacterModel> callback);
+
+    void killCharacter(int characterId, DataCallback<CharacterModel> listDataCallback);
 }

@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 @Config(sdk = Build.VERSION_CODES.P)
@@ -80,35 +82,34 @@ public class DatastoreTest {
     public void testInsertCharacter() {
         // GIVEN
         CharacterModel character = CharacterDataFactory.makeCharacter();
-        List<Integer> ids = Collections.singletonList(character.getId());
 
         // WHEN
         datastore.insertCharacter(character);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters(ids);
-        assertTrue(result.contains(character));
+        CharacterModel result = datastore.queryCharacter(character.getId());
+        assertEquals(result, character);
     }
 
     @Test
     public void testUpdateCharacter() {
         // GIVEN
+        Integer characterId = DataFactory.randomInt();
+
         CharacterModel oldCharacter = CharacterDataFactory.makeCharacter();
-        Integer characterId = oldCharacter.getId();
+        oldCharacter.setId(characterId);
 
         CharacterModel updatedCharacter = CharacterDataFactory.makeCharacter();
         updatedCharacter.setId(characterId);
-
-        List<Integer> ids = Collections.singletonList(characterId);
 
         // WHEN
         datastore.insertCharacter(oldCharacter);
         datastore.insertCharacter(updatedCharacter);
 
         // THEN
-        List<CharacterModel> result = datastore.queryAllCharacters(ids);
-        assertFalse(result.contains(oldCharacter));
-        assertTrue(result.contains(updatedCharacter));
+        CharacterModel result = datastore.queryCharacter(characterId);
+        assertNotEquals(result, oldCharacter);
+        assertEquals(result, updatedCharacter);
     }
 
     @Test
@@ -125,5 +126,64 @@ public class DatastoreTest {
         // THEN
         CharacterModel actual = datastore.queryCharacter(characterId);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testQueryAllCharacters() {
+        // GIVEN
+        CharacterModel expected = CharacterDataFactory.makeCharacter();
+        List<Integer> ids = Collections.singletonList(expected.getId());
+
+        // WHEN
+        datastore.insertCharacter(expected);
+
+        // THEN
+        List<CharacterModel> result = datastore.queryAllCharacters(ids);
+        assertTrue(result.contains(expected));
+    }
+
+    @Test
+    public void testAliveCharacterNotKilledByUserIsAlive() {
+        // GIVEN
+        CharacterModel character = CharacterDataFactory.makeCharacter();
+        character.setStatus(CharacterModel.ALIVE);
+
+        // WHEN
+        datastore.insertCharacter(character);
+
+        // THEN
+        CharacterModel result = datastore.queryCharacter(character.getId());
+        assertTrue(result.isAlive());
+    }
+
+    @Test
+    public void testUserCanKillCharacter() throws NoOfflineDataException {
+        // GIVEN
+        CharacterModel character = CharacterDataFactory.makeCharacter();
+        character.setStatus(CharacterModel.ALIVE);
+
+        // WHEN
+        datastore.insertCharacter(character);
+        datastore.killCharacter(character.getId());
+
+        // THEN
+        CharacterModel result = datastore.queryCharacter(character.getId());
+        assertFalse(result.isAlive());
+    }
+
+    @Test
+    public void testCharacterKilledByUserKeepsDeadAfterInsert() throws NoOfflineDataException {
+        // GIVEN
+        CharacterModel character = CharacterDataFactory.makeCharacter();
+        character.setStatus(CharacterModel.ALIVE);
+
+        // WHEN
+        datastore.insertCharacter(character);
+        datastore.killCharacter(character.getId());
+        datastore.insertCharacter(character);
+
+        // THEN
+        CharacterModel result = datastore.queryCharacter(character.getId());
+        assertFalse(result.isAlive());
     }
 }

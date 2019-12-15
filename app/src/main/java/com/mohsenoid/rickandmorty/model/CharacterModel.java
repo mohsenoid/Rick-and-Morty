@@ -11,6 +11,8 @@ import java.util.List;
 
 public class CharacterModel {
 
+    public static final String ALIVE = "Alive";
+
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
     private static final String TAG_STATUS = "status";
@@ -23,9 +25,6 @@ public class CharacterModel {
     private static final String TAG_EPISODE = "episode";
     private static final String TAG_URL = "url";
     private static final String TAG_CREATED = "created";
-
-    private static final String ALIVE = "Alive";
-
     private Integer id;
     private String name;
     private String status;
@@ -38,8 +37,9 @@ public class CharacterModel {
     private List<String> episodes;
     private String url;
     private String created;
+    private Boolean isKilledByUser;
 
-    public CharacterModel(Integer id, String name, String status, String species, String type, String gender, OriginModel origin, LocationModel location, String image, String episodesSerialized, String url, String created) {
+    public CharacterModel(Integer id, String name, String status, String species, String type, String gender, OriginModel origin, LocationModel location, String image, String episodesSerialized, String url, String created, Boolean isKilledByUser) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -52,9 +52,10 @@ public class CharacterModel {
         this.episodes = Serializer.deserializeStringList(episodesSerialized);
         this.url = url;
         this.created = created;
+        this.isKilledByUser = isKilledByUser;
     }
 
-    public CharacterModel(Integer id, String name, String status, String species, String type, String gender, OriginModel origin, LocationModel location, String image, List<String> episodes, String url, String created) {
+    public CharacterModel(Integer id, String name, String status, String species, String type, String gender, OriginModel origin, LocationModel location, String image, List<String> episodes, String url, String created, Boolean isKilledByUser) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -67,6 +68,7 @@ public class CharacterModel {
         this.episodes = episodes;
         this.url = url;
         this.created = created;
+        this.isKilledByUser = isKilledByUser;
     }
 
     public static List<CharacterModel> fromJson(JSONArray jsonArray) throws JSONException {
@@ -106,7 +108,7 @@ public class CharacterModel {
             episodes.add(episode);
         }
 
-        return new CharacterModel(id, name, status, species, type, gender, origin, location, image, episodes, url, created);
+        return new CharacterModel(id, name, status, species, type, gender, origin, location, image, episodes, url, created, false);
     }
 
     public Integer getId() {
@@ -131,10 +133,6 @@ public class CharacterModel {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public boolean isAlive() {
-        return getStatus().equals(ALIVE);
     }
 
     public String getSpecies() {
@@ -213,6 +211,18 @@ public class CharacterModel {
         this.created = created;
     }
 
+    public Boolean getIsKilledByUser() {
+        return isKilledByUser;
+    }
+
+    public void setIsKilledByUser(Boolean isKilledByUser) {
+        this.isKilledByUser = isKilledByUser;
+    }
+
+    public boolean isAlive() {
+        return getStatus().equals(ALIVE) && !isKilledByUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -229,6 +239,7 @@ public class CharacterModel {
                 image.equals(that.image) &&
                 episodes.equals(that.episodes) &&
                 url.equals(that.url) &&
-                created.equals(that.created);
+                created.equals(that.created) &&
+                isKilledByUser.equals(that.isKilledByUser);
     }
 }

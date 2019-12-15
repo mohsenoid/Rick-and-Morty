@@ -24,7 +24,8 @@ public class CharacterDataFactory {
                 DataFactory.randomString(),
                 DataFactory.randomStringList(5),
                 DataFactory.randomString(),
-                DataFactory.randomString()
+                DataFactory.randomString(),
+                false
         );
     }
 
