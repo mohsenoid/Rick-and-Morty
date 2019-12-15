@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Rick and Morty</string>
-    <string name="episodes_title">Episodes</string>
+
     <string name="offline_app">No network connections</string>
+
     <string name="character_status">STATUS</string>
     <string name="character_species">SPECIES</string>
     <string name="character_gender">GENDER</string>
     <string name="character_origin">ORIGIN</string>
     <string name="character_last_location">LAST LOCATION</string>
+
+    <string name="character_details_format">id: %1$d - created %2$s</string>
 </resources>

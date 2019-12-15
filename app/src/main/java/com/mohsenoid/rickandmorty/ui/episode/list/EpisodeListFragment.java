@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.episode.list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.mohsenoid.rickandmorty.R;
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.ui.base.BaseFragment;
+import com.mohsenoid.rickandmorty.ui.character.list.CharacterListActivity;
 import com.mohsenoid.rickandmorty.ui.episode.list.adapter.EpisodeListAdapter;
 import com.mohsenoid.rickandmorty.ui.util.EndlessRecyclerViewScrollListener;
 
@@ -142,6 +144,7 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
 
     @Override
     public void onClick(EpisodeModel episode) {
-
+        Intent characterListIntent = CharacterListActivity.newIntent(getContext(), episode.getCharacterIds());
+        startActivity(characterListIntent);
     }
 }

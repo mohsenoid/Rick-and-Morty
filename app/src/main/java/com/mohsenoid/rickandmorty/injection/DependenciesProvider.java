@@ -16,10 +16,19 @@ import com.mohsenoid.rickandmorty.data.service.network.NetworkHelperImpl;
 import com.mohsenoid.rickandmorty.executor.IoTaskExecutor;
 import com.mohsenoid.rickandmorty.executor.MainTaskExecutor;
 import com.mohsenoid.rickandmorty.executor.TaskExecutor;
+import com.mohsenoid.rickandmorty.ui.character.details.CharacterDetailsContract;
+import com.mohsenoid.rickandmorty.ui.character.details.CharacterDetailsFragment;
+import com.mohsenoid.rickandmorty.ui.character.details.CharacterDetailsPresenter;
+import com.mohsenoid.rickandmorty.ui.character.list.CharacterListContract;
+import com.mohsenoid.rickandmorty.ui.character.list.CharacterListFragment;
+import com.mohsenoid.rickandmorty.ui.character.list.CharacterListPresenter;
+import com.mohsenoid.rickandmorty.ui.character.list.adapter.CharacterListAdapter;
 import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListContract;
 import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListFragment;
 import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListPresenter;
 import com.mohsenoid.rickandmorty.ui.episode.list.adapter.EpisodeListAdapter;
+
+import java.util.List;
 
 public class DependenciesProvider {
 
@@ -77,5 +86,31 @@ public class DependenciesProvider {
 
     public EpisodeListAdapter getEpisodesListAdapter(EpisodeListAdapter.ClickListener listener) {
         return new EpisodeListAdapter(listener);
+    }
+
+    public CharacterListFragment getCharacterListFragment(List<Integer> characterIds) {
+        return CharacterListFragment.newInstance(characterIds);
+    }
+
+    public CharacterListContract.Presenter getCharacterListFragmentPresenter() {
+        Repository repository = getRepository();
+        ConfigProvider configProvider = getConfigProvider();
+
+        return new CharacterListPresenter(repository, configProvider);
+    }
+
+    public CharacterListAdapter getCharacterListAdapter(CharacterListAdapter.ClickListener listener) {
+        return new CharacterListAdapter(listener);
+    }
+
+    public CharacterDetailsFragment getCharacterDetailsFragment(int characterId) {
+        return CharacterDetailsFragment.newInstance(characterId);
+    }
+
+    public CharacterDetailsContract.Presenter getCharacterDetailsFragmentPresenter() {
+        Repository repository = getRepository();
+        ConfigProvider configProvider = getConfigProvider();
+
+        return new CharacterDetailsPresenter(repository, configProvider);
     }
 }

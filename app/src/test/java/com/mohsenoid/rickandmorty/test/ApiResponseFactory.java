@@ -57,19 +57,11 @@ public class ApiResponseFactory {
 
     public static class Characters {
 
-        public static String CHARACTERS_JSON = "{\n" +
-                "  \"info\": {\n" +
-                "    \"count\": 1,\n" +
-                "    \"pages\": 1,\n" +
-                "    \"next\": \"\",\n" +
-                "    \"prev\": \"\"\n" +
-                "  },\n" +
-                "  \"results\": [\n" +
-                CharacterDetails.CHARACTER_DETAILS_JSON +
-                "  ]\n" +
-                "}";
+        public static String CHARACTERS_JSON = "[\n" +
+                "  " + CharacterDetails.CHARACTER_DETAILS_JSON + "\n" +
+                "]";
 
-        public static List<CharacterModel> characterssResponse() {
+        public static List<CharacterModel> charactersResponse() {
             List<CharacterModel> characters = new ArrayList<>();
 
             CharacterModel character = CharacterDetails.characterResponse();

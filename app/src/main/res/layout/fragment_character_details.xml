@@ -6,22 +6,35 @@
     tools:context=".ui.character.details.CharacterDetailsFragment">
 
     <LinearLayout
-        android:id="@+id/activity_character"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/character_details_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <com.mohsenoid.rickandmorty.ui.util.SquareImageView
                 android:id="@+id/character_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 tools:src="@mipmap/ic_launcher" />
+
+            <ProgressBar
+                android:id="@+id/character_image_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -59,9 +72,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/character_status"
                 android:textAppearance="@style/textAppearanceListItemText" />
@@ -83,9 +95,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/character_species"
                 android:textAppearance="@style/textAppearanceListItemText" />
@@ -107,9 +118,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/character_gender"
                 android:textAppearance="@style/textAppearanceListItemText" />
@@ -131,9 +141,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/character_origin"
                 android:textAppearance="@style/textAppearanceListItemText" />
@@ -155,9 +164,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="start"
                 android:text="@string/character_last_location"
                 android:textAppearance="@style/textAppearanceListItemText" />

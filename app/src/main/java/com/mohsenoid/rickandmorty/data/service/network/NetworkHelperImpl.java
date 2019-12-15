@@ -25,8 +25,11 @@ public class NetworkHelperImpl implements NetworkHelper {
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.append(baseUrl);
             urlBuilder.append(endpoint);
-            for (Param param : params) {
-                urlBuilder.append("?" + param.getKey() + "=" + param.getValue());
+
+            if (params != null) {
+                for (Param param : params) {
+                    urlBuilder.append("?").append(param.getKey()).append("=").append(param.getValue());
+                }
             }
 
             url = new URL(urlBuilder.toString());

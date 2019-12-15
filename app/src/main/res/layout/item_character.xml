@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/keyLine1"
-    android:elevation="2dp">
+    android:layout_margin="@dimen/keyLine1">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,13 +12,26 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/character_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            tools:src="@mipmap/ic_launcher" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.mohsenoid.rickandmorty.ui.util.SquareImageView
+                android:id="@+id/character_image"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                tools:src="@mipmap/ic_launcher" />
+
+            <ProgressBar
+                android:id="@+id/character_image_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/character_name"
@@ -32,11 +44,27 @@
 
         <ImageView
             android:id="@+id/character_dead"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:padding="8dp"
             android:scaleType="fitCenter"
-            tools:src="@drawable/ic_dead" />
+            android:src="@drawable/ic_dead"
+            android:tint="@color/ic_dead"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/character_alive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_alive"
+            android:tint="@color/ic_alive"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

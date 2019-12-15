@@ -19,7 +19,7 @@ public class EpisodeViewHolder extends RecyclerView.ViewHolder {
     private TextView episodeEpisode;
     private TextView episodeAirDate;
 
-    public EpisodeViewHolder(View view) {
+    EpisodeViewHolder(View view) {
         super(view);
         this.view = view;
 

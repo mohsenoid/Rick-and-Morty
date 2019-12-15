@@ -55,7 +55,7 @@ public class ApiClientTest {
         String characterEndpoint = ApiConstants.CHARACTER_ENDPOINT + "[" + Serializer.serializeIntegerList(characterIds) + "]";
         stubNetworkRequestData(characterEndpoint, ApiResponseFactory.Characters.CHARACTERS_JSON);
 
-        List<CharacterModel> expected = ApiResponseFactory.Characters.characterssResponse();
+        List<CharacterModel> expected = ApiResponseFactory.Characters.charactersResponse();
 
         // WHEN
         List<CharacterModel> actual = apiClient.getCharacters(characterIds);

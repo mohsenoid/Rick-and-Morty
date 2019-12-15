@@ -24,6 +24,8 @@ public class CharacterModel {
     private static final String TAG_URL = "url";
     private static final String TAG_CREATED = "created";
 
+    private static final String ALIVE = "Alive";
+
     private Integer id;
     private String name;
     private String status;
@@ -129,6 +131,10 @@ public class CharacterModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isAlive() {
+        return getStatus().equals(ALIVE);
     }
 
     public String getSpecies() {

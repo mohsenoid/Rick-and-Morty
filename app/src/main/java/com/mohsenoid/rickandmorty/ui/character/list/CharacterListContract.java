@@ -9,10 +9,10 @@ import java.util.List;
 public class CharacterListContract {
 
     public interface View extends BaseView {
-        void onEpisodeCharacterQueryResult(List<CharacterModel> characters);
+        void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters);
     }
 
     public interface Presenter extends BasePresenter<View> {
-        void queryEpisodeCharacter(int episodeId);
+        void loadCharacters(List<Integer> characterIds);
     }
 }

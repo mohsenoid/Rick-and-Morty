@@ -5,6 +5,10 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="transparentGray">#A555</color>
+    <color name="white">#FFF</color>
 
     <color name="characterTitleBackground">@color/transparentGray</color>
+
+    <color name="ic_alive">@color/white</color>
+    <color name="ic_dead">@color/colorAccent</color>
 </resources>

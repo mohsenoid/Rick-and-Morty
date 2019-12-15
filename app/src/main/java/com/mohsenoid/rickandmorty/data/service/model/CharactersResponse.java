@@ -4,38 +4,23 @@ import com.mohsenoid.rickandmorty.model.CharacterModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
 public class CharactersResponse {
-    private InfoModel info;
     private List<CharacterModel> results;
 
-    private CharactersResponse(InfoModel info, List<CharacterModel> results) {
-        this.info = info;
+    private CharactersResponse(List<CharacterModel> results) {
         this.results = results;
     }
 
     public static CharactersResponse fromJson(String json) throws JSONException {
-        JSONObject jsonObject = new JSONObject(json);
+        JSONArray jsonArray = new JSONArray(json);
 
-        JSONObject infoJsonObject = jsonObject.getJSONObject("info");
-        JSONArray resultsJsonArray = jsonObject.getJSONArray("results");
+        List<CharacterModel> results = CharacterModel.fromJson(jsonArray);
 
-        InfoModel info = InfoModel.fromJson(infoJsonObject);
-        List<CharacterModel> results = CharacterModel.fromJson(resultsJsonArray);
-
-        CharactersResponse response = new CharactersResponse(info, results);
+        CharactersResponse response = new CharactersResponse(results);
         return response;
-    }
-
-    public InfoModel getInfo() {
-        return info;
-    }
-
-    public void setInfo(InfoModel info) {
-        this.info = info;
     }
 
     public List<CharacterModel> getResults() {
