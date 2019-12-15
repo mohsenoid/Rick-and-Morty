@@ -125,25 +125,29 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     }
 
     @Override
-    public void onEpisodesQueryResult(int page, List<EpisodeModel> episodes) {
+    public void setEpisodes(List<EpisodeModel> episodes) {
         swipeRefresh.setRefreshing(false);
 
-        if (page == 1) {
             adapter.setEpisodes(episodes);
             scrollListener.resetState();
-        } else {
-            adapter.addMoreEpisodes(episodes);
-        }
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onEndOfList() {
+    public void updateEpisodes(List<EpisodeModel> episodes) {
+        swipeRefresh.setRefreshing(false);
+
+            adapter.addMoreEpisodes(episodes);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void reachedEndOfList() {
         progress.setVisibility(View.GONE);
     }
 
     @Override
-    public void onClick(EpisodeModel episode) {
+    public void onEpisodeRowClick(EpisodeModel episode) {
         Intent characterListIntent = CharacterListActivity.newIntent(getContext(), episode.getCharacterIds());
         startActivity(characterListIntent);
     }

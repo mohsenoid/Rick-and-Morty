@@ -7,7 +7,7 @@ public class MainTaskExecutor implements TaskExecutor {
 
     private static MainTaskExecutor instance;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private Handler handler = new Handler();
 
     private MainTaskExecutor() { /* this will prevent making a new object of this type from outside */ }
 

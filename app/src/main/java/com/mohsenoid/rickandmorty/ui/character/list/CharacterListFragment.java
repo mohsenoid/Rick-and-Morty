@@ -131,13 +131,13 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
-    public void onCharactersQueryResult(List<CharacterModel> characters) {
+    public void setCharacters(List<CharacterModel> characters) {
         adapter.setCharacters(characters);
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onCharacterKilled(CharacterModel character) {
+    public void updateCharacter(CharacterModel character) {
         adapter.updateCharacter(character);
         adapter.notifyDataSetChanged();
     }

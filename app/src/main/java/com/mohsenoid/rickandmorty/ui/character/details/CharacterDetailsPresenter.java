@@ -46,7 +46,7 @@ public class CharacterDetailsPresenter implements CharacterDetailsContract.Prese
             @Override
             public void onSuccess(CharacterModel character) {
                 if (view != null) {
-                    view.onCharacterQueryResult(characterId, character);
+                    view.setCharacter(character);
                     view.hideLoading();
                 }
             }

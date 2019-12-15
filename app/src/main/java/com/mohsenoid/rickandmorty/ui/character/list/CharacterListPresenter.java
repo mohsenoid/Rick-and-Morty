@@ -50,7 +50,7 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
             @Override
             public void onSuccess(List<CharacterModel> characters) {
                 if (view != null) {
-                    view.onCharactersQueryResult(characters);
+                    view.setCharacters(characters);
                     view.hideLoading();
                 }
             }
@@ -78,7 +78,7 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
 
             @Override
             public void onSuccess(CharacterModel character) {
-                view.onCharacterKilled(character);
+                view.updateCharacter(character);
             }
 
             @Override

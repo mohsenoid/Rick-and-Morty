@@ -152,7 +152,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     }
 
     @Override
-    public void onCharacterQueryResult(int characterId, CharacterModel character) {
+    public void setCharacter(CharacterModel character) {
         imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
 
         characterName.setText(character.getName());

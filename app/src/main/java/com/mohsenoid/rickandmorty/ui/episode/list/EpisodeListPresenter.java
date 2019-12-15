@@ -58,9 +58,13 @@ public class EpisodeListPresenter implements EpisodeListContract.Presenter {
             @Override
             public void onSuccess(List<EpisodeModel> episodes) {
                 if (view != null) {
-                    view.onEpisodesQueryResult(page, episodes);
-                    view.hideLoading();
-                    view.hideLoadingMore();
+                    if (page == 1) {
+                        view.setEpisodes(episodes);
+                        view.hideLoading();
+                    } else {
+                        view.updateEpisodes(episodes);
+                        view.hideLoadingMore();
+                    }
                 }
             }
 
@@ -72,7 +76,7 @@ public class EpisodeListPresenter implements EpisodeListContract.Presenter {
                 }
 
                 if (exception instanceof EndOfListException) {
-                    if (view != null) view.onEndOfList();
+                    if (view != null) view.reachedEndOfList();
                 } else {
                     if (view != null) view.showMessage(exception.getMessage());
                 }

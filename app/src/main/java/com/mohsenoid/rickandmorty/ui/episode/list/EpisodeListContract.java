@@ -14,9 +14,11 @@ public class EpisodeListContract {
 
         void hideLoadingMore();
 
-        void onEpisodesQueryResult(int page, List<EpisodeModel> episodes);
+        void setEpisodes(List<EpisodeModel> episodes);
 
-        void onEndOfList();
+        void updateEpisodes(List<EpisodeModel> episodes);
+
+        void reachedEndOfList();
     }
 
     public interface Presenter extends BasePresenter<View> {

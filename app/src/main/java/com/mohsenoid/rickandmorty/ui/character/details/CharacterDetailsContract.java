@@ -10,7 +10,7 @@ public class CharacterDetailsContract {
 
         void onNoOfflineData();
 
-        void onCharacterQueryResult(int characterId, CharacterModel character);
+        void setCharacter(CharacterModel character);
     }
 
     public interface Presenter extends BasePresenter<View> {

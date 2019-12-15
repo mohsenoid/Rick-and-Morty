@@ -12,9 +12,9 @@ public class CharacterListContract {
 
         void onNoOfflineData();
 
-        void onCharactersQueryResult(List<CharacterModel> characters);
+        void setCharacters(List<CharacterModel> characters);
 
-        void onCharacterKilled(CharacterModel character);
+        void updateCharacter(CharacterModel character);
     }
 
     public interface Presenter extends BasePresenter<View> {

@@ -45,7 +45,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> 
         holder.setEpisode(episode);
 
         holder.view.setOnClickListener(v -> {
-            if (listener != null) listener.onClick(episode);
+            if (listener != null) listener.onEpisodeRowClick(episode);
         });
     }
 
@@ -55,6 +55,6 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> 
     }
 
     public interface ClickListener {
-        void onClick(EpisodeModel episode);
+        void onEpisodeRowClick(EpisodeModel episode);
     }
 }
