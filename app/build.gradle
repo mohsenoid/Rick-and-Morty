@@ -49,7 +49,6 @@ dependencies {
     // Android Jetpack
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.core:core-ktx:$androidxCoreKtxVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
     implementation "androidx.recyclerview:recyclerview:$androidxRecyclerViewVersion"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$androidxSwipeRefreshVersion"
     implementation "androidx.cardview:cardview:$androidxCardViewVersion"
