@@ -1,22 +1,21 @@
 package com.mohsenoid.rickandmorty.config;
 
-import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-@SuppressLint("StaticFieldLeak")
 public class ConfigProviderImpl implements ConfigProvider {
 
     private static ConfigProviderImpl instance;
 
-    private Context context;
+    private Application context;
 
-    private ConfigProviderImpl(Context context) {
+    private ConfigProviderImpl(Application context) {
         this.context = context;
     }
 
-    public static ConfigProviderImpl getInstance(Context context) {
+    public static synchronized ConfigProviderImpl getInstance(Application context) {
         if (instance == null)
             instance = new ConfigProviderImpl(context);
 

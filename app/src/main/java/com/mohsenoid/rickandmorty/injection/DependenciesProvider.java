@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.injection;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.mohsenoid.rickandmorty.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.config.ConfigProviderImpl;
@@ -34,9 +34,9 @@ import java.util.List;
 
 public class DependenciesProvider {
 
-    private Context context;
+    private Application context;
 
-    public DependenciesProvider(Context context) {
+    public DependenciesProvider(Application context) {
         this.context = context;
     }
 
