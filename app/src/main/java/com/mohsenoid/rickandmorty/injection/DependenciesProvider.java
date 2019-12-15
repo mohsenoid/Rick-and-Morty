@@ -27,6 +27,8 @@ import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListContract;
 import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListFragment;
 import com.mohsenoid.rickandmorty.ui.episode.list.EpisodeListPresenter;
 import com.mohsenoid.rickandmorty.ui.episode.list.adapter.EpisodeListAdapter;
+import com.mohsenoid.rickandmorty.ui.util.ImageDownloader;
+import com.mohsenoid.rickandmorty.ui.util.ImageDownloaderImpl;
 
 import java.util.List;
 
@@ -73,6 +75,19 @@ public class DependenciesProvider {
         return new RepositoryImpl(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
     }
 
+    private String getCacheDirectoryPath() {
+        return context.getCacheDir().getAbsolutePath();
+    }
+
+    public ImageDownloader getImageDownloader() {
+        NetworkHelper networkHelper = getNetworkHelper();
+        String cacheDirectoryPath = getCacheDirectoryPath();
+        TaskExecutor ioTaskExecutor = getIoTaskExecutor();
+        TaskExecutor mainTaskExecutor = getMainTaskExecutor();
+
+        return new ImageDownloaderImpl(networkHelper, cacheDirectoryPath, ioTaskExecutor, mainTaskExecutor);
+    }
+
     public EpisodeListFragment getEpisodeListFragment() {
         return EpisodeListFragment.newInstance();
     }
@@ -100,7 +115,8 @@ public class DependenciesProvider {
     }
 
     public CharacterListAdapter getCharacterListAdapter(CharacterListAdapter.ClickListener listener) {
-        return new CharacterListAdapter(listener);
+        ImageDownloader imageDownloader = getImageDownloader();
+        return new CharacterListAdapter(imageDownloader, listener);
     }
 
     public CharacterDetailsFragment getCharacterDetailsFragment(int characterId) {

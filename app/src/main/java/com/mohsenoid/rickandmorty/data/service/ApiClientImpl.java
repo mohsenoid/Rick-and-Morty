@@ -49,8 +49,7 @@ public class ApiClientImpl implements ApiClient {
         String characterEndpoint = ApiConstants.CHARACTER_ENDPOINT + characterId;
 
         String jsonResponse = networkHelper.requestData(characterEndpoint, null);
-        CharacterModel character = CharacterModel.fromJson(jsonResponse);
 
-        return character;
+        return CharacterModel.fromJson(jsonResponse);
     }
 }

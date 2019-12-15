@@ -1,13 +1,19 @@
 package com.mohsenoid.rickandmorty.data.service.network;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
+import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 public class NetworkHelperImpl implements NetworkHelper {
+
+    private static final int BUFFER_SIZE = 8192;
 
     private String baseUrl;
 
@@ -17,42 +23,45 @@ public class NetworkHelperImpl implements NetworkHelper {
 
     @Override
     public String requestData(String endpoint, List<Param> params) throws IOException {
-        StringBuilder response = new StringBuilder();
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(baseUrl);
+        urlBuilder.append(endpoint);
 
-        URL url;
-        HttpURLConnection urlConnection = null;
-        try {
-            StringBuilder urlBuilder = new StringBuilder();
-            urlBuilder.append(baseUrl);
-            urlBuilder.append(endpoint);
-
-            if (params != null) {
-                for (Param param : params) {
-                    urlBuilder.append("?").append(param.getKey()).append("=").append(param.getValue());
-                }
-            }
-
-            url = new URL(urlBuilder.toString());
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            InputStream inputStream = urlConnection.getInputStream();
-
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-
-
-            int data = inputStreamReader.read();
-            while (data != -1) {
-                response.append((char) data);
-                data = inputStreamReader.read();
-            }
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
+        if (params != null) {
+            for (Param param : params) {
+                urlBuilder.append("?").append(param.getKey()).append("=").append(param.getValue());
             }
         }
 
-        return response.toString();
+        URL url = new URL(urlBuilder.toString());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        request(url, byteArrayOutputStream);
+
+        return new String(byteArrayOutputStream.toByteArray());
     }
 
+    @Override
+    public void requestImageData(String imageUrl, File imageFile) throws IOException {
+        URL url = new URL(imageUrl);
+        FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+        request(url, fileOutputStream);
+    }
+
+    private void request(URL url, OutputStream output) throws IOException {
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.connect();
+
+        InputStream input = new BufferedInputStream(url.openStream(), BUFFER_SIZE);
+
+        byte[] data = new byte[BUFFER_SIZE];
+
+        int count;
+        while ((count = input.read(data)) != -1) {
+            output.write(data, 0, count);
+        }
+
+        output.flush();
+        output.close();
+        input.close();
+    }
 }

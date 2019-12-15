@@ -3,7 +3,6 @@ package com.mohsenoid.rickandmorty.ui.character.list;
 import com.mohsenoid.rickandmorty.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.data.DataCallback;
 import com.mohsenoid.rickandmorty.data.Repository;
-import com.mohsenoid.rickandmorty.data.exception.EndOfListException;
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 

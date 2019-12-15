@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="transparentGray">#A555</color>
+    <color name="transparentGray">#E6555555</color>
     <color name="white">#FFF</color>
 
     <color name="characterTitleBackground">@color/transparentGray</color>

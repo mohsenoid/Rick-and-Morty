@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.ui.util.ImageDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,12 @@ import java.util.List;
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHolder> {
 
     private List<CharacterModel> characters = new ArrayList<>();
+
+    private ImageDownloader imageDownloader;
     private ClickListener listener;
 
-    public CharacterListAdapter(ClickListener listener) {
+    public CharacterListAdapter(ImageDownloader imageDownloader, ClickListener listener) {
+        this.imageDownloader = imageDownloader;
         this.listener = listener;
     }
 
@@ -31,7 +35,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHold
     public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_character, parent, false);
-        return new CharacterViewHolder(view);
+        return new CharacterViewHolder(view, imageDownloader);
     }
 
     @Override

@@ -26,8 +26,7 @@ public class EpisodesResponse {
         InfoModel info = InfoModel.fromJson(infoJsonObject);
         List<EpisodeModel> results = EpisodeModel.fromJson(resultsJsonArray);
 
-        EpisodesResponse response = new EpisodesResponse(info, results);
-        return response;
+        return new EpisodesResponse(info, results);
     }
 
     public InfoModel getInfo() {

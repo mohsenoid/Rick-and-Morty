@@ -29,8 +29,7 @@ class InfoModel {
         String next = jsonObject.getString(TAG_NEXT);
         String prev = jsonObject.getString(TAG_PREV);
 
-        InfoModel info = new InfoModel(count, pages, next, prev);
-        return info;
+        return new InfoModel(count, pages, next, prev);
     }
 
     public int getCount() {

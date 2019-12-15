@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.character.list;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,7 +57,7 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
 
         if (!extractCharacterIds()) {
             Toast.makeText(getContext(), "Character ids are missing!", Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+            parentActivityOnBackPressed();
         }
     }
 
@@ -126,13 +127,18 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     @Override
     public void onNoOfflineData() {
         Toast.makeText(getContext(), R.string.no_offline_data, Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
+        parentActivityOnBackPressed();
     }
 
     @Override
     public void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters) {
         adapter.setCharacters(characters);
         adapter.notifyDataSetChanged();
+    }
+
+    private void parentActivityOnBackPressed() {
+        Activity parentActivity = getActivity();
+        if (parentActivity != null) parentActivity.onBackPressed();
     }
 
     @Override

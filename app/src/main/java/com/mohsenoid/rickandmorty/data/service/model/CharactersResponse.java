@@ -19,8 +19,7 @@ public class CharactersResponse {
 
         List<CharacterModel> results = CharacterModel.fromJson(jsonArray);
 
-        CharactersResponse response = new CharactersResponse(results);
-        return response;
+        return new CharactersResponse(results);
     }
 
     public List<CharacterModel> getResults() {

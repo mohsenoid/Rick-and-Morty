@@ -9,11 +9,14 @@ import java.util.List;
 public class CharacterListContract {
 
     public interface View extends BaseView {
+
         void onNoOfflineData();
+
         void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters);
     }
 
     public interface Presenter extends BasePresenter<View> {
+
         void loadCharacters(List<Integer> characterIds);
     }
 }

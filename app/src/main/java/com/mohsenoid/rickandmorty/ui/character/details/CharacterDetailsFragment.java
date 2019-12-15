@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.character.details;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.mohsenoid.rickandmorty.R;
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.ui.base.BaseFragment;
+import com.mohsenoid.rickandmorty.ui.util.ImageDownloader;
 
 public class CharacterDetailsFragment extends BaseFragment implements CharacterDetailsContract.View {
 
@@ -26,6 +28,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     private int characterId;
 
     private CharacterDetailsContract.Presenter presenter;
+    private ImageDownloader imageDownloader;
     private ProgressBar progress;
     private ImageView characterImage;
     private ProgressBar characterImageProgress;
@@ -50,6 +53,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     @Override
     public void injectDependencies(DependenciesProvider dependenciesProvider) {
         presenter = dependenciesProvider.getCharacterDetailsFragmentPresenter();
+        imageDownloader = dependenciesProvider.getImageDownloader();
     }
 
     @Override
@@ -58,7 +62,7 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
 
         if (!extractCharacterId()) {
             Toast.makeText(getContext(), "Character id is missing!", Toast.LENGTH_SHORT).show();
-            getActivity().onBackPressed();
+            parentActivityOnBackPressed();
         }
     }
 
@@ -137,13 +141,18 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     @Override
     public void onNoOfflineData() {
         Toast.makeText(getContext(), R.string.no_offline_data, Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
+        parentActivityOnBackPressed();
+    }
+
+    private void parentActivityOnBackPressed() {
+        Activity parentActivity = getActivity();
+        if (parentActivity != null) parentActivity.onBackPressed();
     }
 
     @Override
     public void onCharacterQueryResult(int characterId, CharacterModel character) {
-        // TODO: characterImage.setImageBitmap();
-        characterImageProgress.setVisibility(View.VISIBLE);
+        imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
+
         characterName.setText(character.getName());
         characterDetails.setText(getString(R.string.character_details_format, character.getId(), character.getCreated()));
         characterStatus.setText(character.getStatus());

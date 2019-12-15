@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.ui.util.ImageDownloader;
 
 import org.jetbrains.annotations.NotNull;
 
 public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
     public final View view;
+
+    private ImageDownloader imageDownloader;
+
     private CharacterModel character;
 
     private ImageView characterImage;
@@ -23,9 +27,10 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
     private ImageView characterDead;
     private ImageView characterAlive;
 
-    CharacterViewHolder(View view) {
+    CharacterViewHolder(View view, ImageDownloader imageDownloader) {
         super(view);
         this.view = view;
+        this.imageDownloader = imageDownloader;
 
         characterImage = view.findViewById(R.id.character_image);
         characterImageProgress = view.findViewById(R.id.character_image_progress);
@@ -41,8 +46,7 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
     public void setCharacter(@NotNull CharacterModel character) {
         this.character = character;
 
-        // TODO: characterImage.setImageBitmap();
-        characterImageProgress.setVisibility(View.VISIBLE);
+        imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
 
         characterName.setText(character.getName());
 
