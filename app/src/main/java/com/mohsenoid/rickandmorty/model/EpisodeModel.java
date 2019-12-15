@@ -6,11 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EpisodeModel implements Serializable {
+public class EpisodeModel {
 
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "name";
