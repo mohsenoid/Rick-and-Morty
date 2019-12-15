@@ -15,10 +15,19 @@ public class NetworkHelperImpl implements NetworkHelper {
 
     private static final int BUFFER_SIZE = 8192;
 
+    private static NetworkHelperImpl instance;
+
     private String baseUrl;
 
-    public NetworkHelperImpl(String baseUrl) {
+    private NetworkHelperImpl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public static NetworkHelperImpl getInstance(String baseUrl) {
+        if (instance == null)
+            instance = new NetworkHelperImpl(baseUrl);
+
+        return instance;
     }
 
     @Override

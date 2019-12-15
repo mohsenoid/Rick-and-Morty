@@ -4,6 +4,7 @@ import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
 import com.mohsenoid.rickandmorty.executor.TaskExecutor;
 import com.mohsenoid.rickandmorty.test.TestTaskExecutor;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,7 +26,12 @@ public class ImageDownloaderTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        imageDownloader = new ImageDownloaderImpl(networkHelper, cacheDirectoryPath, testTaskExecutor, testTaskExecutor);
+        imageDownloader = ImageDownloaderImpl.getInstance(networkHelper, cacheDirectoryPath, testTaskExecutor, testTaskExecutor);
+    }
+
+    @After
+    public void tearDown() {
+        ImageDownloaderImpl.instance = null;
     }
 
     @Test

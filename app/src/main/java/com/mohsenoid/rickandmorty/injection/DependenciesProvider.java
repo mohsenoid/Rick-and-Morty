@@ -41,28 +41,28 @@ public class DependenciesProvider {
     }
 
     private Datastore getDatastore() {
-        return new DatastoreImpl(context);
+        return DatastoreImpl.getInstance(context);
     }
 
     private NetworkHelper getNetworkHelper() {
-        return new NetworkHelperImpl(ApiConstants.BASE_URL);
+        return NetworkHelperImpl.getInstance(ApiConstants.BASE_URL);
     }
 
     private ApiClient getApiClient() {
         NetworkHelper networkHelper = getNetworkHelper();
-        return new ApiClientImpl(networkHelper);
+        return ApiClientImpl.getInstance(networkHelper);
     }
 
     private TaskExecutor getIoTaskExecutor() {
-        return new IoTaskExecutor();
+        return IoTaskExecutor.getInstance();
     }
 
     private TaskExecutor getMainTaskExecutor() {
-        return new MainTaskExecutor();
+        return MainTaskExecutor.getInstance();
     }
 
     private ConfigProvider getConfigProvider() {
-        return new ConfigProviderImpl(context);
+        return ConfigProviderImpl.getInstance(context);
     }
 
     private Repository getRepository() {
@@ -72,7 +72,7 @@ public class DependenciesProvider {
         TaskExecutor mainTaskExecutor = getMainTaskExecutor();
         ConfigProvider configProvider = getConfigProvider();
 
-        return new RepositoryImpl(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
+        return RepositoryImpl.getInstance(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
     }
 
     private String getCacheDirectoryPath() {
@@ -85,7 +85,7 @@ public class DependenciesProvider {
         TaskExecutor ioTaskExecutor = getIoTaskExecutor();
         TaskExecutor mainTaskExecutor = getMainTaskExecutor();
 
-        return new ImageDownloaderImpl(networkHelper, cacheDirectoryPath, ioTaskExecutor, mainTaskExecutor);
+        return ImageDownloaderImpl.getInstance(networkHelper, cacheDirectoryPath, ioTaskExecutor, mainTaskExecutor);
     }
 
     public EpisodeListFragment getEpisodeListFragment() {

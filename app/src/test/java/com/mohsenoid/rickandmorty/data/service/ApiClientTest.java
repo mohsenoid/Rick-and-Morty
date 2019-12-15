@@ -6,6 +6,7 @@ import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.test.ApiResponseFactory;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,8 +31,12 @@ public class ApiClientTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        apiClient = ApiClientImpl.getInstance(helper);
+    }
 
-        apiClient = new ApiClientImpl(helper);
+    @After
+    public void tearDown() {
+        ApiClientImpl.instance = null;
     }
 
     @Test

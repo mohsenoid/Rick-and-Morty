@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CharacterDataFactory {
 
-    private CharacterDataFactory() { /* this will prevent making a new object */ }
+    private CharacterDataFactory() { /* this will prevent making a new object of this type */ }
 
     public static CharacterModel makeCharacter() {
         return new CharacterModel(

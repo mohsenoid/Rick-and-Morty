@@ -9,5 +9,5 @@ public class ApiConstants {
 
     static final String PARAM_KEY_PAGE = "page";
 
-    private ApiConstants() { /* this will prevent making a new object of this type */}
+    private ApiConstants() { /* this will prevent making a new object of this type */ }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DataFactory {
 
-    private DataFactory() { /* this will prevent making a new object */ }
+    private DataFactory() { /* this will prevent making a new object of this type */ }
 
     public static String randomString() {
         return UUID.randomUUID().toString();

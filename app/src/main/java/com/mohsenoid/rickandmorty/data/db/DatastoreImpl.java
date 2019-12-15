@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.mohsenoid.rickandmorty.data.Serializer;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.model.EpisodeModel;
@@ -17,11 +19,21 @@ import java.util.List;
 
 public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
 
-    private static SQLiteDatabase db;
+    @VisibleForTesting
+    public static DatastoreImpl instance;
 
-    public DatastoreImpl(Context context) {
+    private SQLiteDatabase db;
+
+    private DatastoreImpl(Context context) {
         super(context, DatastoreConstants.DATABASE_NAME, null, DatastoreConstants.DATABASE_VERSION);
         db = getWritableDatabase();
+    }
+
+    public static DatastoreImpl getInstance(Context context) {
+        if (instance == null)
+            instance = new DatastoreImpl(context);
+
+        return instance;
     }
 
     @Override

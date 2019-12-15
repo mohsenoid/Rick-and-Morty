@@ -1,5 +1,7 @@
 package com.mohsenoid.rickandmorty.data.service;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.mohsenoid.rickandmorty.data.Serializer;
 import com.mohsenoid.rickandmorty.data.service.model.CharactersResponse;
 import com.mohsenoid.rickandmorty.data.service.model.EpisodesResponse;
@@ -15,10 +17,20 @@ import java.util.List;
 
 public class ApiClientImpl implements ApiClient {
 
+    @VisibleForTesting
+    public static ApiClientImpl instance;
+
     private NetworkHelper networkHelper;
 
-    public ApiClientImpl(NetworkHelper networkHelper) {
+    ApiClientImpl(NetworkHelper networkHelper) {
         this.networkHelper = networkHelper;
+    }
+
+    public static ApiClientImpl getInstance(NetworkHelper networkHelper) {
+        if (instance == null)
+            instance = new ApiClientImpl(networkHelper);
+
+        return instance;
     }
 
     @Override

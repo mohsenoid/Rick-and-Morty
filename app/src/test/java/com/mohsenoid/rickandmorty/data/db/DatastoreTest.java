@@ -11,6 +11,7 @@ import com.mohsenoid.rickandmorty.test.CharacterDataFactory;
 import com.mohsenoid.rickandmorty.test.DataFactory;
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,12 @@ public class DatastoreTest {
     @Before
     public void setUp() {
         Application application = ApplicationProvider.getApplicationContext();
-        datastore = new DatastoreImpl(application);
+        datastore = DatastoreImpl.getInstance(application);
+    }
+
+    @After
+    public void tearDown() {
+        DatastoreImpl.instance = null;
     }
 
     @Test

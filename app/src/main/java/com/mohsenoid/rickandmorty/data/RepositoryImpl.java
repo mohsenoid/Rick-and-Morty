@@ -1,5 +1,7 @@
 package com.mohsenoid.rickandmorty.data;
 
+import androidx.annotation.VisibleForTesting;
+
 import com.mohsenoid.rickandmorty.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.data.db.Datastore;
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException;
@@ -13,18 +15,28 @@ import java.util.List;
 
 public class RepositoryImpl implements Repository {
 
+    @VisibleForTesting
+    public static RepositoryImpl instance;
+
     private Datastore datastore;
     private ApiClient apiClient;
     private TaskExecutor ioTaskExecutor;
     private TaskExecutor mainTaskExecutor;
     private ConfigProvider configProvider;
 
-    public RepositoryImpl(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
+    private RepositoryImpl(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
         this.datastore = datastore;
         this.apiClient = apiClient;
         this.ioTaskExecutor = ioTaskExecutor;
         this.mainTaskExecutor = mainTaskExecutor;
         this.configProvider = configProvider;
+    }
+
+    public static RepositoryImpl getInstance(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
+        if (instance == null)
+            instance = new RepositoryImpl(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
+
+        return instance;
     }
 
     @Override
