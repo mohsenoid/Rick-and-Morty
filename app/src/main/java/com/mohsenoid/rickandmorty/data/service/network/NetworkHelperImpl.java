@@ -23,7 +23,7 @@ public class NetworkHelperImpl implements NetworkHelper {
         this.baseUrl = baseUrl;
     }
 
-    public static NetworkHelperImpl getInstance(String baseUrl) {
+    public static synchronized NetworkHelperImpl getInstance(String baseUrl) {
         if (instance == null)
             instance = new NetworkHelperImpl(baseUrl);
 

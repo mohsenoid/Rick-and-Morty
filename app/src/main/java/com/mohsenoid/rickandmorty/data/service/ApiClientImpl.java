@@ -26,7 +26,7 @@ public class ApiClientImpl implements ApiClient {
         this.networkHelper = networkHelper;
     }
 
-    public static ApiClientImpl getInstance(NetworkHelper networkHelper) {
+    public static synchronized ApiClientImpl getInstance(NetworkHelper networkHelper) {
         if (instance == null)
             instance = new ApiClientImpl(networkHelper);
 

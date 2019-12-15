@@ -32,7 +32,7 @@ public class ImageDownloaderImpl implements ImageDownloader {
         this.mainTaskExecutor = mainTaskExecutor;
     }
 
-    public static ImageDownloaderImpl getInstance(NetworkHelper networkHelper, String cacheDirectoryPath, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor) {
+    public static synchronized ImageDownloaderImpl getInstance(NetworkHelper networkHelper, String cacheDirectoryPath, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor) {
         if (instance == null)
             instance = new ImageDownloaderImpl(networkHelper, cacheDirectoryPath, ioTaskExecutor, mainTaskExecutor);
 

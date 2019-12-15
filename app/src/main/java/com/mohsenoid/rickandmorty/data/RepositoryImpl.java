@@ -32,7 +32,7 @@ public class RepositoryImpl implements Repository {
         this.configProvider = configProvider;
     }
 
-    public static RepositoryImpl getInstance(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
+    public static synchronized RepositoryImpl getInstance(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
         if (instance == null)
             instance = new RepositoryImpl(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
 

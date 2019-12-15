@@ -11,7 +11,7 @@ public class MainTaskExecutor implements TaskExecutor {
 
     private MainTaskExecutor() { /* this will prevent making a new object of this type from outside */ }
 
-    public static MainTaskExecutor getInstance() {
+    public static synchronized MainTaskExecutor getInstance() {
         if (instance == null)
             instance = new MainTaskExecutor();
 

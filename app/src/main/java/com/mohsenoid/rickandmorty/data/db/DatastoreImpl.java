@@ -32,7 +32,7 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
         db = getWritableDatabase();
     }
 
-    public static DatastoreImpl getInstance(Context context) {
+    public static synchronized DatastoreImpl getInstance(Context context) {
         if (instance == null)
             instance = new DatastoreImpl(context);
 

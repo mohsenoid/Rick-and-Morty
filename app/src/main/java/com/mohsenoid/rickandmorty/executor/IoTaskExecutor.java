@@ -11,7 +11,7 @@ public class IoTaskExecutor implements TaskExecutor {
 
     private IoTaskExecutor() { /* this will prevent making a new object of this type from outside */ }
 
-    public static IoTaskExecutor getInstance() {
+    public static synchronized IoTaskExecutor getInstance() {
         if (instance == null)
             instance = new IoTaskExecutor();
 
