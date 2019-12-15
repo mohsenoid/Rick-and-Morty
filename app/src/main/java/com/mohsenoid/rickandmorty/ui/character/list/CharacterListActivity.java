@@ -60,6 +60,6 @@ public class CharacterListActivity extends BaseActivity {
     private void attachFragments() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, characterListFragment, TAG_CHARACTER_LIST_FRAGMENT);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commit();
     }
 }

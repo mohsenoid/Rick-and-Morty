@@ -57,6 +57,6 @@ public class CharacterDetailsActivity extends BaseActivity {
     private void attachFragments() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, characterDetailsFragment, TAG_CHARACTER_DETAILS_FRAGMENT);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commit();
     }
 }

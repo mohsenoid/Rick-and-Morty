@@ -41,6 +41,6 @@ public class EpisodeListActivity extends BaseActivity {
     private void attachFragments() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, episodeListFragment, TAG_EPISODE_LIST_FRAGMENT);
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commit();
     }
 }
