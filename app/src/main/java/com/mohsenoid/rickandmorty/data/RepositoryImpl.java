@@ -115,7 +115,7 @@ public class RepositoryImpl implements Repository {
                     if (characters.size() > 0) {
                         if (callback != null) callback.onSuccess(characters);
                     } else {
-                        if (callback != null) callback.onError(new EndOfListException());
+                        if (callback != null) callback.onError(new NoOfflineDataException());
                     }
                 });
             } catch (Exception e) {

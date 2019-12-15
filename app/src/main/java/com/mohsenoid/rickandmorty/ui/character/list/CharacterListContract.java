@@ -9,6 +9,7 @@ import java.util.List;
 public class CharacterListContract {
 
     public interface View extends BaseView {
+        void onNoOfflineData();
         void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters);
     }
 

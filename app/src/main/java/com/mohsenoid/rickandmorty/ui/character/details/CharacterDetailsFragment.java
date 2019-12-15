@@ -135,6 +135,12 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     }
 
     @Override
+    public void onNoOfflineData() {
+        Toast.makeText(getContext(), R.string.no_offline_data, Toast.LENGTH_LONG).show();
+        getActivity().onBackPressed();
+    }
+
+    @Override
     public void onCharacterQueryResult(int characterId, CharacterModel character) {
         // TODO: characterImage.setImageBitmap();
         characterImageProgress.setVisibility(View.VISIBLE);

@@ -124,6 +124,12 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
+    public void onNoOfflineData() {
+        Toast.makeText(getContext(), R.string.no_offline_data, Toast.LENGTH_LONG).show();
+        getActivity().onBackPressed();
+    }
+
+    @Override
     public void onCharactersQueryResult(List<Integer> characterIds, List<CharacterModel> characters) {
         adapter.setCharacters(characters);
         adapter.notifyDataSetChanged();

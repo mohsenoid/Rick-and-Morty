@@ -3,6 +3,7 @@ package com.mohsenoid.rickandmorty.ui.character.details;
 import com.mohsenoid.rickandmorty.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.data.DataCallback;
 import com.mohsenoid.rickandmorty.data.Repository;
+import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.model.CharacterModel;
 
 
@@ -56,7 +57,11 @@ public class CharacterDetailsPresenter implements CharacterDetailsContract.Prese
                     view.hideLoading();
                 }
 
-                if (view != null) view.showMessage(exception.getMessage());
+                if (exception instanceof NoOfflineDataException) {
+                    if (view != null) view.onNoOfflineData();
+                } else {
+                    if (view != null) view.showMessage(exception.getMessage());
+                }
             }
         });
     }
