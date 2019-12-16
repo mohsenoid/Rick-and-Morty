@@ -5,9 +5,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import androidx.annotation.VisibleForTesting;
+
 public class ConfigProviderImpl implements ConfigProvider {
 
-    private static ConfigProviderImpl instance;
+    @VisibleForTesting
+    public static ConfigProviderImpl instance;
 
     private final Application context;
 
@@ -29,6 +32,8 @@ public class ConfigProviderImpl implements ConfigProvider {
         if (connectivityManager == null) return false;
 
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+        if (activeNetworkInfo == null) return false;
+
+        return connectivityManager.getActiveNetworkInfo().isConnected();
     }
 }
