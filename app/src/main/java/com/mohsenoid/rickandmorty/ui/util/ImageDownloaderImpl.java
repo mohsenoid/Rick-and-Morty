@@ -59,7 +59,7 @@ public class ImageDownloaderImpl implements ImageDownloader {
                 }
             }
 
-            Bitmap bitmap = loadBitmapFile(imageFile);
+            Bitmap bitmap = loadBitmapFile(imageFile, imageView.getWidth(), imageView.getHeight());
 
             mainTaskExecutor.execute(() -> {
                 if (progress != null) progress.setVisibility(View.GONE);
@@ -77,9 +77,12 @@ public class ImageDownloaderImpl implements ImageDownloader {
         return urlParts[urlParts.length - 1];
     }
 
-    private Bitmap loadBitmapFile(File imageFile) {
+    private Bitmap loadBitmapFile(File imageFile, int outWidth, int outHeight) {
         try {
-            return BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.outWidth = outWidth;
+            options.outHeight = outHeight;
+            return BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
