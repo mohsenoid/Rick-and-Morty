@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.character.details.CharacterDetailsFragment">
+    tools:context=".view.character.details.CharacterDetailsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.mohsenoid.rickandmorty.ui.util.SquareImageView
+            <com.mohsenoid.rickandmorty.view.util.SquareImageView
                 android:id="@+id/character_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

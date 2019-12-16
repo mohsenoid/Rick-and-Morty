@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.episode.list.EpisodeListActivity">
+        <activity android:name=".view.episode.list.EpisodeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -22,9 +22,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.character.list.CharacterListActivity" />
+        <activity android:name=".view.character.list.CharacterListActivity" />
 
-        <activity android:name=".ui.character.details.CharacterDetailsActivity" />
+        <activity android:name=".view.character.details.CharacterDetailsActivity" />
     </application>
 
 </manifest>

@@ -1,10 +1,11 @@
 package com.mohsenoid.rickandmorty.data;
 
-import com.mohsenoid.rickandmorty.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.data.db.Datastore;
 import com.mohsenoid.rickandmorty.data.service.ApiClient;
-import com.mohsenoid.rickandmorty.executor.TaskExecutor;
+import com.mohsenoid.rickandmorty.domain.Repository;
 import com.mohsenoid.rickandmorty.test.TestTaskExecutor;
+import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
+import com.mohsenoid.rickandmorty.util.executor.TaskExecutor;
 
 import org.junit.After;
 import org.junit.Before;

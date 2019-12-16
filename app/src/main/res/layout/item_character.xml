@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.mohsenoid.rickandmorty.ui.util.SquareImageView
+            <com.mohsenoid.rickandmorty.view.util.SquareImageView
                 android:id="@+id/character_image"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
