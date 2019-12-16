@@ -22,6 +22,7 @@ The **Image Downloader** also takes care of loading and caching images.
 
 [**GitHub Actions CI service**](https://github.com/mohsenoid/mobile-take-home/actions) is running the repo test and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/mobile-take-home).
 
+There are some unit tests using **Mockito** and some Android tests using **Robolectric**.
 
 ## References
 
