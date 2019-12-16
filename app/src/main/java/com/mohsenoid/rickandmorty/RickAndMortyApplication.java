@@ -6,7 +6,7 @@ import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
 
 public class RickAndMortyApplication extends Application {
 
-    DependenciesProvider dependenciesProvider;
+    private DependenciesProvider dependenciesProvider;
 
     public DependenciesProvider getDependenciesProvider() {
         return dependenciesProvider;

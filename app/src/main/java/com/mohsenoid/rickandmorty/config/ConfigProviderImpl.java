@@ -9,7 +9,7 @@ public class ConfigProviderImpl implements ConfigProvider {
 
     private static ConfigProviderImpl instance;
 
-    private Application context;
+    private final Application context;
 
     private ConfigProviderImpl(Application context) {
         this.context = context;

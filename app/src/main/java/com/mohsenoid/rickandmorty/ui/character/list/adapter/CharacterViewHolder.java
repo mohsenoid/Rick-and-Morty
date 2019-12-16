@@ -17,13 +17,12 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
     public final View view;
 
-    ImageView characterStatus;
+    final ImageView characterStatus;
 
-    private ImageDownloader imageDownloader;
-    private CharacterModel character;
-    private ImageView characterImage;
-    private ProgressBar characterImageProgress;
-    private TextView characterName;
+    private final ImageDownloader imageDownloader;
+    private final ImageView characterImage;
+    private final ProgressBar characterImageProgress;
+    private final TextView characterName;
 
     CharacterViewHolder(View view, ImageDownloader imageDownloader) {
         super(view);
@@ -36,13 +35,7 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
         characterStatus = view.findViewById(R.id.character_status);
     }
 
-    public CharacterModel getCharacter() {
-        return character;
-    }
-
     public void setCharacter(@NotNull CharacterModel character) {
-        this.character = character;
-
         imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
 
         characterName.setText(character.getName());

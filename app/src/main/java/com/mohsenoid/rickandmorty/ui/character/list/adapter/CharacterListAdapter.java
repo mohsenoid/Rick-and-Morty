@@ -16,10 +16,10 @@ import java.util.List;
 
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterViewHolder> {
 
-    private List<CharacterModel> characters = new ArrayList<>();
+    private final ImageDownloader imageDownloader;
+    private final ClickListener listener;
 
-    private ImageDownloader imageDownloader;
-    private ClickListener listener;
+    private List<CharacterModel> characters = new ArrayList<>();
 
     public CharacterListAdapter(ImageDownloader imageDownloader, ClickListener listener) {
         this.imageDownloader = imageDownloader;

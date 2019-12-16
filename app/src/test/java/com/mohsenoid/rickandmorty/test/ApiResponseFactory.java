@@ -20,7 +20,7 @@ public class ApiResponseFactory {
         private static final String VALUE_URL = "https://rickandmortyapi.com/api/episode/1";
         private static final String VALUE_CREATED = "2017-11-10T12:56:33.798Z";
 
-        public static String EPISODES_JSON = "{\n" +
+        public static final String EPISODES_JSON = "{\n" +
                 "  \"info\": {\n" +
                 "    \"count\": 1,\n" +
                 "    \"pages\": 1,\n" +
@@ -57,7 +57,7 @@ public class ApiResponseFactory {
 
     public static class Characters {
 
-        public static String CHARACTERS_JSON = "[\n" +
+        public static final String CHARACTERS_JSON = "[\n" +
                 "  " + CharacterDetails.CHARACTER_DETAILS_JSON + "\n" +
                 "]";
 
@@ -88,7 +88,7 @@ public class ApiResponseFactory {
         private static final String VALUE_URL = "https://rickandmortyapi.com/api/character/1";
         private static final String VALUE_CREATED = "2017-11-04T18:48:46.250Z";
 
-        public static String CHARACTER_DETAILS_JSON = "{\n" +
+        public static final String CHARACTER_DETAILS_JSON = "{\n" +
                 "  \"id\": " + VALUE_ID + ",\n" +
                 "  \"name\": \"" + VALUE_NAME + "\",\n" +
                 "  \"status\": \"" + VALUE_STATUS + "\",\n" +
@@ -118,9 +118,7 @@ public class ApiResponseFactory {
             List<String> episodes = new ArrayList<>();
             episodes.add(VALUE_EPISODE);
 
-            CharacterModel character = new CharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED, false);
-
-            return character;
+            return new CharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED, false);
         }
     }
 }

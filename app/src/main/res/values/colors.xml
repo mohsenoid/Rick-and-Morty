@@ -5,7 +5,6 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="transparentGray">#E6555555</color>
-    <color name="white">#FFF</color>
 
     <color name="characterDetailsNameBackground">@color/transparentGray</color>
     <color name="characterListStatusBackground">@color/transparentGray</color>

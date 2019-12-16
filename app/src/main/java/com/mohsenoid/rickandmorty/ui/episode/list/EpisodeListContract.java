@@ -6,9 +6,9 @@ import com.mohsenoid.rickandmorty.ui.base.BaseView;
 
 import java.util.List;
 
-public class EpisodeListContract {
+public interface EpisodeListContract {
 
-    public interface View extends BaseView {
+    interface View extends BaseView {
 
         void showLoadingMore();
 
@@ -21,7 +21,8 @@ public class EpisodeListContract {
         void reachedEndOfList();
     }
 
-    public interface Presenter extends BasePresenter<View> {
+    interface Presenter extends BasePresenter<View> {
+
         void loadEpisodes();
 
         void loadMoreEpisodes(int page);

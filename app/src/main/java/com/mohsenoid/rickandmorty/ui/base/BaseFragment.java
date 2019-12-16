@@ -18,5 +18,5 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(context);
     }
 
-    public abstract void injectDependencies(DependenciesProvider dependenciesProvider);
+    protected abstract void injectDependencies(DependenciesProvider dependenciesProvider);
 }

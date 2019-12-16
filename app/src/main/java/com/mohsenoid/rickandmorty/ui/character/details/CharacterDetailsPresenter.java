@@ -9,10 +9,10 @@ import com.mohsenoid.rickandmorty.model.CharacterModel;
 
 public class CharacterDetailsPresenter implements CharacterDetailsContract.Presenter {
 
-    private CharacterDetailsContract.View view = null;
+    private final Repository repository;
+    private final ConfigProvider configProvider;
 
-    private Repository repository;
-    private ConfigProvider configProvider;
+    private CharacterDetailsContract.View view = null;
 
     public CharacterDetailsPresenter(Repository repository, ConfigProvider configProvider) {
         this.repository = repository;

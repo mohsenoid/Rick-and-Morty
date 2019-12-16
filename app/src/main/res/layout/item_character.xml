@@ -48,6 +48,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:background="@color/characterListStatusBackground"
+            android:contentDescription="@string/character_status"
             android:padding="8dp"
             android:src="@drawable/ic_dead" />
     </LinearLayout>

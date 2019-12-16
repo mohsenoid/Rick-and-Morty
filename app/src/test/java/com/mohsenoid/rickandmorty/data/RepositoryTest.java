@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.when;
 
-public abstract class RepositoryTest {
+abstract class RepositoryTest {
 
     @Mock
     Datastore datastore;
@@ -21,6 +21,7 @@ public abstract class RepositoryTest {
     @Mock
     ApiClient apiClient;
     Repository repository;
+
     @Mock
     private ConfigProvider configProvider;
     private TaskExecutor testTaskExecutor = new TestTaskExecutor();

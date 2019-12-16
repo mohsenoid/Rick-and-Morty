@@ -15,8 +15,9 @@ import java.util.List;
 
 public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> {
 
+    private final ClickListener listener;
+
     private List<EpisodeModel> episodes = new ArrayList<>();
-    private ClickListener listener;
 
     public EpisodeListAdapter(ClickListener listener) {
         this.listener = listener;

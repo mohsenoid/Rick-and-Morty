@@ -20,9 +20,9 @@ public class ApiClientImpl implements ApiClient {
     @VisibleForTesting
     public static ApiClientImpl instance;
 
-    private NetworkHelper networkHelper;
+    private final NetworkHelper networkHelper;
 
-    ApiClientImpl(NetworkHelper networkHelper) {
+    private ApiClientImpl(NetworkHelper networkHelper) {
         this.networkHelper = networkHelper;
     }
 

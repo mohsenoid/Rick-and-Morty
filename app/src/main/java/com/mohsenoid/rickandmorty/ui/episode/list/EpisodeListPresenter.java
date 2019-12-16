@@ -10,10 +10,10 @@ import java.util.List;
 
 public class EpisodeListPresenter implements EpisodeListContract.Presenter {
 
-    private EpisodeListContract.View view = null;
+    private final Repository repository;
+    private final ConfigProvider configProvider;
 
-    private Repository repository;
-    private ConfigProvider configProvider;
+    private EpisodeListContract.View view = null;
 
     private int page = 1;
 

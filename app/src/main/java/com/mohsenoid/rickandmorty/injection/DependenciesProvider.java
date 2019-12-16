@@ -34,7 +34,7 @@ import java.util.List;
 
 public class DependenciesProvider {
 
-    private Application context;
+    private final Application context;
 
     public DependenciesProvider(Application context) {
         this.context = context;

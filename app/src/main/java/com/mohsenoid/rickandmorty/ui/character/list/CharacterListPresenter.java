@@ -10,11 +10,10 @@ import java.util.List;
 
 public class CharacterListPresenter implements CharacterListContract.Presenter {
 
+    private final Repository repository;
+    private final ConfigProvider configProvider;
+
     private CharacterListContract.View view = null;
-
-    private Repository repository;
-    private ConfigProvider configProvider;
-
     private List<Integer> characterIds;
 
     public CharacterListPresenter(Repository repository, ConfigProvider configProvider) {

@@ -13,11 +13,10 @@ import org.jetbrains.annotations.NotNull;
 public class EpisodeViewHolder extends RecyclerView.ViewHolder {
 
     public final View view;
-    private EpisodeModel episode;
 
-    private TextView episodeName;
-    private TextView episodeEpisode;
-    private TextView episodeAirDate;
+    private final TextView episodeName;
+    private final TextView episodeEpisode;
+    private final TextView episodeAirDate;
 
     EpisodeViewHolder(View view) {
         super(view);
@@ -28,13 +27,7 @@ public class EpisodeViewHolder extends RecyclerView.ViewHolder {
         episodeAirDate = view.findViewById(R.id.episode_air_date);
     }
 
-    public EpisodeModel getCharacter() {
-        return episode;
-    }
-
     public void setEpisode(@NotNull EpisodeModel episode) {
-        this.episode = episode;
-
         episodeName.setText(episode.getName());
         episodeEpisode.setText(episode.getEpisode());
         episodeAirDate.setText(episode.getAirDate());

@@ -18,12 +18,14 @@ import java.io.IOException;
 public class ImageDownloaderImpl implements ImageDownloader {
 
     private static final String SEPARATOR = "/";
+
     @VisibleForTesting
     public static ImageDownloaderImpl instance;
-    private NetworkHelper networkHelper;
-    private String cacheDirectoryPath;
-    private TaskExecutor ioTaskExecutor;
-    private TaskExecutor mainTaskExecutor;
+
+    private final NetworkHelper networkHelper;
+    private final String cacheDirectoryPath;
+    private final TaskExecutor ioTaskExecutor;
+    private final TaskExecutor mainTaskExecutor;
 
     private ImageDownloaderImpl(NetworkHelper networkHelper, String cacheDirectoryPath, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor) {
         this.networkHelper = networkHelper;

@@ -12,8 +12,8 @@ import com.mohsenoid.rickandmorty.ui.base.BaseActivity;
 
 public class EpisodeListActivity extends BaseActivity {
 
-    static String TAG = EpisodeListActivity.class.getSimpleName();
-    static String TAG_EPISODE_LIST_FRAGMENT = "episodeListFragment";
+    private static final String TAG = EpisodeListActivity.class.getSimpleName();
+    private static final String TAG_EPISODE_LIST_FRAGMENT = "episodeListFragment";
 
     private EpisodeListFragment episodeListFragment;
 

@@ -23,7 +23,7 @@ import com.mohsenoid.rickandmorty.ui.util.ImageDownloader;
 
 public class CharacterDetailsFragment extends BaseFragment implements CharacterDetailsContract.View {
 
-    private static String ARG_CHARACTER_ID = "character_id";
+    private static final String ARG_CHARACTER_ID = "character_id";
 
     private int characterId;
 

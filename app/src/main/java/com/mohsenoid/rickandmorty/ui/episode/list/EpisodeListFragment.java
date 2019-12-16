@@ -128,8 +128,8 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     public void setEpisodes(List<EpisodeModel> episodes) {
         swipeRefresh.setRefreshing(false);
 
-            adapter.setEpisodes(episodes);
-            scrollListener.resetState();
+        adapter.setEpisodes(episodes);
+        scrollListener.resetState();
         adapter.notifyDataSetChanged();
     }
 
@@ -137,7 +137,7 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     public void updateEpisodes(List<EpisodeModel> episodes) {
         swipeRefresh.setRefreshing(false);
 
-            adapter.addMoreEpisodes(episodes);
+        adapter.addMoreEpisodes(episodes);
         adapter.notifyDataSetChanged();
     }
 

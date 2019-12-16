@@ -25,7 +25,7 @@ public class DatastoreImpl extends SQLiteOpenHelper implements Datastore {
     @VisibleForTesting
     public static DatastoreImpl instance;
 
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
     private DatastoreImpl(Context context) {
         super(context, DatastoreConstants.DATABASE_NAME, null, DatastoreConstants.DATABASE_VERSION);

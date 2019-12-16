@@ -14,10 +14,9 @@ import com.mohsenoid.rickandmorty.ui.base.BaseActivity;
 
 public class CharacterDetailsActivity extends BaseActivity {
 
-    private static String TAG = CharacterDetailsActivity.class.getSimpleName();
-    private static String TAG_CHARACTER_DETAILS_FRAGMENT = "character_details_fragment";
-
-    private static String ARG_CHARACTER_ID = "character_id";
+    private static final String TAG = CharacterDetailsActivity.class.getSimpleName();
+    private static final String TAG_CHARACTER_DETAILS_FRAGMENT = "character_details_fragment";
+    private static final String ARG_CHARACTER_ID = "character_id";
 
     private CharacterDetailsFragment characterDetailsFragment;
 

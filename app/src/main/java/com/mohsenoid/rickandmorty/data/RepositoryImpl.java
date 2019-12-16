@@ -18,11 +18,11 @@ public class RepositoryImpl implements Repository {
     @VisibleForTesting
     public static RepositoryImpl instance;
 
-    private Datastore datastore;
-    private ApiClient apiClient;
-    private TaskExecutor ioTaskExecutor;
-    private TaskExecutor mainTaskExecutor;
-    private ConfigProvider configProvider;
+    private final Datastore datastore;
+    private final ApiClient apiClient;
+    private final TaskExecutor ioTaskExecutor;
+    private final TaskExecutor mainTaskExecutor;
+    private final ConfigProvider configProvider;
 
     private RepositoryImpl(Datastore datastore, ApiClient apiClient, TaskExecutor ioTaskExecutor, TaskExecutor mainTaskExecutor, ConfigProvider configProvider) {
         this.datastore = datastore;

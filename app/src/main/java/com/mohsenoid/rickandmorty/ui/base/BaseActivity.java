@@ -18,5 +18,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
     }
 
-    public abstract void injectDependencies(@Nullable Bundle savedInstanceState, DependenciesProvider dependenciesProvider);
+    protected abstract void injectDependencies(@Nullable Bundle savedInstanceState, DependenciesProvider dependenciesProvider);
 }
