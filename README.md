@@ -1,4 +1,4 @@
-# ![launcher icon](https://raw.githubusercontent.com/mohsenoid/mobile-take-home/master/app/src/main/res/mipmap-mdpi/ic_launcher_round.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/mobile-take-home/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/mobile-take-home/actions) [![codecov](https://codecov.io/gh/mohsenoid/mobile-take-home/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/mobile-take-home)
+# ![launcher icon](logo.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty)
 
 This repository contains [**Guestlogix**](http://www.guestlogix.ai/) assignment Android application. [_Here is the assignment full details._](TASK.md)
 
@@ -20,7 +20,7 @@ The  **Dependencies Provider** does the Dependency Injection in the whole app. I
 
 The **Image Downloader** also takes care of loading and caching images.
 
-[**GitHub Actions CI service**](https://github.com/mohsenoid/mobile-take-home/actions) is running the repo test and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/mobile-take-home).
+[**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo test and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
 
 There are some unit tests using **Mockito** and some Android tests using **Robolectric**.
 
