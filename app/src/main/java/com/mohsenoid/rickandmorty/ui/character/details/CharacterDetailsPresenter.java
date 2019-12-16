@@ -12,6 +12,8 @@ public class CharacterDetailsPresenter implements CharacterDetailsContract.Prese
     private final Repository repository;
     private final ConfigProvider configProvider;
 
+    private int characterId;
+
     private CharacterDetailsContract.View view = null;
 
     public CharacterDetailsPresenter(Repository repository, ConfigProvider configProvider) {
@@ -30,7 +32,12 @@ public class CharacterDetailsPresenter implements CharacterDetailsContract.Prese
     }
 
     @Override
-    public void loadCharacter(int characterId) {
+    public void setCharacterId(int characterId) {
+        this.characterId = characterId;
+    }
+
+    @Override
+    public void loadCharacter() {
         if (view != null) view.showLoading();
 
         queryCharacter(characterId);

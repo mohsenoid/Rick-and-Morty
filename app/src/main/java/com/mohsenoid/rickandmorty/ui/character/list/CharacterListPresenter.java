@@ -32,9 +32,13 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
     }
 
     @Override
-    public void loadCharacters(List<Integer> characterIds) {
-        if (view != null) view.showLoading();
+    public void setCharacterIds(List<Integer> characterIds) {
         this.characterIds = characterIds;
+    }
+
+    @Override
+    public void loadCharacters() {
+        if (view != null) view.showLoading();
 
         queryCharacters();
     }

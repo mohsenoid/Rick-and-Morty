@@ -29,8 +29,6 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
 
     private static final String ARG_CHARACTER_IDS = "character_ids";
 
-    private List<Integer> characterIds;
-
     private CharacterListContract.Presenter presenter;
     private ProgressBar progress;
     private CharacterListAdapter adapter;
@@ -55,18 +53,20 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!extractCharacterIds()) {
+        ArrayList<Integer> characterIds = extractCharacterIds();
+        if (characterIds == null) {
             Toast.makeText(getContext(), "Character ids are missing!", Toast.LENGTH_SHORT).show();
             parentActivityOnBackPressed();
+        } else {
+            presenter.setCharacterIds(characterIds);
         }
     }
 
-    private boolean extractCharacterIds() {
+    private ArrayList<Integer> extractCharacterIds() {
         Bundle args = getArguments();
-        if (args == null) return false;
+        if (args == null) return null;
 
-        characterIds = args.getIntegerArrayList(ARG_CHARACTER_IDS);
-        return characterIds != null;
+        return args.getIntegerArrayList(ARG_CHARACTER_IDS);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     public void onResume() {
         super.onResume();
 
-        presenter.loadCharacters(characterIds);
+        presenter.loadCharacters();
     }
 
     @Override

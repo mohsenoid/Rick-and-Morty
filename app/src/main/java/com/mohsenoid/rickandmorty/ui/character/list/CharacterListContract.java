@@ -19,7 +19,9 @@ public interface CharacterListContract {
 
     interface Presenter extends BasePresenter<View> {
 
-        void loadCharacters(List<Integer> characterIds);
+        void setCharacterIds(List<Integer> characterIds);
+
+        void loadCharacters();
 
         void killCharacter(CharacterModel character);
     }

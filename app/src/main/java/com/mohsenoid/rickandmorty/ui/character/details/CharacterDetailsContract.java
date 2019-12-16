@@ -15,6 +15,8 @@ public interface CharacterDetailsContract {
 
     interface Presenter extends BasePresenter<View> {
 
-        void loadCharacter(int characterId);
+        void setCharacterId(int characterId);
+
+        void loadCharacter();
     }
 }
