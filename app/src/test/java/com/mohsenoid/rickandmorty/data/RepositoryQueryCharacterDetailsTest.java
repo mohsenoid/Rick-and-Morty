@@ -1,6 +1,9 @@
 package com.mohsenoid.rickandmorty.data;
 
+import org.json.JSONException;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -8,7 +11,7 @@ import static org.mockito.Mockito.verify;
 public class RepositoryQueryCharacterDetailsTest extends RepositoryTest {
 
     @Test
-    public void testIfQueryCharacterDetailsCallsApiClientMethodWhenIsOnline() throws Exception {
+    public void testIfQueryCharacterDetailsCallsApiClientMethodWhenIsOnline() throws IOException, JSONException {
         // GIVEN
         stubConfigProviderIsOnline(true);
         int page = 1;
@@ -17,12 +20,12 @@ public class RepositoryQueryCharacterDetailsTest extends RepositoryTest {
         repository.queryCharacterDetails(page, null);
 
         // THEN
-        verify(datastore, times(1)).queryCharacter(page);
-        verify(apiClient, times(1)).getCharacterDetails(page);
+        verify(db, times(1)).queryCharacter(page);
+        verify(networkClient, times(1)).getCharacterDetails(page);
     }
 
     @Test
-    public void testIfQueryCharacterDetailsCallsApiClientMethodWhenIsOffline() throws Exception {
+    public void testIfQueryCharacterDetailsCallsApiClientMethodWhenIsOffline() throws IOException, JSONException {
         // GIVEN
         stubConfigProviderIsOnline(false);
         int page = 1;
@@ -31,7 +34,7 @@ public class RepositoryQueryCharacterDetailsTest extends RepositoryTest {
         repository.queryCharacterDetails(page, null);
 
         // THEN
-        verify(datastore, times(1)).queryCharacter(page);
-        verify(apiClient, times(0)).getCharacterDetails(page);
+        verify(db, times(1)).queryCharacter(page);
+        verify(networkClient, times(0)).getCharacterDetails(page);
     }
 }

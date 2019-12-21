@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.view.character.list;
 
-import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.view.base.BasePresenter;
 import com.mohsenoid.rickandmorty.view.base.BaseView;
 
@@ -12,9 +12,9 @@ public interface CharacterListContract {
 
         void onNoOfflineData();
 
-        void setCharacters(List<CharacterModel> characters);
+        void setCharacters(List<CharacterEntity> characters);
 
-        void updateCharacter(CharacterModel character);
+        void updateCharacter(CharacterEntity character);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -23,6 +23,6 @@ public interface CharacterListContract {
 
         void loadCharacters();
 
-        void killCharacter(CharacterModel character);
+        void killCharacter(CharacterEntity character);
     }
 }

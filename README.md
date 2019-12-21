@@ -1,12 +1,12 @@
 # ![launcher icon](logo.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty)
 
-This repository contains [**Guestlogix**](http://www.guestlogix.ai/) assignment Android application. [_Here is the assignment full details._](TASK.md)
+This repository contains Rick and Morty Android application which I am using as training material.
 
 ![Screenshot](SCREENSHOT1.png) ![Screenshot](SCREENSHOT2.png)
 
 ## Technical details
 
-The Application implemented and structured based on **Clean Architecture** and **SOLID** principles best practices and the presentation layer is implemented based on the **MVP** pattern. No 3rd party dependencies are used for developing this app and it only depends on **Android Jetpack** native libraries.
+The Application implemented and structured based on **Clean Architecture** and **SOLID** principles best practices and the presentation layer is implemented based on the **MVP** pattern.
 
 The **Data** layer contains **API Client** to get access to remote data and **DB** to persist those data locally in case of offline usage.
 

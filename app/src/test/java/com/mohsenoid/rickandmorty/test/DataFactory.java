@@ -31,6 +31,20 @@ public class DataFactory {
         return ThreadLocalRandom.current().nextInt(min, max);
     }
 
+    public static List<Integer> randomIntList(int count, int min, int max) {
+        List<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            list.add(DataFactory.randomInt());
+        }
+
+        return list;
+    }
+
+    public static List<Integer> randomIntList(int count) {
+        return randomIntList(count, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    }
+
     public static Boolean randomBoolean() {
         return Math.random() < 0.5;
     }

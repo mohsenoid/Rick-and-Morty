@@ -44,4 +44,16 @@ public class Serializer {
 
         return Arrays.asList((input.split(SEPARATOR)));
     }
+
+    public static List<Integer> mapStringListToIntegerList(List<String> input) {
+        if (input == null) return null;
+
+        List<Integer> output = new ArrayList<>();
+
+        for (String s : input) {
+            output.add(Integer.parseInt(s));
+        }
+
+        return output;
+    }
 }

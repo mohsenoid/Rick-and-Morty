@@ -1,8 +1,9 @@
 package com.mohsenoid.rickandmorty.view.character.list;
 
 import com.mohsenoid.rickandmorty.data.DataCallback;
+import com.mohsenoid.rickandmorty.data.mapper.CharacterMapper;
 import com.mohsenoid.rickandmorty.domain.Repository;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory;
 import com.mohsenoid.rickandmorty.test.DataFactory;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
@@ -84,13 +85,13 @@ public class CharacterListPresenterTest {
         presenter.loadCharacters();
 
         // THEN
-        verify(repository, times(1)).queryCharacters(eq(characterIds), any());
+        verify(repository, times(1)).queryCharactersByIds(eq(characterIds), any());
     }
 
     @Test
     public void testLoadCharactersCallsViewSetCharactersOnSuccess() {
         // GIVEN
-        List<CharacterModel> characters = CharacterDataFactory.makeCharactersList(5);
+        List<CharacterEntity> characters = CharacterDataFactory.Entity.makeEntityCharactersModelList(5);
         stubRepositoryQueryCharactersOnSuccess(characters);
 
         // WHEN
@@ -103,7 +104,7 @@ public class CharacterListPresenterTest {
     @Test
     public void testLoadCharactersCallsHideLoadingOnSuccess() {
         // GIVEN
-        List<CharacterModel> characters = CharacterDataFactory.makeCharactersList(5);
+        List<CharacterEntity> characters = CharacterDataFactory.Entity.makeEntityCharactersModelList(5);
         stubRepositoryQueryCharactersOnSuccess(characters);
 
         // WHEN
@@ -117,14 +118,14 @@ public class CharacterListPresenterTest {
     public void testKillCharacterCallsRepositoryWhenCharacterIsAlive() {
         // GIVEN
         stubConfigProviderIsOnline(true);
-        CharacterModel character = CharacterDataFactory.makeCharacter();
-        character.setStatus(CharacterModel.ALIVE);
+        int characterId = DataFactory.randomInt();
+        CharacterEntity character = CharacterDataFactory.Entity.makeCharacterEntityWithIdAndStatus(characterId, CharacterMapper.CharacterDbMapper.ALIVE, true, false);
 
         // WHEN
         presenter.killCharacter(character);
 
         // THEN
-        verify(repository, times(1)).killCharacter(eq(character.getId()), any());
+        verify(repository, times(1)).killCharacter(eq(characterId), any());
     }
 
     @Test
@@ -156,8 +157,8 @@ public class CharacterListPresenterTest {
     public void testKillCharacterSkipCallingRepositoryWhenCharacterIsKilled() {
         // GIVEN
         stubConfigProviderIsOnline(true);
-        CharacterModel character = CharacterDataFactory.makeCharacter();
-        character.setIsKilledByUser(true);
+        int characterId = DataFactory.randomInt();
+        CharacterEntity character = CharacterDataFactory.Entity.makeCharacterEntityWithIdAndStatus(characterId, CharacterMapper.CharacterDbMapper.ALIVE, true, true);
 
         // WHEN
         presenter.killCharacter(character);
@@ -171,21 +172,21 @@ public class CharacterListPresenterTest {
                 .thenReturn(isOnline);
     }
 
-    private void stubRepositoryQueryCharactersOnSuccess(List<CharacterModel> characters) {
+    private void stubRepositoryQueryCharactersOnSuccess(List<CharacterEntity> characters) {
         doAnswer((Answer<Void>) invocation -> {
-            DataCallback<List<CharacterModel>> callback = invocation.getArgument(1);
+            DataCallback<List<CharacterEntity>> callback = invocation.getArgument(1);
             callback.onSuccess(characters);
 
             return null;
-        }).when(repository).queryCharacters(any(), any());
+        }).when(repository).queryCharactersByIds(any(), any());
     }
 
     private void stubRepositoryQueryCharactersOnError(Exception exception) {
         doAnswer((Answer<Void>) invocation -> {
-            DataCallback<List<CharacterModel>> callback = invocation.getArgument(1);
+            DataCallback<List<CharacterEntity>> callback = invocation.getArgument(1);
             callback.onError(exception);
 
             return null;
-        }).when(repository).queryCharacters(any(), any());
+        }).when(repository).queryCharactersByIds(any(), any());
     }
 }

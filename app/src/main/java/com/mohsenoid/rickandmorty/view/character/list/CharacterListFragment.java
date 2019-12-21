@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.view.base.BaseFragment;
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity;
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter;
@@ -131,13 +131,13 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
-    public void setCharacters(List<CharacterModel> characters) {
+    public void setCharacters(List<CharacterEntity> characters) {
         adapter.setCharacters(characters);
         adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void updateCharacter(CharacterModel character) {
+    public void updateCharacter(CharacterEntity character) {
         adapter.updateCharacter(character);
         adapter.notifyDataSetChanged();
     }
@@ -148,13 +148,13 @@ public class CharacterListFragment extends BaseFragment implements CharacterList
     }
 
     @Override
-    public void onCharacterRowClick(CharacterModel character) {
+    public void onCharacterRowClick(CharacterEntity character) {
         Intent characterDetailsIntent = CharacterDetailsActivity.newIntent(getContext(), character.getId());
         startActivity(characterDetailsIntent);
     }
 
     @Override
-    public void onCharacterStatusClick(CharacterModel character) {
+    public void onCharacterStatusClick(CharacterEntity character) {
         presenter.killCharacter(character);
     }
 }
