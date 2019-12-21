@@ -1,0 +1,8 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">@dimen/keyLine1</dimen>
+    <dimen name="activity_vertical_margin">@dimen/keyLine1</dimen>
+
+    <dimen name="keyLine1">16dp</dimen>
+    <dimen name="keyLine2">72dp</dimen>
+</resources>

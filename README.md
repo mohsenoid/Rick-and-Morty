@@ -1,71 +1,35 @@
-### Guestlogix Take Home Test - Mobile
+# ![launcher icon](logo.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty)
 
-At Guestlogix we feel that putting developers on the spot with advanced algorithmic puzzles doesn’t exactly highlight one’s true skillset. The intention of this assessment is to see how you approach and tackle a problem in the real world, not quivering in front of a whiteboard.
+This repository contains [**Guestlogix**](http://www.guestlogix.ai/) assignment Android application. [_Here is the assignment full details._](TASK.md)
 
-### What is the test?
+![Screenshot](SCREENSHOT1.png) ![Screenshot](SCREENSHOT2.png)
 
-You will be building a mobile application that displays a list of Rick and Morty episodes. If the user taps on an episode another list should appear showing the characters in that episode split into dead or alive (you're free to decide how to implement this split) and displayed in the order in which they were created. If the user taps on a character then a screen showing the character's picture and information should appear.
+## Technical details
 
-For bonus points (not mandatory) you can add functionality to kill a character (the way to kill a character is completely up to you, a swipe, a button, etc). If a character dies then everything should update accordingly.
+The Application implemented and structured based on **Clean Architecture** and **SOLID** principles best practices and the presentation layer is implemented based on the **MVP** pattern. No 3rd party dependencies are used for developing this app and it only depends on **Android Jetpack** native libraries.
 
-### User Stories
+The **Data** layer contains **API Client** to get access to remote data and **DB** to persist those data locally in case of offline usage.
 
-* The first thing a user should see is a list of episodes.
-* If the user taps into an episode the app has to display a list of characters with a clear distinction between dead and alive characters
-* If the user taps into a character the app has to display that character's information and picture
-* Bonus functionality: The user should have the ability to kill a character and if a character gets kill the character lists should update accordingly
+The **Domain** layer consist of **Repository** which allows access to the Data layer. It also uses **IO Task Executor** and **Main Task Executor** to run long-running tasks in the background and reflect the result on UI. **IO Task Executor** is implemented using java **thread pools** and **Main Task Executor** uses Android main looper **Handler**. There is also a **Test Task Executor** which runs immediately on same thread in unit tests.
 
-### Evaluation criteria
+![Task Executor](EXECUTOR.png)
 
-Your submission will be evaluated on the following aspects
+The **View** layer multiple Activity and Fragment which use their contract to implement the view interface and use presenter to respond to user interactions.
 
-   * Completeness
-   * Correct application of SOLID principles
-   * Efficiency
-   * Correct application of architectural patterns (we suggest MVC, but if you want to use a different one make sure it is readable and applied correctly)
-   * Code readability and expressiveness
-   * If there is a problem, the app fails gracefully
-   * While we favour functionality over UI/UX your submission should be easy to use (from a user's perspective)
-   * Your solution has to compile
+The  **Dependencies Provider** does the Dependency Injection in the whole app. It also uses **Base** objects to inject dependencies into **Activities** and **Fragments**.
 
-### (Non negotiable) Requirements
+The **Image Downloader** also takes care of loading and caching images.
 
-The application may be done in **Java or Swift** (No Kotlin, no Obj-C). 
+[**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo test and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
 
-**No third party libraries may be used**. You can use any native tools available to you from the platform, but no open sourced, or third party libraries. 
+There are some unit tests using **Mockito** and some Android tests using **Robolectric**.
 
-### Project's API
+## References
 
-https://rickandmortyapi.com/
+Data provided by [Rick And Morty API](https://rickandmortyapi.com/)
 
-### Submitting
+Endless Recycler View made by [@nesquena](https://gist.github.com/nesquena/d09dc68ff07e845cc622)
 
-1. Fork this repository and work on the challenge.
-2. Run through it one last time to make sure it works!
-3. Send an email with a link to your forked repository to indicate that you have completed the challenge.
+App Launcher Icon made by [freepngimg.com](http://freepngimg.com)
 
-### Questions
-
-If you have any questions during the challenge feel free to email recruitment@guestlogix.com Whether it be a question about the requirements, submitting, anything, just send the email!
-
-### F.A.Q
-
-* Why are third party libraries not allowed?
-     For two reasons: 
-      1. Because we want to gauge your knowledge regarding iOS/Android. We're testing your understanding and domain with native networking methods and patterns and if you use external libraries then all the heavy lifting is done for you and the test becomes more like a chore than an actual test. 
-     2. Because we're building a native SDK for iOS and Android, and as such, we want it to talk nicely with other potential             libraries our clients may be using. To take away the burden of keeping track of compatibility issues and maintenance issues with other libraries we're doing everything 100% native
-     
-* Can I use Alamofire/KingFisher/OkHttp/Retrofit/Gson/SwiftyJson/Rx....? 
-    * No, only native libraries. Note for Android developers: This includes Volley!! 
-    
-* But Google/Facebook/Etc...maintains/created the library I intend to use...
-  * Still no...
-  
-* But its a very popular library and all the cool kids are using it!
-  * Nope, no external libraries. 
- 
-* OK so which libraries can I use? 
-  * For Android, you can find all the available libraries for you here: https://developer.android.com/reference 
-  If the library is not listed there, then you can't use it. 
-  
-  * For iOS you can find all the availabe libraries for you here: https://developer.apple.com/documentation
+Dead/Alive Icons made by [Freepik](https://flaticon.com/authors/freepik) from [flaticon.com](https://flaticon.com)
