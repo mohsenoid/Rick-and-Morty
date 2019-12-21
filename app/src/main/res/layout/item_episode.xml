@@ -13,7 +13,7 @@
         android:padding="8dp">
 
         <TextView
-            android:id="@+id/episode_episode"
+            android:id="@+id/episodeEpisode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
@@ -22,7 +22,7 @@
             tools:text="S01E01" />
 
         <TextView
-            android:id="@+id/episode_name"
+            android:id="@+id/episodeName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -30,7 +30,7 @@
             tools:text="Pilot" />
 
         <TextView
-            android:id="@+id/episode_air_date"
+            android:id="@+id/episodeAirDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
