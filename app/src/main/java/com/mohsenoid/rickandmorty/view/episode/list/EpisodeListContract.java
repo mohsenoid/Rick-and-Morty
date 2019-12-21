@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.view.episode.list;
 
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity;
 import com.mohsenoid.rickandmorty.view.base.BasePresenter;
 import com.mohsenoid.rickandmorty.view.base.BaseView;
 
@@ -14,9 +14,9 @@ public interface EpisodeListContract {
 
         void hideLoadingMore();
 
-        void setEpisodes(List<EpisodeModel> episodes);
+        void setEpisodes(List<EpisodeEntity> episodes);
 
-        void updateEpisodes(List<EpisodeModel> episodes);
+        void updateEpisodes(List<EpisodeEntity> episodes);
 
         void reachedEndOfList();
     }

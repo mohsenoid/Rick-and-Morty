@@ -1,7 +1,11 @@
 package com.mohsenoid.rickandmorty.data;
 
-import com.mohsenoid.rickandmorty.data.db.Datastore;
-import com.mohsenoid.rickandmorty.data.service.ApiClient;
+import com.mohsenoid.rickandmorty.data.db.Db;
+import com.mohsenoid.rickandmorty.data.mapper.CharacterMapper;
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeMapper;
+import com.mohsenoid.rickandmorty.data.mapper.LocationMapper;
+import com.mohsenoid.rickandmorty.data.mapper.OriginMapper;
+import com.mohsenoid.rickandmorty.data.network.NetworkClient;
 import com.mohsenoid.rickandmorty.domain.Repository;
 import com.mohsenoid.rickandmorty.test.TestTaskExecutor;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
@@ -17,20 +21,24 @@ import static org.mockito.Mockito.when;
 abstract class RepositoryTest {
 
     @Mock
-    Datastore datastore;
+    Db db;
 
     @Mock
-    ApiClient apiClient;
+    NetworkClient networkClient;
+
     Repository repository;
 
     @Mock
     private ConfigProvider configProvider;
+
     private TaskExecutor testTaskExecutor = new TestTaskExecutor();
+    private EpisodeMapper episodeMapper = EpisodeMapper.getInstance();
+    private CharacterMapper characterMapper = CharacterMapper.getInstance(OriginMapper.getInstance(), LocationMapper.getInstance());
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        repository = RepositoryImpl.getInstance(datastore, apiClient, testTaskExecutor, testTaskExecutor, configProvider);
+        repository = RepositoryImpl.getInstance(db, networkClient, testTaskExecutor, testTaskExecutor, configProvider, episodeMapper, characterMapper);
     }
 
     @After

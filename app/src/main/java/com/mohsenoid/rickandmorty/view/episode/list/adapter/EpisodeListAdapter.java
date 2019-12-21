@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,17 +17,17 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> 
 
     private final ClickListener listener;
 
-    private List<EpisodeModel> episodes = new ArrayList<>();
+    private List<EpisodeEntity> episodes = new ArrayList<>();
 
     public EpisodeListAdapter(ClickListener listener) {
         this.listener = listener;
     }
 
-    public void setEpisodes(List<EpisodeModel> episodes) {
+    public void setEpisodes(List<EpisodeEntity> episodes) {
         this.episodes = episodes;
     }
 
-    public void addMoreEpisodes(List<EpisodeModel> episodes) {
+    public void addMoreEpisodes(List<EpisodeEntity> episodes) {
         this.episodes.addAll(episodes);
     }
 
@@ -41,7 +41,7 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull EpisodeViewHolder holder, int position) {
-        final EpisodeModel episode = episodes.get(position);
+        final EpisodeEntity episode = episodes.get(position);
 
         holder.setEpisode(episode);
 
@@ -56,6 +56,6 @@ public class EpisodeListAdapter extends RecyclerView.Adapter<EpisodeViewHolder> 
     }
 
     public interface ClickListener {
-        void onEpisodeRowClick(EpisodeModel episode);
+        void onEpisodeRowClick(EpisodeEntity episode);
     }
 }

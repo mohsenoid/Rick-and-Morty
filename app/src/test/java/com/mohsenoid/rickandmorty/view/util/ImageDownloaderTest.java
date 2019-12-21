@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.view.util;
 
-import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
+import com.mohsenoid.rickandmorty.data.network.NetworkHelper;
 import com.mohsenoid.rickandmorty.test.TestTaskExecutor;
 import com.mohsenoid.rickandmorty.util.executor.TaskExecutor;
 

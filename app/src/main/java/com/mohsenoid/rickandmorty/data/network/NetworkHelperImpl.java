@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.data.service.network;
+package com.mohsenoid.rickandmorty.data.network;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mohsenoid.rickandmorty.R;
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity;
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
 import com.mohsenoid.rickandmorty.view.base.BaseFragment;
 import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivity;
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter;
@@ -125,7 +125,7 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     }
 
     @Override
-    public void setEpisodes(List<EpisodeModel> episodes) {
+    public void setEpisodes(List<EpisodeEntity> episodes) {
         swipeRefresh.setRefreshing(false);
 
         adapter.setEpisodes(episodes);
@@ -134,7 +134,7 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     }
 
     @Override
-    public void updateEpisodes(List<EpisodeModel> episodes) {
+    public void updateEpisodes(List<EpisodeEntity> episodes) {
         swipeRefresh.setRefreshing(false);
 
         adapter.addMoreEpisodes(episodes);
@@ -147,7 +147,7 @@ public class EpisodeListFragment extends BaseFragment implements EpisodeListCont
     }
 
     @Override
-    public void onEpisodeRowClick(EpisodeModel episode) {
+    public void onEpisodeRowClick(EpisodeEntity episode) {
         Intent characterListIntent = CharacterListActivity.newIntent(getContext(), episode.getCharacterIds());
         startActivity(characterListIntent);
     }

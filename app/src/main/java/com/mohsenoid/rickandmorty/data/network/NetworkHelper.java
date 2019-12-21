@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.data.service.network;
+package com.mohsenoid.rickandmorty.data.network;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,25 +14,17 @@ public interface NetworkHelper {
         private String key;
         private String value;
 
-        public Param(String key, String value) {
+        Param(String key, String value) {
             this.key = key;
             this.value = value;
         }
 
-        public String getKey() {
+        String getKey() {
             return key;
         }
 
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public String getValue() {
+        String getValue() {
             return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
         }
     }
 }
