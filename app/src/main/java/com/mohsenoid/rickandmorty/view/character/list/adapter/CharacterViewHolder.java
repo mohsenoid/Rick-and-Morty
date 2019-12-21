@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.view.util.ImageDownloader;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class CharacterViewHolder extends RecyclerView.ViewHolder {
         characterStatus = view.findViewById(R.id.character_status);
     }
 
-    public void setCharacter(@NotNull CharacterModel character) {
+    public void setCharacter(@NotNull CharacterEntity character) {
         imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
 
         characterName.setText(character.getName());

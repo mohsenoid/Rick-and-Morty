@@ -1,6 +1,4 @@
-package com.mohsenoid.rickandmorty.data.db;
-
-import com.mohsenoid.rickandmorty.data.Serializer;
+package com.mohsenoid.rickandmorty.data;
 
 import org.junit.Test;
 

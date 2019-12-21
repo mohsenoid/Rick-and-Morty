@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.view.character.details;
 import com.mohsenoid.rickandmorty.data.DataCallback;
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.domain.Repository;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
 
 
@@ -48,10 +48,10 @@ public class CharacterDetailsPresenter implements CharacterDetailsContract.Prese
             if (view != null) view.showOfflineMessage(false);
         }
 
-        repository.queryCharacterDetails(characterId, new DataCallback<CharacterModel>() {
+        repository.queryCharacterDetails(characterId, new DataCallback<CharacterEntity>() {
 
             @Override
-            public void onSuccess(CharacterModel character) {
+            public void onSuccess(CharacterEntity character) {
                 if (view != null) {
                     view.setCharacter(character);
                     view.hideLoading();

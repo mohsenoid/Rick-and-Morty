@@ -3,13 +3,17 @@ package com.mohsenoid.rickandmorty.injection;
 import android.app.Application;
 
 import com.mohsenoid.rickandmorty.data.RepositoryImpl;
-import com.mohsenoid.rickandmorty.data.db.Datastore;
-import com.mohsenoid.rickandmorty.data.db.DatastoreImpl;
-import com.mohsenoid.rickandmorty.data.service.ApiClient;
-import com.mohsenoid.rickandmorty.data.service.ApiClientImpl;
-import com.mohsenoid.rickandmorty.data.service.ApiConstants;
-import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
-import com.mohsenoid.rickandmorty.data.service.network.NetworkHelperImpl;
+import com.mohsenoid.rickandmorty.data.db.Db;
+import com.mohsenoid.rickandmorty.data.db.DbImpl;
+import com.mohsenoid.rickandmorty.data.mapper.CharacterMapper;
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeMapper;
+import com.mohsenoid.rickandmorty.data.mapper.LocationMapper;
+import com.mohsenoid.rickandmorty.data.mapper.OriginMapper;
+import com.mohsenoid.rickandmorty.data.network.NetworkClient;
+import com.mohsenoid.rickandmorty.data.network.NetworkClientImpl;
+import com.mohsenoid.rickandmorty.data.network.NetworkConstants;
+import com.mohsenoid.rickandmorty.data.network.NetworkHelper;
+import com.mohsenoid.rickandmorty.data.network.NetworkHelperImpl;
 import com.mohsenoid.rickandmorty.domain.Repository;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
 import com.mohsenoid.rickandmorty.util.config.ConfigProviderImpl;
@@ -40,17 +44,17 @@ public class DependenciesProvider {
         this.context = context;
     }
 
-    private Datastore getDatastore() {
-        return DatastoreImpl.getInstance(context);
+    private Db getDatastore() {
+        return DbImpl.getInstance(context);
     }
 
     private NetworkHelper getNetworkHelper() {
-        return NetworkHelperImpl.getInstance(ApiConstants.BASE_URL);
+        return NetworkHelperImpl.getInstance(NetworkConstants.BASE_URL);
     }
 
-    private ApiClient getApiClient() {
+    private NetworkClient getApiClient() {
         NetworkHelper networkHelper = getNetworkHelper();
-        return ApiClientImpl.getInstance(networkHelper);
+        return NetworkClientImpl.getInstance(networkHelper);
     }
 
     private TaskExecutor getIoTaskExecutor() {
@@ -65,14 +69,35 @@ public class DependenciesProvider {
         return ConfigProviderImpl.getInstance(context);
     }
 
+    private EpisodeMapper getEpisodeMapper() {
+        return EpisodeMapper.getInstance();
+    }
+
+    private OriginMapper getOriginMapper() {
+        return OriginMapper.getInstance();
+    }
+
+    private LocationMapper getLocationMapper() {
+        return LocationMapper.getInstance();
+    }
+
+    private CharacterMapper getCharacterMapper() {
+        OriginMapper originMapper = getOriginMapper();
+        LocationMapper locationMapper = getLocationMapper();
+
+        return CharacterMapper.getInstance(originMapper, locationMapper);
+    }
+
     private Repository getRepository() {
-        Datastore datastore = getDatastore();
-        ApiClient apiClient = getApiClient();
+        Db db = getDatastore();
+        NetworkClient networkClient = getApiClient();
         TaskExecutor ioTaskExecutor = getIoTaskExecutor();
         TaskExecutor mainTaskExecutor = getMainTaskExecutor();
         ConfigProvider configProvider = getConfigProvider();
+        EpisodeMapper episodeMapper = getEpisodeMapper();
+        CharacterMapper characterMapper = getCharacterMapper();
 
-        return RepositoryImpl.getInstance(datastore, apiClient, ioTaskExecutor, mainTaskExecutor, configProvider);
+        return RepositoryImpl.getInstance(db, networkClient, ioTaskExecutor, mainTaskExecutor, configProvider, episodeMapper, characterMapper);
     }
 
     private String getCacheDirectoryPath() {

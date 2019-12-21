@@ -16,8 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
 import com.mohsenoid.rickandmorty.R;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
 import com.mohsenoid.rickandmorty.view.base.BaseFragment;
 import com.mohsenoid.rickandmorty.view.util.ImageDownloader;
 
@@ -152,13 +152,13 @@ public class CharacterDetailsFragment extends BaseFragment implements CharacterD
     }
 
     @Override
-    public void setCharacter(CharacterModel character) {
+    public void setCharacter(CharacterEntity character) {
         imageDownloader.downloadImage(character.getImage(), characterImage, characterImageProgress);
 
         characterName.setText(character.getName());
         characterDetails.setText(getString(R.string.character_details_format, character.getId(), character.getCreated()));
 
-        if (character.getIsKilledByUser()) {
+        if (character.getKilledByUser()) {
             characterKilledByUser.setVisibility(View.VISIBLE);
         } else {
             characterKilledByUser.setVisibility(View.GONE);

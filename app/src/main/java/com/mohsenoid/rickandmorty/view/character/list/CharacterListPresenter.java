@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.view.character.list;
 import com.mohsenoid.rickandmorty.data.DataCallback;
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException;
 import com.mohsenoid.rickandmorty.domain.Repository;
-import com.mohsenoid.rickandmorty.model.CharacterModel;
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
 
 import java.util.List;
@@ -48,10 +48,10 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
             if (view != null) view.showOfflineMessage(false);
         }
 
-        repository.queryCharacters(characterIds, new DataCallback<List<CharacterModel>>() {
+        repository.queryCharactersByIds(characterIds, new DataCallback<List<CharacterEntity>>() {
 
             @Override
-            public void onSuccess(List<CharacterModel> characters) {
+            public void onSuccess(List<CharacterEntity> characters) {
                 if (view != null) {
                     view.setCharacters(characters);
                     view.hideLoading();
@@ -74,13 +74,13 @@ public class CharacterListPresenter implements CharacterListContract.Presenter {
     }
 
     @Override
-    public void killCharacter(CharacterModel character) {
+    public void killCharacter(CharacterEntity character) {
         if (!character.isAlive()) return;
 
-        repository.killCharacter(character.getId(), new DataCallback<CharacterModel>() {
+        repository.killCharacter(character.getId(), new DataCallback<CharacterEntity>() {
 
             @Override
-            public void onSuccess(CharacterModel character) {
+            public void onSuccess(CharacterEntity character) {
                 view.updateCharacter(character);
             }
 

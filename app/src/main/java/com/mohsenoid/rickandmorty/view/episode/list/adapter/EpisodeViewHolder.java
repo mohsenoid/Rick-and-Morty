@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mohsenoid.rickandmorty.R;
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public class EpisodeViewHolder extends RecyclerView.ViewHolder {
         episodeAirDate = view.findViewById(R.id.episode_air_date);
     }
 
-    public void setEpisode(@NotNull EpisodeModel episode) {
+    public void setEpisode(@NotNull EpisodeEntity episode) {
         episodeName.setText(episode.getName());
         episodeEpisode.setText(episode.getEpisode());
         episodeAirDate.setText(episode.getAirDate());

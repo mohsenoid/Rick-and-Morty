@@ -1,6 +1,9 @@
 package com.mohsenoid.rickandmorty.data;
 
+import org.json.JSONException;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -8,7 +11,7 @@ import static org.mockito.Mockito.verify;
 public class RepositoryQueryEpisodesTest extends RepositoryTest {
 
     @Test
-    public void testIfQueryEpisodesCallsApiClientMethodWhenIsOnline() throws Exception {
+    public void testIfQueryEpisodesCallsApiClientMethodWhenIsOnline() throws IOException, JSONException {
         // GIVEN
         stubConfigProviderIsOnline(true);
         int page = 1;
@@ -17,12 +20,12 @@ public class RepositoryQueryEpisodesTest extends RepositoryTest {
         repository.queryEpisodes(page, null);
 
         // THEN
-        verify(datastore, times(1)).queryAllEpisodes(page);
-        verify(apiClient, times(1)).getEpisodes(page);
+        verify(db, times(1)).queryAllEpisodes(page);
+        verify(networkClient, times(1)).getEpisodes(page);
     }
 
     @Test
-    public void testIfQueryEpisodesCallsApiClientMethodWhenIsOffline() throws Exception {
+    public void testIfQueryEpisodesCallsApiClientMethodWhenIsOffline() throws IOException, JSONException {
         // GIVEN
         stubConfigProviderIsOnline(false);
         int page = 1;
@@ -31,7 +34,7 @@ public class RepositoryQueryEpisodesTest extends RepositoryTest {
         repository.queryEpisodes(page, null);
 
         // THEN
-        verify(datastore, times(1)).queryAllEpisodes(page);
-        verify(apiClient, times(0)).getEpisodes(page);
+        verify(db, times(1)).queryAllEpisodes(page);
+        verify(networkClient, times(0)).getEpisodes(page);
     }
 }

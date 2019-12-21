@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.view.episode.list;
 import com.mohsenoid.rickandmorty.data.DataCallback;
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException;
 import com.mohsenoid.rickandmorty.domain.Repository;
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity;
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider;
 
 import java.util.List;
@@ -53,10 +53,10 @@ public class EpisodeListPresenter implements EpisodeListContract.Presenter {
             if (view != null) view.showOfflineMessage(false);
         }
 
-        repository.queryEpisodes(page, new DataCallback<List<EpisodeModel>>() {
+        repository.queryEpisodes(page, new DataCallback<List<EpisodeEntity>>() {
 
             @Override
-            public void onSuccess(List<EpisodeModel> episodes) {
+            public void onSuccess(List<EpisodeEntity> episodes) {
                 if (view != null) {
                     if (page == 1) {
                         view.setEpisodes(episodes);

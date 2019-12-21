@@ -2,6 +2,7 @@ package com.mohsenoid.rickandmorty.view.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -9,7 +10,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import com.mohsenoid.rickandmorty.data.service.network.NetworkHelper;
+import com.mohsenoid.rickandmorty.data.network.NetworkHelper;
 import com.mohsenoid.rickandmorty.util.executor.TaskExecutor;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 public class ImageDownloaderImpl implements ImageDownloader {
 
+    private static final String TAG = ImageDownloaderImpl.class.getSimpleName();
     private static final String SEPARATOR = "/";
 
     @VisibleForTesting
@@ -56,6 +58,9 @@ public class ImageDownloaderImpl implements ImageDownloader {
                     networkHelper.requestImageData(imageUrl, imageFile);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    if (imageFile.delete())
+                        Log.w(TAG, "Image file " + imageFile.getName() + " deleted!");
+
                 }
             }
 

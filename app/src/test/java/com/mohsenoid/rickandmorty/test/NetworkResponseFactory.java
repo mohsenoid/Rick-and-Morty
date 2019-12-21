@@ -1,14 +1,14 @@
 package com.mohsenoid.rickandmorty.test;
 
-import com.mohsenoid.rickandmorty.model.CharacterModel;
-import com.mohsenoid.rickandmorty.model.EpisodeModel;
-import com.mohsenoid.rickandmorty.model.LocationModel;
-import com.mohsenoid.rickandmorty.model.OriginModel;
+import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel;
+import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel;
+import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel;
+import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiResponseFactory {
+public class NetworkResponseFactory {
 
     public static class Episode {
 
@@ -42,13 +42,13 @@ public class ApiResponseFactory {
                 "  ]\n" +
                 "}";
 
-        public static List<EpisodeModel> episodesResponse() {
-            List<EpisodeModel> episodes = new ArrayList<>();
+        public static List<NetworkEpisodeModel> episodesResponse() {
+            List<NetworkEpisodeModel> episodes = new ArrayList<>();
 
             List<String> characters = new ArrayList<>();
             characters.add(VALUE_CHARACTER);
 
-            EpisodeModel episode = new EpisodeModel(VALUE_ID, VALUE_NAME, VALUE_AIR_DATE, VALUE_EPISODE, characters, VALUE_URL, VALUE_CREATED);
+            NetworkEpisodeModel episode = new NetworkEpisodeModel(VALUE_ID, VALUE_NAME, VALUE_AIR_DATE, VALUE_EPISODE, characters, VALUE_URL, VALUE_CREATED);
             episodes.add(episode);
 
             return episodes;
@@ -61,10 +61,10 @@ public class ApiResponseFactory {
                 "  " + CharacterDetails.CHARACTER_DETAILS_JSON + "\n" +
                 "]";
 
-        public static List<CharacterModel> charactersResponse() {
-            List<CharacterModel> characters = new ArrayList<>();
+        public static List<NetworkCharacterModel> charactersResponse() {
+            List<NetworkCharacterModel> characters = new ArrayList<>();
 
-            CharacterModel character = CharacterDetails.characterResponse();
+            NetworkCharacterModel character = CharacterDetails.characterResponse();
             characters.add(character);
 
             return characters;
@@ -111,14 +111,14 @@ public class ApiResponseFactory {
                 "  \"created\": \"" + VALUE_CREATED + "\"\n" +
                 "}";
 
-        public static CharacterModel characterResponse() {
-            OriginModel origin = new OriginModel(VALUE_ORIGIN_NAME, VALUE_ORIGIN_URL);
-            LocationModel location = new LocationModel(VALUE_LOCATION_NAME, VALUE_LOCATION_URL);
+        public static NetworkCharacterModel characterResponse() {
+            NetworkOriginModel origin = new NetworkOriginModel(VALUE_ORIGIN_NAME, VALUE_ORIGIN_URL);
+            NetworkLocationModel location = new NetworkLocationModel(VALUE_LOCATION_NAME, VALUE_LOCATION_URL);
 
             List<String> episodes = new ArrayList<>();
             episodes.add(VALUE_EPISODE);
 
-            return new CharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED, false);
+            return new NetworkCharacterModel(VALUE_ID, VALUE_NAME, VALUE_STATUS, VALUE_SPECIES, VALUE_TYPE, VALUE_GENDER, origin, location, VALUE_IMAGE, episodes, VALUE_URL, VALUE_CREATED);
         }
     }
 }

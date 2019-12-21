@@ -1,9 +1,11 @@
-package com.mohsenoid.rickandmorty.model;
+package com.mohsenoid.rickandmorty.data.network.dto;
+
+import androidx.annotation.VisibleForTesting;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LocationModel {
+public class NetworkOriginModel {
 
     private static final String TAG_NAME = "name";
     private static final String TAG_URL = "url";
@@ -11,39 +13,32 @@ public class LocationModel {
     private String name;
     private String url;
 
-    public LocationModel(String name, String url) {
+    @VisibleForTesting
+    public NetworkOriginModel(String name, String url) {
         this.name = name;
         this.url = url;
     }
 
-    static LocationModel fromJson(JSONObject jsonObject) throws JSONException {
+    static NetworkOriginModel fromJson(JSONObject jsonObject) throws JSONException {
         String name = jsonObject.getString(TAG_NAME);
         String url = jsonObject.getString(TAG_URL);
 
-        return new LocationModel(name, url);
+        return new NetworkOriginModel(name, url);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getUrl() {
         return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LocationModel that = (LocationModel) o;
+        NetworkOriginModel that = (NetworkOriginModel) o;
         return name.equals(that.name) &&
                 url.equals(that.url);
     }
