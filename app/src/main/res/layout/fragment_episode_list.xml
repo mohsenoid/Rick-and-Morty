@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/episode_list_swipe_refresh"
+        android:id="@+id/episodeListSwipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         tools:context=".view.episode.list.EpisodeListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/episode_list"
+            android:id="@+id/episodeList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -26,7 +26,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/episode_list_progress"
+        android:id="@+id/episodeListProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

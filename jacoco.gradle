@@ -32,11 +32,14 @@ tasks.create(name: "jacocoReport", type: JacocoReport, dependsOn: ["test", "test
             'android/**/*.*'
     ]
     def javaClasses = fileTree(dir: "$project.buildDir/intermediates/javac/debug", excludes: excludes)
-    classDirectories = files([javaClasses])
+    def kotlinClasses = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: excludes)
+    classDirectories = files([javaClasses, kotlinClasses])
 
     sourceDirectories = files([
             "$project.projectDir/src/main/java",
             "$project.projectDir/src/debug/java",
+            "$project.projectDir/src/main/kotlin",
+            "$project.projectDir/src/debug/kotlin"
     ])
 
     def includes = [

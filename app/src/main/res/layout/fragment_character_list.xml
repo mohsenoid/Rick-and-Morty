@@ -8,7 +8,7 @@
     tools:context=".view.character.list.CharacterListFragment">
 
     <ProgressBar
-        android:id="@+id/character_list_progress"
+        android:id="@+id/characterListProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -17,7 +17,7 @@
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/character_list"
+        android:id="@+id/characterList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'kotlin-android-extensions'
+
 apply from: "$rootDir/jacoco.gradle"
 
 android {
@@ -25,6 +31,25 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDirs += 'src/main/kotlin'
+                srcDirs += '${buildDir.absolutePath}/generated/source/kaptKotlin/'
+            }
+        }
+        test {
+            java {
+                srcDirs += 'src/test/kotlin'
+            }
+        }
+        androidTest {
+            java {
+                srcDirs += 'src/androidTest/kotlin'
+            }
         }
     }
 
@@ -56,9 +81,13 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxTestExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspressoVersion"
 
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
     // Test
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.json:json:$jsonVersion"
 }
