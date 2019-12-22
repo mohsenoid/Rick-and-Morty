@@ -5,17 +5,15 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.mohsenoid.rickandmorty.util.image.ImageDownloader
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class CharacterViewHolder internal constructor(
-    internal val view: View,
-    private val imageDownloader: ImageDownloader
+    internal val view: View
 ) : ViewHolder(view), CoroutineScope {
 
     private lateinit var job: Job
@@ -27,13 +25,10 @@ class CharacterViewHolder internal constructor(
     }
 
     fun setCharacter(character: CharacterEntity) {
-        launch {
-            imageDownloader.downloadImage(
-                imageUrl = character.imageUrl,
-                imageView = view.characterImage,
-                progress = view.characterImageProgress
-            )
-        }
+        Picasso.get()
+            .load(character.imageUrl)
+            .placeholder(R.drawable.ic_placeholder)
+            .into(view.characterImage)
 
         view.characterName.text = character.name
 

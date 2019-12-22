@@ -3,7 +3,6 @@ package com.mohsenoid.rickandmorty.view.character.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseActivity

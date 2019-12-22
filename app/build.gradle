@@ -94,6 +94,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.json:json:$jsonVersion"
 
-    // Timber
+    // Dependencies
     implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
 }

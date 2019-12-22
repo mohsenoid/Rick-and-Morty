@@ -11,26 +11,13 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <com.mohsenoid.rickandmorty.view.util.SquareImageView
-                android:id="@+id/characterImage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                tools:src="@mipmap/ic_launcher" />
-
-            <ProgressBar
-                android:id="@+id/characterImageProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                tools:visibility="visible" />
-        </FrameLayout>
+        <com.mohsenoid.rickandmorty.view.util.SquareImageView
+            android:id="@+id/characterImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/ic_placeholder" />
 
         <TextView
             android:id="@+id/characterName"

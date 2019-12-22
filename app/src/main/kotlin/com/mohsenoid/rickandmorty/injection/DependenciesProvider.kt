@@ -23,8 +23,6 @@ import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProviderImpl
 import com.mohsenoid.rickandmorty.util.dispatcher.AppDispatcherProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.mohsenoid.rickandmorty.util.image.ImageDownloader
-import com.mohsenoid.rickandmorty.util.image.ImageDownloaderImpl
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsContract
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsFragment
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsPresenter
@@ -38,8 +36,6 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 
 class DependenciesProvider(private val context: Application) {
-
-    private val cacheDirectoryPath: String = context.cacheDir.absolutePath
 
     private val datastore: Db by lazy {
         DbImpl(context)
@@ -106,15 +102,6 @@ class DependenciesProvider(private val context: Application) {
         )
     }
 
-
-    val imageDownloader: ImageDownloader by lazy {
-        ImageDownloaderImpl(
-            networkHelper,
-            cacheDirectoryPath,
-            dispatcherProvider
-        )
-    }
-
     fun getEpisodeListFragment(): EpisodeListFragment {
         return EpisodeListFragment.newInstance()
     }
@@ -136,7 +123,7 @@ class DependenciesProvider(private val context: Application) {
     }
 
     fun getCharacterListAdapter(listener: CharacterListAdapter.ClickListener): CharacterListAdapter {
-        return CharacterListAdapter(imageDownloader, dispatcherProvider, listener)
+        return CharacterListAdapter(dispatcherProvider, listener)
     }
 
     fun getCharacterDetailsFragment(characterId: Int): CharacterDetailsFragment {
