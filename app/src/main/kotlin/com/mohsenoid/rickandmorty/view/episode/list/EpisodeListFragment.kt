@@ -17,6 +17,7 @@ import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivity
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_episode_list.*
+import kotlinx.coroutines.launch
 
 class EpisodeListFragment : BaseFragment(),
     EpisodeListContract.View,
@@ -56,7 +57,9 @@ class EpisodeListFragment : BaseFragment(),
                 totalItemsCount: Int,
                 view: RecyclerView
             ) {
-                presenter.loadMoreEpisodes(page + 1)
+                launch {
+                    presenter.loadMoreEpisodes(page + 1)
+                }
             }
         }.also {
             episodeList.addOnScrollListener(it)
@@ -77,11 +80,15 @@ class EpisodeListFragment : BaseFragment(),
 
     override fun onResume() {
         super.onResume()
-        presenter.loadEpisodes()
+        launch {
+            presenter.loadEpisodes()
+        }
     }
 
     override fun onRefresh() {
-        presenter.loadEpisodes()
+        launch {
+            presenter.loadEpisodes()
+        }
     }
 
     override fun showMessage(message: String) {

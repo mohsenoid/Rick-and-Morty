@@ -2,12 +2,13 @@ package com.mohsenoid.rickandmorty.data
 
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class RepositoryQueryEpisodesTest : RepositoryTest() {
 
     @Test
-    fun `test if queryEpisodes calls networkClient and db when isOnline`() {
+    fun `test if queryEpisodes calls networkClient and db when isOnline`() = runBlockingTest {
         // GIVEN
         stubConfigProviderIsOnline(true)
         val page = 1
@@ -21,7 +22,7 @@ class RepositoryQueryEpisodesTest : RepositoryTest() {
     }
 
     @Test
-    fun `test if queryEpisodes calls db only when isOffline`() {
+    fun `test if queryEpisodes calls db only when isOffline`() = runBlockingTest {
         // GIVEN
         stubConfigProviderIsOnline(false)
         val page = 1

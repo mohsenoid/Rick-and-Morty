@@ -3,12 +3,13 @@ package com.mohsenoid.rickandmorty.data
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class RepositoryQueryCharactersTest : RepositoryTest() {
 
     @Test
-    fun `test if queryCharactersByIds calls networkClient when isOnline`() {
+    fun `test if queryCharactersByIds calls networkClient when isOnline`() = runBlockingTest {
         // GIVEN
         stubConfigProviderIsOnline(true)
         val characterIds = DataFactory.randomIntList(5)
@@ -22,7 +23,7 @@ class RepositoryQueryCharactersTest : RepositoryTest() {
     }
 
     @Test
-    fun `test if queryCharactersByIds calls db only when isOffline`() {
+    fun `test if queryCharactersByIds calls db only when isOffline`() = runBlockingTest {
         // GIVEN
         stubConfigProviderIsOnline(false)
         val characterIds = DataFactory.randomIntList(5)

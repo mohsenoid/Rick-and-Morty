@@ -23,19 +23,19 @@ class EpisodeListPresenter(
         view = null
     }
 
-    override fun loadEpisodes() {
+    override suspend fun loadEpisodes() {
         view?.showLoading()
         page = 1
         queryEpisodes()
     }
 
-    override fun loadMoreEpisodes(page: Int) {
+    override suspend fun loadMoreEpisodes(page: Int) {
         view?.showLoadingMore()
         this.page = page
         queryEpisodes()
     }
 
-    private fun queryEpisodes() {
+    private suspend fun queryEpisodes() {
         if (!configProvider.isOnline()) {
             view?.showOfflineMessage(false)
         }

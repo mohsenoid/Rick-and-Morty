@@ -23,12 +23,12 @@ class CharacterListPresenter(
         view = null
     }
 
-    override fun loadCharacters() {
+    override suspend fun loadCharacters() {
         view?.showLoading()
         queryCharacters()
     }
 
-    private fun queryCharacters() {
+    private suspend fun queryCharacters() {
         if (!configProvider.isOnline()) {
             view?.showOfflineMessage(false)
         }
@@ -50,7 +50,7 @@ class CharacterListPresenter(
         })
     }
 
-    override fun killCharacter(character: CharacterEntity) {
+    override suspend fun killCharacter(character: CharacterEntity) {
         if (!character.isAlive) return
         repository.killCharacter(character.id, object : DataCallback<CharacterEntity> {
             override fun onSuccess(result: CharacterEntity) {

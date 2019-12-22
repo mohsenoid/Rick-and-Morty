@@ -21,9 +21,8 @@ import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProviderImpl
-import com.mohsenoid.rickandmorty.util.executor.IoTaskExecutor
-import com.mohsenoid.rickandmorty.util.executor.MainTaskExecutor
-import com.mohsenoid.rickandmorty.util.executor.TaskExecutor
+import com.mohsenoid.rickandmorty.util.dispatcher.AppDispatcherProvider
+import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import com.mohsenoid.rickandmorty.util.image.ImageDownloader
 import com.mohsenoid.rickandmorty.util.image.ImageDownloaderImpl
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsContract
@@ -54,12 +53,8 @@ class DependenciesProvider(private val context: Application) {
         NetworkClientImpl(networkHelper)
     }
 
-    private val ioTaskExecutor: TaskExecutor by lazy {
-        IoTaskExecutor()
-    }
-
-    private val mainTaskExecutor: TaskExecutor by lazy {
-        MainTaskExecutor()
+    val dispatcherProvider: DispatcherProvider by lazy {
+        AppDispatcherProvider()
     }
 
     private val configProvider: ConfigProvider by lazy {
@@ -102,8 +97,7 @@ class DependenciesProvider(private val context: Application) {
         RepositoryImpl(
             datastore,
             networkClient,
-            ioTaskExecutor,
-            mainTaskExecutor,
+            dispatcherProvider,
             configProvider,
             episodeDbMapper,
             episodeEntityMapper,
@@ -117,8 +111,7 @@ class DependenciesProvider(private val context: Application) {
         ImageDownloaderImpl(
             networkHelper,
             cacheDirectoryPath,
-            ioTaskExecutor,
-            mainTaskExecutor
+            dispatcherProvider
         )
     }
 
@@ -143,7 +136,7 @@ class DependenciesProvider(private val context: Application) {
     }
 
     fun getCharacterListAdapter(listener: CharacterListAdapter.ClickListener): CharacterListAdapter {
-        return CharacterListAdapter(imageDownloader, listener)
+        return CharacterListAdapter(imageDownloader, dispatcherProvider, listener)
     }
 
     fun getCharacterDetailsFragment(characterId: Int): CharacterDetailsFragment {

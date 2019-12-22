@@ -13,6 +13,7 @@ import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.util.image.ImageDownloader
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_character_details.*
+import kotlinx.coroutines.launch
 
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
@@ -60,7 +61,9 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter.loadCharacter()
+        launch {
+            presenter.loadCharacter()
+        }
     }
 
     override fun showMessage(message: String) {
@@ -94,11 +97,14 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     }
 
     override fun setCharacter(character: CharacterEntity) {
-        imageDownloader.downloadImage(
-            imageUrl = character.imageUrl,
-            imageView = characterImage,
-            progress = characterImageProgress
-        )
+        launch {
+            imageDownloader.downloadImage(
+                imageUrl = character.imageUrl,
+                imageView = characterImage,
+                progress = characterImageProgress
+            )
+        }
+
         characterName.text = character.name
         characterDetails.text =
             getString(R.string.character_details_format, character.id, character.created)

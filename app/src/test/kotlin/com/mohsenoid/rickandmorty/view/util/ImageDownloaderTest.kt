@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.view.util
 
 import com.mohsenoid.rickandmorty.data.network.NetworkHelper
-import com.mohsenoid.rickandmorty.test.TestTaskExecutor
-import com.mohsenoid.rickandmorty.util.executor.TaskExecutor
+import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
+import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import com.mohsenoid.rickandmorty.util.image.ImageDownloader
 import com.mohsenoid.rickandmorty.util.image.ImageDownloaderImpl
 import org.junit.Assert.assertEquals
@@ -16,7 +16,7 @@ class ImageDownloaderTest {
     @Mock
     lateinit var networkHelper: NetworkHelper
 
-    private val testTaskExecutor: TaskExecutor = TestTaskExecutor()
+    private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
     private val cacheDirectoryPath = ""
 
     private lateinit var imageDownloader: ImageDownloader
@@ -27,8 +27,7 @@ class ImageDownloaderTest {
         imageDownloader = ImageDownloaderImpl(
             networkHelper = networkHelper,
             cacheDirectoryPath = cacheDirectoryPath,
-            ioTaskExecutor = testTaskExecutor,
-            mainTaskExecutor = testTaskExecutor
+            dispatcherProvider = testDispatcherProvider
         )
     }
 

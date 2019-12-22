@@ -16,9 +16,9 @@ import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
-import com.mohsenoid.rickandmorty.test.TestTaskExecutor
+import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import com.mohsenoid.rickandmorty.util.executor.TaskExecutor
+import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 import org.mockito.Mock
@@ -37,7 +37,7 @@ abstract class RepositoryTest {
 
     lateinit var repository: Repository
 
-    private val testTaskExecutor: TaskExecutor = TestTaskExecutor()
+    private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
 
     private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel> =
         EpisodeDbMapper()
@@ -63,8 +63,7 @@ abstract class RepositoryTest {
         repository = RepositoryImpl(
             db = db,
             networkClient = networkClient,
-            ioTaskExecutor = testTaskExecutor,
-            mainTaskExecutor = testTaskExecutor,
+            dispatcherProvider = testDispatcherProvider,
             configProvider = configProvider,
             episodeDbMapper = episodeDbMapper,
             episodeEntityMapper = episodeEntityMapper,

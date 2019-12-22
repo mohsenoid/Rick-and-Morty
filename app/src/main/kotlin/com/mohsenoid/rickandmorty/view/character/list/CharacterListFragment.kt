@@ -14,6 +14,7 @@ import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.android.synthetic.main.fragment_character_list.*
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
@@ -77,7 +78,9 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
 
     override fun onResume() {
         super.onResume()
-        presenter.loadCharacters()
+        launch {
+            presenter.loadCharacters()
+        }
     }
 
     override fun showMessage(message: String) {
@@ -118,7 +121,9 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     override fun onCharacterStatusClick(character: CharacterEntity) {
-        presenter.killCharacter(character)
+        launch {
+            presenter.killCharacter(character)
+        }
     }
 
     companion object {
