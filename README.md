@@ -16,8 +16,6 @@ The **View** layer multiple Activity and Fragment which use their contract to im
 
 The  **Dependencies Provider** does the Dependency Injection in the whole app. It also uses **Base** objects to inject dependencies into **Activities** and **Fragments**.
 
-The **Image Downloader** also takes care of loading and caching images.
-
 [**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo test and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
 
 There are some unit tests using **Mockito** and some Android tests using **Robolectric**.
@@ -31,3 +29,7 @@ Endless Recycler View made by [@nesquena](https://gist.github.com/nesquena/d09dc
 App Launcher Icon made by [freepngimg.com](http://freepngimg.com)
 
 Dead/Alive Icons made by [Freepik](https://flaticon.com/authors/freepik) from [flaticon.com](https://flaticon.com)
+
+Timber logger library made by [Jake Wharton](https://github.com/JakeWharton/timber)
+
+Picasso image downloading and caching library made by [square](https://github.com/square/picasso)

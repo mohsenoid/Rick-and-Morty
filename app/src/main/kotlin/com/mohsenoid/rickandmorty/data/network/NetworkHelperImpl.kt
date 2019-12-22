@@ -1,6 +1,8 @@
 package com.mohsenoid.rickandmorty.data.network
 
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.net.URL
 
 class NetworkHelperImpl(private val baseUrl: String) : NetworkHelper {
@@ -20,12 +22,6 @@ class NetworkHelperImpl(private val baseUrl: String) : NetworkHelper {
         val byteArrayOutputStream = ByteArrayOutputStream()
         request(url, byteArrayOutputStream)
         return String(byteArrayOutputStream.toByteArray())
-    }
-
-    override fun requestImageData(imageUrl: String, imageFile: File) {
-        val url = URL(imageUrl)
-        val fileOutputStream = FileOutputStream(imageFile)
-        request(url, fileOutputStream)
     }
 
     private fun request(url: URL, output: OutputStream) {
