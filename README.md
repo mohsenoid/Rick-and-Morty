@@ -33,3 +33,5 @@ Dead/Alive Icons made by [Freepik](https://flaticon.com/authors/freepik) from [f
 Timber logger library made by [Jake Wharton](https://github.com/JakeWharton/timber)
 
 Picasso image downloading and caching library made by [square](https://github.com/square/picasso)
+
+Retrofit HTTP API library made by [square](https://github.com/square/retrofit)

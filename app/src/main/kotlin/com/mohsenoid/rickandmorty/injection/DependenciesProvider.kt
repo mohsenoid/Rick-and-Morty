@@ -1,6 +1,9 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.app.Application
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.RepositoryImpl
 import com.mohsenoid.rickandmorty.data.db.Db
 import com.mohsenoid.rickandmorty.data.db.DbImpl
@@ -9,7 +12,8 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.data.mapper.*
-import com.mohsenoid.rickandmorty.data.network.*
+import com.mohsenoid.rickandmorty.data.network.NetworkClient
+import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
@@ -34,6 +38,14 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListContract
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.net.UnknownHostException
 
 class DependenciesProvider(private val context: Application) {
 
@@ -41,12 +53,43 @@ class DependenciesProvider(private val context: Application) {
         DbImpl(context)
     }
 
-    private val networkHelper: NetworkHelper by lazy {
-        NetworkHelperImpl(NetworkConstants.BASE_URL)
+    private val baseUrl: HttpUrl by lazy {
+        NetworkConstants.BASE_URL.toHttpUrlOrNull()
+            ?: throw UnknownHostException("Invalid host: " + NetworkConstants.BASE_URL)
+    }
+
+    private val gson: Gson by lazy {
+        GsonBuilder().serializeNulls().create()
+    }
+
+    private val converterFactory: Converter.Factory by lazy {
+        GsonConverterFactory.create(gson)
+    }
+
+    private val loggingInterceptor: HttpLoggingInterceptor by lazy {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG)
+                addInterceptor(loggingInterceptor)
+        }
+            .build()
+    }
+
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(converterFactory)
+            .client(okHttpClient)
+            .build()
     }
 
     private val networkClient: NetworkClient by lazy {
-        NetworkClientImpl(networkHelper)
+        retrofit.create(NetworkClient::class.java)
     }
 
     val dispatcherProvider: DispatcherProvider by lazy {

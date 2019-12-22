@@ -8,4 +8,7 @@ object NetworkConstants {
     const val CHARACTER_ENDPOINT = "character/"
 
     const val PARAM_KEY_PAGE = "page"
+
+    const val PATH_KEY_CHARACTER_IDS = "characterIds"
+    const val PATH_KEY_CHARACTER_ID = "characterId"
 }
