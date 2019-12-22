@@ -17,6 +17,6 @@ interface CharacterDetailsContract {
 
         var characterId: Int
 
-        fun loadCharacter()
+        suspend fun loadCharacter()
     }
 }

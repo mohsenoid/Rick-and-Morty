@@ -8,22 +8,26 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import com.mohsenoid.rickandmorty.data.network.NetworkHelper
-import com.mohsenoid.rickandmorty.util.executor.TaskExecutor
+import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
 class ImageDownloaderImpl(
     private val networkHelper: NetworkHelper,
     private val cacheDirectoryPath: String,
-    private val ioTaskExecutor: TaskExecutor,
-    private val mainTaskExecutor: TaskExecutor
+    private val dispatcherProvider: DispatcherProvider
 ) : ImageDownloader {
 
-    override fun downloadImage(imageUrl: String, imageView: ImageView, progress: ProgressBar?) {
+    override suspend fun downloadImage(
+        imageUrl: String,
+        imageView: ImageView,
+        progress: ProgressBar?
+    ) {
         imageView.visibility = View.INVISIBLE
         progress?.isVisible = true
 
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             val fileName = extractFileName(imageUrl)
             val imageFile = File(cacheDirectoryPath + File.separator + fileName)
             if (!imageFile.exists()) {
@@ -35,7 +39,7 @@ class ImageDownloaderImpl(
                 }
             }
             val bitmap = loadBitmapFile(imageFile, imageView.width, imageView.height)
-            mainTaskExecutor.execute {
+            withContext(dispatcherProvider.mainDispatcher) {
                 progress?.isVisible = false
                 imageView.isVisible = true
                 imageView.setImageBitmap(bitmap)

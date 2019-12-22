@@ -23,12 +23,12 @@ class CharacterDetailsPresenter(
         view = null
     }
 
-    override fun loadCharacter() {
+    override suspend fun loadCharacter() {
         view?.showLoading()
         queryCharacter(characterId)
     }
 
-    private fun queryCharacter(characterId: Int) {
+    private suspend fun queryCharacter(characterId: Int) {
         if (!configProvider.isOnline()) {
             view?.showOfflineMessage(false)
         }

@@ -13,13 +13,13 @@ import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import com.mohsenoid.rickandmorty.util.executor.TaskExecutor
+import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
+import kotlinx.coroutines.withContext
 
 class RepositoryImpl(
     private val db: Db,
     private val networkClient: NetworkClient,
-    private val ioTaskExecutor: TaskExecutor,
-    private val mainTaskExecutor: TaskExecutor,
+    private val dispatcherProvider: DispatcherProvider,
     private val configProvider: ConfigProvider,
     private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel>,
     private val episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>,
@@ -27,7 +27,7 @@ class RepositoryImpl(
     private val characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
 ) : Repository {
 
-    override fun queryEpisodes(
+    override suspend fun queryEpisodes(
         page: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     ) {
@@ -38,11 +38,11 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryNetworkEpisodes(
+    private suspend fun queryNetworkEpisodes(
         page: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val networkEpisodes = networkClient.getEpisodes(page)
 
@@ -58,17 +58,17 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryDbEpisodes(
+    private suspend fun queryDbEpisodes(
         page: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val dbEpisodes = db.queryAllEpisodes(page)
 
                 val episodes = dbEpisodes.map(episodeEntityMapper::map)
 
-                mainTaskExecutor.execute {
+                withContext(dispatcherProvider.mainDispatcher) {
                     if (episodes.isNotEmpty()) {
                         callback?.onSuccess(episodes)
                     } else {
@@ -77,12 +77,12 @@ class RepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                mainTaskExecutor.execute { callback?.onError(e) }
+                withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
     }
 
-    override fun queryCharactersByIds(
+    override suspend fun queryCharactersByIds(
         characterIds: List<Int>,
         callback: DataCallback<List<CharacterEntity>>?
     ) {
@@ -93,11 +93,11 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryNetworkCharactersByIds(
+    private suspend fun queryNetworkCharactersByIds(
         characterIds: List<Int>,
         callback: DataCallback<List<CharacterEntity>>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val networkCharacters = networkClient.getCharactersByIds(characterIds)
 
@@ -113,17 +113,17 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryDbCharactersByIds(
+    private suspend fun queryDbCharactersByIds(
         characterIds: List<Int>,
         callback: DataCallback<List<CharacterEntity>>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val dbCharacters = db.queryCharactersByIds(characterIds)
 
                 val characters = dbCharacters.map(characterEntityMapper::map)
 
-                mainTaskExecutor.execute {
+                withContext(dispatcherProvider.mainDispatcher) {
                     if (characters.isNotEmpty()) {
                         callback?.onSuccess(characters)
                     } else {
@@ -132,12 +132,12 @@ class RepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                mainTaskExecutor.execute { callback?.onError(e) }
+                withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
     }
 
-    override fun queryCharacterDetails(
+    override suspend fun queryCharacterDetails(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     ) {
@@ -148,11 +148,11 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryNetworkCharacterDetails(
+    private suspend fun queryNetworkCharacterDetails(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val networkCharacter = networkClient.getCharacterDetails(characterId)
 
@@ -167,41 +167,41 @@ class RepositoryImpl(
         }
     }
 
-    private fun queryDbCharacterDetails(
+    private suspend fun queryDbCharacterDetails(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 val dbCharacter = db.queryCharacter(characterId)
                 if (dbCharacter != null) {
                     val character = characterEntityMapper.map(dbCharacter)
-                    mainTaskExecutor.execute {
+                    withContext(dispatcherProvider.mainDispatcher) {
                         callback?.onSuccess(character)
                     }
                 } else {
-                    mainTaskExecutor.execute {
+                    withContext(dispatcherProvider.mainDispatcher) {
                         callback?.onError(NoOfflineDataException())
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                mainTaskExecutor.execute { callback?.onError(e) }
+                withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
     }
 
-    override fun killCharacter(
+    override suspend fun killCharacter(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     ) {
-        ioTaskExecutor.execute {
+        withContext(dispatcherProvider.ioDispatcher) {
             try {
                 db.killCharacter(characterId)
                 queryCharacterDetails(characterId, callback)
             } catch (e: Exception) {
                 e.printStackTrace()
-                mainTaskExecutor.execute { callback?.onError(e) }
+                withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
     }
