@@ -7,6 +7,7 @@ import android.util.Log
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseActivity
+import timber.log.Timber
 
 class CharacterDetailsActivity : BaseActivity() {
 
@@ -35,7 +36,7 @@ class CharacterDetailsActivity : BaseActivity() {
         if (savedInstanceState == null) {
             attachFragments()
         }
-        Log.i(TAG, "CharacterDetailsActivity created")
+        Timber.i("CharacterDetailsActivity created")
     }
 
     private fun attachFragments() {
@@ -46,8 +47,6 @@ class CharacterDetailsActivity : BaseActivity() {
     }
 
     companion object {
-        private val TAG = CharacterDetailsActivity::class.java.simpleName
-
         private const val TAG_CHARACTER_DETAILS_FRAGMENT = "character_details_fragment"
         private const val ARG_CHARACTER_ID = "character_id"
 

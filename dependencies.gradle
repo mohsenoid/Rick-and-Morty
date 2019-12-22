@@ -30,4 +30,7 @@ ext {
     mockitoKotlinVersion = '2.1.0'
     robolectricVersion = '4.3.1'
     jsonVersion = '20190722'
+
+    // Dependencies
+    timberVersion = '4.7.1'
 }
