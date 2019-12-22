@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.mohsenoid.rickandmorty.data.network.NetworkHelper
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 
@@ -35,7 +36,7 @@ class ImageDownloaderImpl(
                     networkHelper.requestImageData(imageUrl, imageFile)
                 } catch (e: IOException) {
                     e.printStackTrace()
-                    if (imageFile.delete()) Log.w(TAG, "Image file ${imageFile.name} deleted!")
+                    if (imageFile.delete()) Timber.w("Image file ${imageFile.name} deleted!")
                 }
             }
             val bitmap = loadBitmapFile(imageFile, imageView.width, imageView.height)
@@ -64,7 +65,6 @@ class ImageDownloaderImpl(
     }
 
     companion object {
-        private val TAG = ImageDownloaderImpl::class.java.simpleName
         private const val SEPARATOR = "/"
     }
 }
