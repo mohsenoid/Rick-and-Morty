@@ -19,8 +19,8 @@ interface CharacterListContract {
 
         var characterIds: List<Int>
 
-        fun loadCharacters()
+        suspend fun loadCharacters()
 
-        fun killCharacter(character: CharacterEntity)
+        suspend fun killCharacter(character: CharacterEntity)
     }
 }

@@ -21,8 +21,8 @@ interface EpisodeListContract {
 
     interface Presenter : BasePresenter<View> {
 
-        fun loadEpisodes()
+        suspend fun loadEpisodes()
 
-        fun loadMoreEpisodes(page: Int)
+        suspend fun loadMoreEpisodes(page: Int)
     }
 }

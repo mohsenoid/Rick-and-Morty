@@ -5,7 +5,7 @@ import android.widget.ProgressBar
 
 interface ImageDownloader {
 
-    fun downloadImage(
+    suspend fun downloadImage(
         imageUrl: String,
         imageView: ImageView,
         progress: ProgressBar?

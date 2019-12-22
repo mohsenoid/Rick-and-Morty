@@ -6,22 +6,22 @@ import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 
 interface Repository {
 
-    fun queryEpisodes(
+    suspend fun queryEpisodes(
         page: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     )
 
-    fun queryCharactersByIds(
+    suspend fun queryCharactersByIds(
         characterIds: List<Int>,
         callback: DataCallback<List<CharacterEntity>>?
     )
 
-    fun queryCharacterDetails(
+    suspend fun queryCharacterDetails(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     )
 
-    fun killCharacter(
+    suspend fun killCharacter(
         characterId: Int,
         callback: DataCallback<CharacterEntity>?
     )
