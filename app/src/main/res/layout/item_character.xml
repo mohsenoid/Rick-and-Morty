@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <com.mohsenoid.rickandmorty.view.util.SquareImageView
-                android:id="@+id/character_image"
+                android:id="@+id/characterImage"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:adjustViewBounds="true"
@@ -24,7 +24,7 @@
                 tools:src="@mipmap/ic_launcher" />
 
             <ProgressBar
-                android:id="@+id/character_image_progress"
+                android:id="@+id/characterImageProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -33,7 +33,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/character_name"
+            android:id="@+id/characterName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,7 +42,7 @@
             tools:text="Character Name" />
 
         <ImageButton
-            android:id="@+id/character_status"
+            android:id="@+id/characterStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

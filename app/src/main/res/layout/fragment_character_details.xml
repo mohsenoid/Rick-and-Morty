@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ProgressBar
-            android:id="@+id/character_details_progress"
+            android:id="@+id/characterDetailsProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal" />
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <com.mohsenoid.rickandmorty.view.util.SquareImageView
-                android:id="@+id/character_image"
+                android:id="@+id/characterImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -29,7 +29,7 @@
                 tools:src="@mipmap/ic_launcher" />
 
             <ProgressBar
-                android:id="@+id/character_image_progress"
+                android:id="@+id/characterImageProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -45,14 +45,14 @@
                 android:padding="@dimen/keyLine1">
 
                 <TextView
-                    android:id="@+id/character_name"
+                    android:id="@+id/characterName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/textAppearanceListItemTitle"
                     tools:text="Character Name" />
 
                 <TextView
-                    android:id="@+id/character_details"
+                    android:id="@+id/characterDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/textAppearanceListItemText"
@@ -74,7 +74,7 @@
                 android:textAppearance="@style/textAppearanceListItemText" />
 
             <TextView
-                android:id="@+id/character_status"
+                android:id="@+id/characterStatus"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -83,7 +83,7 @@
                 tools:text="Alive" />
 
             <TextView
-                android:id="@+id/character_killed_by_user"
+                android:id="@+id/characterKilledByUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -108,7 +108,7 @@
                 android:textAppearance="@style/textAppearanceListItemText" />
 
             <TextView
-                android:id="@+id/character_species"
+                android:id="@+id/characterSpecies"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -131,7 +131,7 @@
                 android:textAppearance="@style/textAppearanceListItemText" />
 
             <TextView
-                android:id="@+id/character_gender"
+                android:id="@+id/characterGender"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -154,7 +154,7 @@
                 android:textAppearance="@style/textAppearanceListItemText" />
 
             <TextView
-                android:id="@+id/character_origin"
+                android:id="@+id/characterOrigin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -177,7 +177,7 @@
                 android:textAppearance="@style/textAppearanceListItemText" />
 
             <TextView
-                android:id="@+id/character_last_location"
+                android:id="@+id/characterLastLocation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
