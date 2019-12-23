@@ -1,12 +1,13 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.app.Application
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.RepositoryImpl
 import com.mohsenoid.rickandmorty.data.db.Db
-import com.mohsenoid.rickandmorty.data.db.DbImpl
+import com.mohsenoid.rickandmorty.data.db.DbConstants
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
@@ -57,8 +58,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DependenciesProvider(private val context: Application) {
 
-    private val datastore: Db by lazy {
-        DbImpl(context)
+    private val db: Db by lazy {
+        Room.databaseBuilder(context, Db::class.java, DbConstants.DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     private val baseUrl: HttpUrl by lazy {
@@ -142,14 +145,15 @@ class DependenciesProvider(private val context: Application) {
 
     private val repository: Repository by lazy {
         RepositoryImpl(
-            datastore,
-            networkClient,
-            dispatcherProvider,
-            configProvider,
-            episodeDbMapper,
-            episodeEntityMapper,
-            characterDbMapper,
-            characterEntityMapper
+            characterDao = db.characterDao,
+            episodeDao = db.episodeDao,
+            networkClient = networkClient,
+            dispatcherProvider = dispatcherProvider,
+            configProvider = configProvider,
+            episodeDbMapper = episodeDbMapper,
+            episodeEntityMapper = episodeEntityMapper,
+            characterDbMapper = characterDbMapper,
+            characterEntityMapper = characterEntityMapper
         )
     }
 

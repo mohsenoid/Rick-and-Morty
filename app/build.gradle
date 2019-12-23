@@ -104,6 +104,11 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
 
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+
     // Others
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "com.squareup.picasso:picasso:$picassoVersion"

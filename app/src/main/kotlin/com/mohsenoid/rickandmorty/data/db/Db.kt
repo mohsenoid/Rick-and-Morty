@@ -1,19 +1,21 @@
 package com.mohsenoid.rickandmorty.data.db
 
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
+import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
+import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 
-interface Db {
+@Database(
+    entities = [DbCharacterModel::class, DbEpisodeModel::class, DbLocationModel::class, DbOriginModel::class],
+    version = DbConstants.DATABASE_VERSION
+)
+@TypeConverters(DbConverters::class)
+abstract class Db : RoomDatabase() {
 
-    fun insertEpisode(episode: DbEpisodeModel)
+    abstract val episodeDao: DbEpisodeDao
 
-    fun queryAllEpisodes(page: Int): List<DbEpisodeModel>
-
-    fun insertCharacter(character: DbCharacterModel)
-
-    fun queryCharactersByIds(characterIds: List<Int>): List<DbCharacterModel>
-
-    fun queryCharacter(characterId: Int): DbCharacterModel?
-
-    fun killCharacter(characterId: Int)
+    abstract val characterDao: DbCharacterDaoAbs
 }

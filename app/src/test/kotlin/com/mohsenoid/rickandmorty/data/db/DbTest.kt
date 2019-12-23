@@ -2,11 +2,15 @@ package com.mohsenoid.rickandmorty.data.db
 
 import android.app.Application
 import android.os.Build
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
+import java.io.IOException
+import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -23,178 +27,210 @@ import org.robolectric.annotation.Config
 class DbTest {
 
     private lateinit var db: Db
+    private lateinit var episodeDao: DbEpisodeDao
+    private lateinit var characterDao: DbCharacterDao
 
     @Before
     fun setUp() {
         val application = ApplicationProvider.getApplicationContext<Application>()
-        db = DbImpl(application)
+
+        db = Room.inMemoryDatabaseBuilder(
+            application, Db::class.java
+        ).build()
+
+        episodeDao = db.episodeDao
+        characterDao = db.characterDao
+    }
+
+    @After
+    @Throws(IOException::class)
+    fun tearDown() {
+        db.close()
     }
 
     @Test
     fun `test insertEpisode can inserts a new Episode`() {
-        // GIVEN
-        val episode = EpisodeDataFactory.Db.makeDbEpisodeModel()
+        runBlocking {
+            // GIVEN
+            val episode = EpisodeDataFactory.Db.makeDbEpisodeModel()
 
-        // WHEN
-        db.insertEpisode(episode)
+            // WHEN
+            episodeDao.insertEpisode(episode)
 
-        // THEN
-        val result = db.queryAllEpisodes(1)
-        assertTrue(result.contains(episode))
+            // THEN
+            val result = episodeDao.queryAllEpisodes(1)
+            assertTrue(result.contains(episode))
+        }
     }
 
     @Test
     fun `test insertEpisode with same ID updates the old one`() {
-        // GIVEN
-        val episodeId = DataFactory.randomInt()
-        val oldEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel(episodeId = episodeId)
-        val updatedEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel(episodeId = episodeId)
+        runBlocking {
+            // GIVEN
+            val episodeId = DataFactory.randomInt()
+            val oldEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel(episodeId = episodeId)
+            val updatedEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel(episodeId = episodeId)
 
-        // WHEN
-        db.insertEpisode(oldEpisode)
-        db.insertEpisode(updatedEpisode)
+            // WHEN
+            episodeDao.insertEpisode(oldEpisode)
+            episodeDao.insertEpisode(updatedEpisode)
 
-        // THEN
-        val result = db.queryAllEpisodes(1)
-        assertEquals(result.count(), 1)
-        assertFalse(result.contains(oldEpisode))
-        assertTrue(result.contains(updatedEpisode))
+            // THEN
+            val result = episodeDao.queryAllEpisodes(1)
+            assertEquals(result.count(), 1)
+            assertFalse(result.contains(oldEpisode))
+            assertTrue(result.contains(updatedEpisode))
+        }
     }
 
     @Test
     fun `test insertCharacter can inserts a new Character`() {
-        // GIVEN
-        val character = CharacterDataFactory.Db.makeDbCharacterModel()
+        runBlocking {
+            // GIVEN
+            val character = CharacterDataFactory.Db.makeDbCharacterModel()
 
-        // WHEN
-        db.insertCharacter(character)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(character)
 
-        // THEN
-        val result = db.queryCharacter(character.id)
-        assertEquals(result, character)
+            // THEN
+            val result = characterDao.queryCharacter(character.id)
+            assertEquals(result, character)
+        }
     }
 
     @Test
     fun `test insertCharacter with same ID updates the old one`() {
-        // GIVEN
-        val characterId = DataFactory.randomInt()
-        val oldCharacter =
-            CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
-        val updatedCharacter =
-            CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
+        runBlocking {
+            // GIVEN
+            val characterId = DataFactory.randomInt()
+            val oldCharacter =
+                CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
+            val updatedCharacter =
+                CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
 
-        // WHEN
-        db.insertCharacter(oldCharacter)
-        db.insertCharacter(updatedCharacter)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(oldCharacter)
+            characterDao.insertOrUpdateCharacter(updatedCharacter)
 
-        // THEN
-        val result = db.queryCharacter(characterId)
-        assertNotEquals(result, oldCharacter)
-        assertEquals(result, updatedCharacter)
+            // THEN
+            val result = characterDao.queryCharacter(characterId)
+            assertNotEquals(result, oldCharacter)
+            assertEquals(result, updatedCharacter)
+        }
     }
 
     @Test
     fun `test queryCharacter returns the same Character details inserted`() {
-        // GIVEN
-        val characterId = DataFactory.randomInt()
-        val expected = CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
+        runBlocking {
+            // GIVEN
+            val characterId = DataFactory.randomInt()
+            val expected = CharacterDataFactory.Db.makeDbCharacterModel(characterId = characterId)
 
-        // WHEN
-        db.insertCharacter(expected)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(expected)
 
-        // THEN
-        val actual = db.queryCharacter(characterId)
-        assertNotNull(actual)
-        assertEquals(expected, actual)
+            // THEN
+            val actual = characterDao.queryCharacter(characterId)
+            assertNotNull(actual)
+            assertEquals(expected, actual)
+        }
     }
 
     @Test
     fun `test queryCharactersByIds returns the Characters asked for`() {
-        // GIVEN
-        val expected = CharacterDataFactory.Db.makeDbCharacterModel()
-        val notExpected = CharacterDataFactory.Db.makeDbCharacterModel()
-        val ids = listOf(expected.id)
+        runBlocking {
+            // GIVEN
+            val expected = CharacterDataFactory.Db.makeDbCharacterModel()
+            val notExpected = CharacterDataFactory.Db.makeDbCharacterModel()
+            val ids = listOf(expected.id)
 
-        // WHEN
-        db.insertCharacter(expected)
-        db.insertCharacter(notExpected)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(expected)
+            characterDao.insertOrUpdateCharacter(notExpected)
 
-        // THEN
-        val result = db.queryCharactersByIds(ids)
-        assertEquals(result.count(), 1)
-        assertTrue(result.contains(expected))
-        assertFalse(result.contains(notExpected))
+            // THEN
+            val result = characterDao.queryCharactersByIds(ids)
+            assertEquals(result.count(), 1)
+            assertTrue(result.contains(expected))
+            assertFalse(result.contains(notExpected))
+        }
     }
 
     @Test
     fun `test Character which status is Alive and is not KilledByUser isAlive`() {
-        // GIVEN
-        val characterId = DataFactory.randomInt()
-        val character =
-            CharacterDataFactory.Db.makeDbCharacterModel(
-                characterId = characterId,
-                status = CharacterDbMapper.ALIVE,
-                isAlive = true,
-                isKilledByUser = false
-            )
+        runBlocking {
+            // GIVEN
+            val characterId = DataFactory.randomInt()
+            val character =
+                CharacterDataFactory.Db.makeDbCharacterModel(
+                    characterId = characterId,
+                    status = CharacterDbMapper.ALIVE,
+                    isAlive = true,
+                    isKilledByUser = false
+                )
 
-        // WHEN
-        db.insertCharacter(character)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(character)
 
-        // THEN
-        val result = db.queryCharacter(character.id)
-        assertNotNull(result)
-        assertEquals(result!!.status, CharacterDbMapper.ALIVE)
-        assertTrue(result.statusAlive)
-        assertFalse(result.killedByUser)
+            // THEN
+            val result = characterDao.queryCharacter(character.id)
+            assertNotNull(result)
+            assertEquals(result!!.status, CharacterDbMapper.ALIVE)
+            assertTrue(result.statusAlive)
+            assertFalse(result.killedByUser)
+        }
     }
 
     @Test
     fun `test user can kill a Character`() {
-        // GIVEN
-        val characterId = DataFactory.randomInt()
-        val character =
-            CharacterDataFactory.Db.makeDbCharacterModel(
-                characterId = characterId,
-                status = CharacterDbMapper.ALIVE,
-                isAlive = true,
-                isKilledByUser = false
-            )
+        runBlocking {
+            // GIVEN
+            val characterId = DataFactory.randomInt()
+            val character =
+                CharacterDataFactory.Db.makeDbCharacterModel(
+                    characterId = characterId,
+                    status = CharacterDbMapper.ALIVE,
+                    isAlive = true,
+                    isKilledByUser = false
+                )
 
-        // WHEN
-        db.insertCharacter(character)
-        db.killCharacter(character.id)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(character)
+            characterDao.killCharacter(character.id)
 
-        // THEN
-        val result = db.queryCharacter(character.id)
-        assertNotNull(result)
-        assertEquals(result!!.status, CharacterDbMapper.ALIVE)
-        assertTrue(result.statusAlive)
-        assertTrue(result.killedByUser)
+            // THEN
+            val result = characterDao.queryCharacter(character.id)
+            assertNotNull(result)
+            assertEquals(result!!.status, CharacterDbMapper.ALIVE)
+            assertTrue(result.statusAlive)
+            assertTrue(result.killedByUser)
+        }
     }
 
     @Test
-    fun `test a Character which isKilledByUser keeps dead even after update by insert`() {
-        // GIVEN
-        val characterId = DataFactory.randomInt()
-        val character =
-            CharacterDataFactory.Db.makeDbCharacterModel(
-                characterId = characterId,
-                status = CharacterDbMapper.ALIVE,
-                isAlive = true,
-                isKilledByUser = false
-            )
+    fun `test a Character which isKilledByUser keeps dead after update by insert`() {
+        runBlocking {
+            // GIVEN
+            val characterId = DataFactory.randomInt()
+            val character =
+                CharacterDataFactory.Db.makeDbCharacterModel(
+                    characterId = characterId,
+                    status = CharacterDbMapper.ALIVE,
+                    isAlive = true,
+                    isKilledByUser = false
+                )
 
-        // WHEN
-        db.insertCharacter(character)
-        db.killCharacter(character.id)
-        db.insertCharacter(character)
+            // WHEN
+            characterDao.insertOrUpdateCharacter(character)
+            characterDao.killCharacter(character.id)
+            characterDao.insertOrUpdateCharacter(character)
 
-        // THEN
-        val result = db.queryCharacter(character.id)
-        assertNotNull(result)
-        assertEquals(result!!.status, CharacterDbMapper.ALIVE)
-        assertTrue(result.statusAlive)
-        assertTrue(result.killedByUser)
+            // THEN
+            val result = characterDao.queryCharacter(character.id)
+            assertNotNull(result)
+            assertEquals(result!!.status, CharacterDbMapper.ALIVE)
+            assertTrue(result.statusAlive)
+            assertTrue(result.killedByUser)
+        }
     }
 }
