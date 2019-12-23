@@ -11,7 +11,15 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
-import com.mohsenoid.rickandmorty.data.mapper.*
+import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.LocationDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.LocationEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.Mapper
+import com.mohsenoid.rickandmorty.data.mapper.OriginDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.OriginEntityMapper
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
 import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
@@ -38,6 +46,7 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListContract
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
+import java.net.UnknownHostException
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -45,7 +54,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.UnknownHostException
 
 class DependenciesProvider(private val context: Application) {
 

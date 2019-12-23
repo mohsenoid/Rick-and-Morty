@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
-
 class ConfigProviderImpl(private val context: Application) : ConfigProvider {
 
     override fun isOnline(): Boolean {
@@ -20,7 +19,7 @@ class ConfigProviderImpl(private val context: Application) : ConfigProvider {
                 connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
 
             return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
         } else {
             @Suppress("DEPRECATION")
             val networksInfo = connectivityManager.allNetworkInfo ?: return false
