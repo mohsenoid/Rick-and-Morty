@@ -44,7 +44,7 @@ class ConfigProviderTest {
         // WHEN
         val isOnline = configProvider.isOnline()
 
-        //THEN
+        // THEN
         assertTrue(isOnline)
     }
 
@@ -56,7 +56,7 @@ class ConfigProviderTest {
         // WHEN
         val isOnline = configProvider.isOnline()
 
-        //THEN
+        // THEN
         assertFalse(isOnline)
     }
 }

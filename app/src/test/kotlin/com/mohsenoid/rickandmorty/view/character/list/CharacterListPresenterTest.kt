@@ -9,13 +9,17 @@ import com.mohsenoid.rickandmorty.test.CharacterDataFactory.Entity.makeEntityCha
 import com.mohsenoid.rickandmorty.test.DataFactory.randomInt
 import com.mohsenoid.rickandmorty.test.DataFactory.randomString
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import java.util.ArrayList
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import java.util.*
 
 class CharacterListPresenterTest {
 

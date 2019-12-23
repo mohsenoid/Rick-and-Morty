@@ -7,7 +7,7 @@ import com.mohsenoid.rickandmorty.test.DataFactory.randomInt
 import com.mohsenoid.rickandmorty.test.DataFactory.randomIntList
 import com.mohsenoid.rickandmorty.test.DataFactory.randomString
 import com.mohsenoid.rickandmorty.test.DataFactory.randomStringList
-import java.util.*
+import java.util.ArrayList
 
 object EpisodeDataFactory {
 

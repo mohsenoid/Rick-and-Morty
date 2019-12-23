@@ -6,8 +6,8 @@ import android.os.Bundle
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseActivity
+import java.util.ArrayList
 import timber.log.Timber
-import java.util.*
 
 class CharacterListActivity : BaseActivity() {
 

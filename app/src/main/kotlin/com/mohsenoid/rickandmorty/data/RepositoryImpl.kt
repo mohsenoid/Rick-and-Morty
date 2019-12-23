@@ -51,7 +51,6 @@ class RepositoryImpl(
                         networkEpisodes.results
                             .map(episodeDbMapper::map)
                             .forEach { db.insertEpisode(it) }
-
                     }
                 }
 

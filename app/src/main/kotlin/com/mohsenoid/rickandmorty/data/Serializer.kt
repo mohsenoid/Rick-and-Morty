@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.data
 
 import androidx.annotation.VisibleForTesting
-import java.util.*
+import java.util.ArrayList
 
 object Serializer {
 

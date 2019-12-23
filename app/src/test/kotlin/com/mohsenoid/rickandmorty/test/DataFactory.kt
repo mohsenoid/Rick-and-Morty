@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.test
 
-import java.util.*
+import java.util.ArrayList
+import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 
 object DataFactory {

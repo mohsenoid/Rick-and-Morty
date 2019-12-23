@@ -13,9 +13,9 @@ import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
+import java.util.ArrayList
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
-import java.util.*
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     CharacterListAdapter.ClickListener {
