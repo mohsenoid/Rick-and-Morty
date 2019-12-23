@@ -26,7 +26,7 @@ object CharacterDataFactory {
                 origin = OriginDataFactory.Db.makeDbOriginModel(),
                 location = LocationDataFactory.Db.makeDbLocationModel(),
                 image = DataFactory.randomString(),
-                serializedEpisodes = DataFactory.randomString() + "," + DataFactory.randomString() + "," + DataFactory.randomString(),
+                serializedEpisodes = "${DataFactory.randomInt()},${DataFactory.randomInt()},${DataFactory.randomInt()}",
                 url = DataFactory.randomString(),
                 created = DataFactory.randomString(),
                 killedByUser = isKilledByUser

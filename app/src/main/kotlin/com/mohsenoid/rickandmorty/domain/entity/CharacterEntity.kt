@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.domain.entity
 
-class CharacterEntity(
+data class CharacterEntity(
     val id: Int,
     val name: String,
     val status: String,
