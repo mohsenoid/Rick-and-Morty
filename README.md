@@ -8,9 +8,11 @@ This repository contains Rick and Morty Android application which I am using as 
 
 The Application implemented and structured based on **Clean Architecture** and **SOLID** principles best practices and the presentation layer is implemented based on the **MVP** pattern.
 
-The **Data** layer contains **Network Client** implemented by Retrofit library to get access to remote data and **DB** implemented by Room library to persist those data locally in case of offline usage.
+The **Data** layer contains **Network Client** implemented by Retrofit library to get access to remote data and **DB** implemented by **Room** library to persist those data locally in case of offline usage.
 
 The **Domain** layer consist of **Repository** which allows access to the Data layer. It also uses Coroutines **IO Dispatcher** and **Main Dispatcher** to run long-running tasks in the background and reflect the result on UI. There is also a **Test Dispatcher Provider** which runs immediately on same thread in unit tests.
+
+![Repository Pattern](REPOSITORY_PATTERN.png)
 
 The **View** layer multiple Activity and Fragment which use their contract to implement the view interface and use presenter to respond to user interactions.
 
