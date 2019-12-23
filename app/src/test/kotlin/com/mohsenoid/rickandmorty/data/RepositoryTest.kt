@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.Db
+import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
+import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
@@ -35,7 +36,10 @@ import org.mockito.MockitoAnnotations
 abstract class RepositoryTest {
 
     @Mock
-    lateinit var db: Db
+    lateinit var characterDao: DbCharacterDao
+
+    @Mock
+    lateinit var episodeDao: DbEpisodeDao
 
     @Mock
     lateinit var networkClient: NetworkClient
@@ -69,7 +73,8 @@ abstract class RepositoryTest {
         MockitoAnnotations.initMocks(this)
 
         repository = RepositoryImpl(
-            db = db,
+            characterDao = characterDao,
+            episodeDao = episodeDao,
             networkClient = networkClient,
             dispatcherProvider = testDispatcherProvider,
             configProvider = configProvider,

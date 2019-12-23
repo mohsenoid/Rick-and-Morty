@@ -41,4 +41,5 @@ ext {
     // Dependencies
     timberVersion = '4.7.1'
     picassoVersion = '2.71828'
+    roomVersion ='2.2.3'
 }

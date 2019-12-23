@@ -15,7 +15,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import java.util.ArrayList
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -42,103 +42,117 @@ class CharacterListPresenterTest {
     }
 
     @Test
-    fun `test if isOnline loadCharacters calls view showLoading`() = runBlockingTest {
-        // GIVEN
-        stubConfigProviderIsOnline(true)
+    fun `test if isOnline loadCharacters calls view showLoading`() {
+        runBlocking {
+            // GIVEN
+            stubConfigProviderIsOnline(true)
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).showLoading()
+            // THEN
+            verify(view, times(1)).showLoading()
+        }
     }
 
     @Test
-    fun `test if isOffline loadCharacters calls view showOfflineMessage`() = runBlockingTest {
-        // GIVEN
-        stubConfigProviderIsOnline(false)
+    fun `test if isOffline loadCharacters calls view showOfflineMessage`() {
+        runBlocking {
+            // GIVEN
+            stubConfigProviderIsOnline(false)
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).showOfflineMessage(isCritical = false)
+            // THEN
+            verify(view, times(1)).showOfflineMessage(isCritical = false)
+        }
     }
 
     @Test
-    fun `test loadCharacters calls repository queryCharactersByIds`() = runBlockingTest {
-        // GIVEN
-        stubConfigProviderIsOnline(true)
-        val characterIds: MutableList<Int> = ArrayList()
-        characterIds.add(randomInt())
-        characterIds.add(randomInt())
-        characterIds.add(randomInt())
-        presenter.characterIds = characterIds
+    fun `test loadCharacters calls repository queryCharactersByIds`() {
+        runBlocking {
+            // GIVEN
+            stubConfigProviderIsOnline(true)
+            val characterIds: MutableList<Int> = ArrayList()
+            characterIds.add(randomInt())
+            characterIds.add(randomInt())
+            characterIds.add(randomInt())
+            presenter.characterIds = characterIds
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(repository, times(1))
-            .queryCharactersByIds(characterIds = eq<List<Int>>(characterIds), callback = any())
+            // THEN
+            verify(repository, times(1))
+                .queryCharactersByIds(characterIds = eq<List<Int>>(characterIds), callback = any())
+        }
     }
 
     @Test
-    fun `test loadCharacters calls view setCharacters OnSuccess`() = runBlockingTest {
-        // GIVEN
-        val characters =
-            makeEntityCharactersModelList(5)
-        stubRepositoryQueryCharactersOnSuccess(characters)
+    fun `test loadCharacters calls view setCharacters OnSuccess`() {
+        runBlocking {
+            // GIVEN
+            val characters =
+                makeEntityCharactersModelList(5)
+            stubRepositoryQueryCharactersOnSuccess(characters)
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).setCharacters(characters = eq(characters))
+            // THEN
+            verify(view, times(1)).setCharacters(characters = eq(characters))
+        }
     }
 
     @Test
-    fun `test loadCharacters calls view showMessage OnError`() = runBlockingTest {
-        // GIVEN
-        val errorMessage = randomString()
-        stubRepositoryQueryCharactersOnError(Exception(errorMessage))
+    fun `test loadCharacters calls view showMessage OnError`() {
+        runBlocking {
+            // GIVEN
+            val errorMessage = randomString()
+            stubRepositoryQueryCharactersOnError(Exception(errorMessage))
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).showMessage(message = errorMessage)
+            // THEN
+            verify(view, times(1)).showMessage(message = errorMessage)
+        }
     }
 
     @Test
-    fun `test loadCharacters calls view hideLoading OnSuccess`() = runBlockingTest {
-        // GIVEN
-        val characters =
-            makeEntityCharactersModelList(5)
-        stubRepositoryQueryCharactersOnSuccess(characters)
+    fun `test loadCharacters calls view hideLoading OnSuccess`() {
+        runBlocking {
+            // GIVEN
+            val characters =
+                makeEntityCharactersModelList(5)
+            stubRepositoryQueryCharactersOnSuccess(characters)
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).hideLoading()
+            // THEN
+            verify(view, times(1)).hideLoading()
+        }
     }
 
     @Test
-    fun `test loadCharacters calls view hideLoading OnError`() = runBlockingTest {
-        // GIVEN
-        stubRepositoryQueryCharactersOnError(Exception())
+    fun `test loadCharacters calls view hideLoading OnError`() {
+        runBlocking {
+            // GIVEN
+            stubRepositoryQueryCharactersOnError(Exception())
 
-        // WHEN
-        presenter.loadCharacters()
+            // WHEN
+            presenter.loadCharacters()
 
-        // THEN
-        verify(view, times(1)).hideLoading()
+            // THEN
+            verify(view, times(1)).hideLoading()
+        }
     }
 
     @Test
-    fun `test killCharacter calls repository killCharacter when character isAlive`() =
-        runBlockingTest {
+    fun `test killCharacter calls repository killCharacter when character isAlive`() {
+        runBlocking {
             // GIVEN
             stubConfigProviderIsOnline(true)
             val characterId = randomInt()
@@ -160,10 +174,11 @@ class CharacterListPresenterTest {
                     callback = any()
                 )
         }
+    }
 
     @Test
-    fun `test killCharacter skips calling repository killCharacter when character isNotAlive`() =
-        runBlockingTest {
+    fun `test killCharacter skips calling repository killCharacter when character isNotAlive`() {
+        runBlocking {
             // GIVEN
             stubConfigProviderIsOnline(true)
             val characterId = randomInt()
@@ -185,26 +200,26 @@ class CharacterListPresenterTest {
                     callback = any()
                 )
         }
+    }
 
     private fun stubConfigProviderIsOnline(isOnline: Boolean) {
         whenever(configProvider.isOnline())
             .thenReturn(isOnline)
     }
 
-    private fun stubRepositoryQueryCharactersOnSuccess(characters: List<CharacterEntity>) =
-        runBlockingTest {
-            whenever(repository.queryCharactersByIds(characterIds = any(), callback = any()))
-                .then { invocation ->
-                    val callback =
-                        invocation.getArgument<DataCallback<List<CharacterEntity>>>(
-                            1
-                        )
-                    callback.onSuccess(characters)
-                    null
-                }
-        }
+    private suspend fun stubRepositoryQueryCharactersOnSuccess(characters: List<CharacterEntity>) {
+        whenever(repository.queryCharactersByIds(characterIds = any(), callback = any()))
+            .then { invocation ->
+                val callback =
+                    invocation.getArgument<DataCallback<List<CharacterEntity>>>(
+                        1
+                    )
+                callback.onSuccess(characters)
+                null
+            }
+    }
 
-    private fun stubRepositoryQueryCharactersOnError(exception: Exception) = runBlockingTest {
+    private suspend fun stubRepositoryQueryCharactersOnError(exception: Exception) {
         whenever(repository.queryCharactersByIds(characterIds = any(), callback = any()))
             .then { invocation ->
                 val callback =
