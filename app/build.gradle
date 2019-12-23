@@ -8,6 +8,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply from: "$rootDir/jacoco.gradle"
 
+apply from: "$rootDir/ktlint.gradle"
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -67,6 +69,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
+check.dependsOn ktlint
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
