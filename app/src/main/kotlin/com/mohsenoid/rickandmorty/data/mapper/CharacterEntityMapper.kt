@@ -37,11 +37,11 @@ class CharacterEntityMapper(
         )
     }
 
-    private fun getEpisodeIds(episodes: List<String>): List<String> {
-        return episodes.map { it.split(SEPARATOR).last() }
-    }
-
     companion object {
         private const val SEPARATOR = "/"
+
+        fun getEpisodeIds(episodes: List<String>): List<String> {
+            return episodes.map { it.split(SEPARATOR).last() }
+        }
     }
 }
