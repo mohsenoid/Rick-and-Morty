@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import java.util.*
+import java.util.ArrayList
 
 class EpisodeListAdapter(private val listener: ClickListener) :
     RecyclerView.Adapter<EpisodeViewHolder>() {

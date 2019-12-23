@@ -44,11 +44,15 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val networkEpisodes = networkClient.getEpisodes(page)
+                val networkEpisodesResponse = networkClient.getEpisodes(page)
 
-                networkEpisodes
-                    .map(episodeDbMapper::map)
-                    .forEach { db.insertEpisode(it) }
+                if (networkEpisodesResponse.isSuccessful) {
+                    networkEpisodesResponse.body()?.let { networkEpisodes ->
+                        networkEpisodes.results
+                            .map(episodeDbMapper::map)
+                            .forEach { db.insertEpisode(it) }
+                    }
+                }
 
                 queryDbEpisodes(page, callback)
             } catch (e: Exception) {
@@ -99,11 +103,15 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val networkCharacters = networkClient.getCharactersByIds(characterIds)
+                val networkCharactersResponse = networkClient.getCharactersByIds(characterIds)
 
-                networkCharacters
-                    .map(characterDbMapper::map)
-                    .forEach { db.insertCharacter(it) }
+                if (networkCharactersResponse.isSuccessful) {
+                    networkCharactersResponse.body()?.let { networkCharacters ->
+                        networkCharacters
+                            .map(characterDbMapper::map)
+                            .forEach { db.insertCharacter(it) }
+                    }
+                }
 
                 queryDbCharactersByIds(characterIds, callback)
             } catch (e: Exception) {
@@ -154,11 +162,15 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val networkCharacter = networkClient.getCharacterDetails(characterId)
+                val networkCharacterResponse = networkClient.getCharacterDetails(characterId)
 
-                val dbCharacterModel = characterDbMapper.map(networkCharacter)
+                if (networkCharacterResponse.isSuccessful) {
+                    networkCharacterResponse.body()?.let { networkCharacter ->
+                        val dbCharacterModel = characterDbMapper.map(networkCharacter)
+                        db.insertCharacter(dbCharacterModel)
+                    }
+                }
 
-                db.insertCharacter(dbCharacterModel)
                 queryDbCharacterDetails(characterId, callback)
             } catch (e: Exception) {
                 e.printStackTrace()

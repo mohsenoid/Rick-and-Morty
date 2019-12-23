@@ -6,6 +6,7 @@ ext {
     // Project
     toolsBuildGradleVersion = '3.5.3'
     jacocoVersion = '0.8.3'
+    ktlintVersion = '0.36.0'
 
     // Android Jetpack
     androidxAppCompatVersion = '1.1.0'
@@ -30,4 +31,14 @@ ext {
     mockitoKotlinVersion = '2.1.0'
     robolectricVersion = '4.3.1'
     jsonVersion = '20190722'
+
+    // Retrofit
+    okhttpVersion = '4.2.1'
+    retrofitVersion = '2.6.2'
+    retrofitAdapterVersion = '1.0.0'
+    gsonVersion = '2.8.5'
+
+    // Dependencies
+    timberVersion = '4.7.1'
+    picassoVersion = '2.71828'
 }

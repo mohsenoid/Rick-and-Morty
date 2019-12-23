@@ -8,6 +8,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply from: "$rootDir/jacoco.gradle"
 
+apply from: "$rootDir/ktlint.gradle"
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -17,8 +19,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.compileSdkVersion
 
-        versionCode 4
-        versionName "2.1.0"
+        versionCode 5
+        versionName "2.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,6 +70,8 @@ android {
     }
 }
 
+check.dependsOn ktlint
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -92,5 +96,15 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "org.json:json:$jsonVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    implementation "com.google.code.gson:gson:$gsonVersion"
+
+    // Others
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
 }

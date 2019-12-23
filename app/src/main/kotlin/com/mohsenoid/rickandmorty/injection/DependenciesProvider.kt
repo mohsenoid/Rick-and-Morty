@@ -1,6 +1,9 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.app.Application
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.RepositoryImpl
 import com.mohsenoid.rickandmorty.data.db.Db
 import com.mohsenoid.rickandmorty.data.db.DbImpl
@@ -8,8 +11,17 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
-import com.mohsenoid.rickandmorty.data.mapper.*
-import com.mohsenoid.rickandmorty.data.network.*
+import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.LocationDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.LocationEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.Mapper
+import com.mohsenoid.rickandmorty.data.mapper.OriginDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.OriginEntityMapper
+import com.mohsenoid.rickandmorty.data.network.NetworkClient
+import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
@@ -23,8 +35,6 @@ import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProviderImpl
 import com.mohsenoid.rickandmorty.util.dispatcher.AppDispatcherProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.mohsenoid.rickandmorty.util.image.ImageDownloader
-import com.mohsenoid.rickandmorty.util.image.ImageDownloaderImpl
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsContract
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsFragment
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsPresenter
@@ -36,21 +46,58 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListContract
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
+import java.net.UnknownHostException
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class DependenciesProvider(private val context: Application) {
-
-    private val cacheDirectoryPath: String = context.cacheDir.absolutePath
 
     private val datastore: Db by lazy {
         DbImpl(context)
     }
 
-    private val networkHelper: NetworkHelper by lazy {
-        NetworkHelperImpl(NetworkConstants.BASE_URL)
+    private val baseUrl: HttpUrl by lazy {
+        NetworkConstants.BASE_URL.toHttpUrlOrNull()
+            ?: throw UnknownHostException("Invalid host: " + NetworkConstants.BASE_URL)
+    }
+
+    private val gson: Gson by lazy {
+        GsonBuilder().serializeNulls().create()
+    }
+
+    private val converterFactory: Converter.Factory by lazy {
+        GsonConverterFactory.create(gson)
+    }
+
+    private val loggingInterceptor: HttpLoggingInterceptor by lazy {
+        HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    private val okHttpClient: OkHttpClient by lazy {
+        OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG)
+                addInterceptor(loggingInterceptor)
+        }
+            .build()
+    }
+
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(converterFactory)
+            .client(okHttpClient)
+            .build()
     }
 
     private val networkClient: NetworkClient by lazy {
-        NetworkClientImpl(networkHelper)
+        retrofit.create(NetworkClient::class.java)
     }
 
     val dispatcherProvider: DispatcherProvider by lazy {
@@ -106,15 +153,6 @@ class DependenciesProvider(private val context: Application) {
         )
     }
 
-
-    val imageDownloader: ImageDownloader by lazy {
-        ImageDownloaderImpl(
-            networkHelper,
-            cacheDirectoryPath,
-            dispatcherProvider
-        )
-    }
-
     fun getEpisodeListFragment(): EpisodeListFragment {
         return EpisodeListFragment.newInstance()
     }
@@ -136,7 +174,7 @@ class DependenciesProvider(private val context: Application) {
     }
 
     fun getCharacterListAdapter(listener: CharacterListAdapter.ClickListener): CharacterListAdapter {
-        return CharacterListAdapter(imageDownloader, dispatcherProvider, listener)
+        return CharacterListAdapter(dispatcherProvider, listener)
     }
 
     fun getCharacterDetailsFragment(characterId: Int): CharacterDetailsFragment {

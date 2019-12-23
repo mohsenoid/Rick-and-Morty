@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.test
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import java.util.*
+import java.util.ArrayList
 
 object CharacterDataFactory {
 

@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.mohsenoid.rickandmorty.util.image.ImageDownloader
+import java.util.ArrayList
 import kotlinx.android.synthetic.main.item_character.view.*
-import java.util.*
 
 class CharacterListAdapter(
-    private val imageDownloader: ImageDownloader,
     private val dispatcherProvider: DispatcherProvider,
     private val listener: ClickListener
 ) : RecyclerView.Adapter<CharacterViewHolder>() {
@@ -30,7 +28,7 @@ class CharacterListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_character, parent, false)
-        return CharacterViewHolder(view, imageDownloader)
+        return CharacterViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {

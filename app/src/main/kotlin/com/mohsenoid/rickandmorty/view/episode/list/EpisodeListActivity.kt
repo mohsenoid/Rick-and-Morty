@@ -1,10 +1,10 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
 import android.os.Bundle
-import android.util.Log
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseActivity
+import timber.log.Timber
 
 class EpisodeListActivity : BaseActivity() {
 
@@ -27,7 +27,7 @@ class EpisodeListActivity : BaseActivity() {
         if (savedInstanceState == null) {
             attachFragments()
         }
-        Log.i(TAG, "EpisodeListActivity created")
+        Timber.i("EpisodeListActivity created")
     }
 
     private fun attachFragments() {
@@ -38,7 +38,6 @@ class EpisodeListActivity : BaseActivity() {
     }
 
     companion object {
-        private val TAG = EpisodeListActivity::class.java.simpleName
         private const val TAG_EPISODE_LIST_FRAGMENT = "episodeListFragment"
     }
 }

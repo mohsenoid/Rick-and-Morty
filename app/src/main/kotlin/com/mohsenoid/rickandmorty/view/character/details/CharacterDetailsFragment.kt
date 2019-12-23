@@ -10,19 +10,17 @@ import android.widget.Toast
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
-import com.mohsenoid.rickandmorty.util.image.ImageDownloader
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.coroutines.launch
 
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
     private lateinit var presenter: CharacterDetailsContract.Presenter
-    private lateinit var imageDownloader: ImageDownloader
 
     public override fun injectDependencies(dependenciesProvider: DependenciesProvider) {
         presenter = dependenciesProvider.getCharacterDetailsFragmentPresenter()
-        imageDownloader = dependenciesProvider.imageDownloader
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,13 +95,10 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     }
 
     override fun setCharacter(character: CharacterEntity) {
-        launch {
-            imageDownloader.downloadImage(
-                imageUrl = character.imageUrl,
-                imageView = characterImage,
-                progress = characterImageProgress
-            )
-        }
+        Picasso.get()
+            .load(character.imageUrl)
+            .placeholder(R.drawable.ic_placeholder)
+            .into(characterImage)
 
         characterName.text = character.name
         characterDetails.text =

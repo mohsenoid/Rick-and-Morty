@@ -11,7 +11,7 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
-import java.util.*
+import java.util.ArrayList
 
 class DbImpl(context: Context) :
     SQLiteOpenHelper(context, DbConstants.DATABASE_NAME, null, DbConstants.DATABASE_VERSION), Db {
@@ -27,39 +27,39 @@ class DbImpl(context: Context) :
     @Synchronized
     private fun createEpisodeTable(db: SQLiteDatabase) {
         val sql = "CREATE TABLE IF NOT EXISTS ${DbConstants.Episode.TABLE_NAME} " +
-                "(" +
-                "${DbConstants.Episode.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "${DbConstants.Episode.NAME} TEXT, " +
-                "${DbConstants.Episode.AIR_DATE} TEXT, " +
-                "${DbConstants.Episode.EPISODE} TEXT, " +
-                "${DbConstants.Episode.CHARACTER_IDS} TEXT, " +
-                "${DbConstants.Episode.URL} TEXT, " +
-                "${DbConstants.Episode.CREATED} TEXT" +
-                ")"
+            "(" +
+            "${DbConstants.Episode.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+            "${DbConstants.Episode.NAME} TEXT, " +
+            "${DbConstants.Episode.AIR_DATE} TEXT, " +
+            "${DbConstants.Episode.EPISODE} TEXT, " +
+            "${DbConstants.Episode.CHARACTER_IDS} TEXT, " +
+            "${DbConstants.Episode.URL} TEXT, " +
+            "${DbConstants.Episode.CREATED} TEXT" +
+            ")"
         db.execSQL(sql)
     }
 
     @Synchronized
     private fun createCharacterTable(db: SQLiteDatabase) {
         val sql = "CREATE TABLE IF NOT EXISTS ${DbConstants.Character.TABLE_NAME} " +
-                "(" +
-                "${DbConstants.Character.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "${DbConstants.Character.NAME} TEXT, " +
-                "${DbConstants.Character.STATUS} TEXT, " +
-                "${DbConstants.Character.IS_STATUS_ALIVE} INTEGER, " +
-                "${DbConstants.Character.SPECIES} TEXT, " +
-                "${DbConstants.Character.TYPE} TEXT, " +
-                "${DbConstants.Character.GENDER} TEXT, " +
-                "${DbConstants.Character.ORIGIN_NAME} TEXT, " +
-                "${DbConstants.Character.ORIGIN_URL} TEXT, " +
-                "${DbConstants.Character.LOCATION_NAME} TEXT, " +
-                "${DbConstants.Character.LOCATION_URL} TEXT, " +
-                "${DbConstants.Character.IMAGE} TEXT, " +
-                "${DbConstants.Character.EPISODE} TEXT, " +
-                "${DbConstants.Character.URL} TEXT, " +
-                "${DbConstants.Character.CREATED} TEXT, " +
-                "${DbConstants.Character.KILLED_BY_USER} INTEGER DEFAULT 0" +
-                ")"
+            "(" +
+            "${DbConstants.Character.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+            "${DbConstants.Character.NAME} TEXT, " +
+            "${DbConstants.Character.STATUS} TEXT, " +
+            "${DbConstants.Character.IS_STATUS_ALIVE} INTEGER, " +
+            "${DbConstants.Character.SPECIES} TEXT, " +
+            "${DbConstants.Character.TYPE} TEXT, " +
+            "${DbConstants.Character.GENDER} TEXT, " +
+            "${DbConstants.Character.ORIGIN_NAME} TEXT, " +
+            "${DbConstants.Character.ORIGIN_URL} TEXT, " +
+            "${DbConstants.Character.LOCATION_NAME} TEXT, " +
+            "${DbConstants.Character.LOCATION_URL} TEXT, " +
+            "${DbConstants.Character.IMAGE} TEXT, " +
+            "${DbConstants.Character.EPISODE} TEXT, " +
+            "${DbConstants.Character.URL} TEXT, " +
+            "${DbConstants.Character.CREATED} TEXT, " +
+            "${DbConstants.Character.KILLED_BY_USER} INTEGER DEFAULT 0" +
+            ")"
         db.execSQL(sql)
     }
 
@@ -105,7 +105,7 @@ class DbImpl(context: Context) :
     @Synchronized
     private fun getSelectEpisodeCursor(episodeId: Int): Cursor {
         val sql = "SELECT * FROM ${DbConstants.Episode.TABLE_NAME} " +
-                "WHERE ${DbConstants.Episode.ID} = $episodeId"
+            "WHERE ${DbConstants.Episode.ID} = $episodeId"
         return db.rawQuery(sql, null)
     }
 
@@ -114,8 +114,8 @@ class DbImpl(context: Context) :
         val episodes = ArrayList<DbEpisodeModel>()
 
         val sql = "SELECT * FROM ${DbConstants.Episode.TABLE_NAME} " +
-                "LIMIT ${DbConstants.PAGE_SIZE} " +
-                "OFFSET ${calculatePageOffset(page)}"
+            "LIMIT ${DbConstants.PAGE_SIZE} " +
+            "OFFSET ${calculatePageOffset(page)}"
 
         db.rawQuery(sql, null).use { cursor ->
             while (cursor.moveToNext()) {
@@ -187,7 +187,7 @@ class DbImpl(context: Context) :
     @Synchronized
     private fun getSelectCharacterCursor(characterId: Int): Cursor {
         val sql = "SELECT * FROM ${DbConstants.Character.TABLE_NAME} " +
-                "WHERE ${DbConstants.Character.ID} = $characterId"
+            "WHERE ${DbConstants.Character.ID} = $characterId"
         return db.rawQuery(sql, null)
     }
 
@@ -199,7 +199,7 @@ class DbImpl(context: Context) :
 
         val serializedCharacterIds = Serializer.serializeIntegerList(characterIds)
         val sql = "SELECT * FROM ${DbConstants.Character.TABLE_NAME} " +
-                "WHERE ${DbConstants.Character.ID} IN ($serializedCharacterIds)"
+            "WHERE ${DbConstants.Character.ID} IN ($serializedCharacterIds)"
         db.rawQuery(sql, null).use { cursor ->
             while (cursor.moveToNext()) {
                 val newCharacter = getCursorCharacterDetails(cursor)

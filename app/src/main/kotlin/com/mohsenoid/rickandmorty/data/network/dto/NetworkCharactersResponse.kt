@@ -1,14 +1,8 @@
 package com.mohsenoid.rickandmorty.data.network.dto
 
-import org.json.JSONArray
+import com.google.gson.annotations.SerializedName
 
-data class NetworkCharactersResponse(val results: List<NetworkCharacterModel>) {
-
-    companion object {
-        fun fromJson(json: String): NetworkCharactersResponse {
-            val jsonArray = JSONArray(json)
-            val results = NetworkCharacterModel.fromJson(jsonArray)
-            return NetworkCharactersResponse(results = results)
-        }
-    }
-}
+data class NetworkCharactersResponse(
+    @SerializedName("results")
+    val results: List<NetworkCharacterModel>
+)
