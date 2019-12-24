@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.data.mapper
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
-import org.junit.Assert
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 
@@ -21,15 +21,15 @@ class LocationEntityMapperTest {
         // GIVEN
         val dbLocation = LocationDataFactory.Db.makeDbLocationModel()
 
-        val expected = LocationEntity(
+        val expectedLocation = LocationEntity(
             name = dbLocation.name,
             url = dbLocation.url
         )
 
         // WHEN
-        val actual = locationEntityMapper.map(dbLocation)
+        val actualLocation = locationEntityMapper.map(dbLocation)
 
         // THEN
-        Assert.assertEquals(expected, actual)
+        expectedLocation shouldEqual actualLocation
     }
 }

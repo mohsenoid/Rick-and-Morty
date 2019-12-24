@@ -37,3 +37,5 @@ Timber logger library made by [Jake Wharton](https://github.com/JakeWharton/timb
 Picasso image downloading and caching library made by [square](https://github.com/square/picasso)
 
 Retrofit HTTP API library made by [square](https://github.com/square/retrofit)
+
+Kluent assertions library made by [MarkusAmshove](https://github.com/MarkusAmshove/Kluent)

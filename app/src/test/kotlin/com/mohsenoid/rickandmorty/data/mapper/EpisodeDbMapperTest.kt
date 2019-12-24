@@ -4,7 +4,7 @@ import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
-import org.junit.Assert
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.mockito.MockitoAnnotations
@@ -24,7 +24,7 @@ class EpisodeDbMapperTest {
         // GIVEN
         val networkEpisode = EpisodeDataFactory.Network.makeNetworkEpisodeModel()
 
-        val expected = DbEpisodeModel(
+        val expectedEpisode = DbEpisodeModel(
             id = networkEpisode.id,
             name = networkEpisode.name,
             airDate = networkEpisode.airDate,
@@ -39,9 +39,9 @@ class EpisodeDbMapperTest {
         )
 
         // WHEN
-        val actual = episodeDbMapper.map(networkEpisode)
+        val actualEpisode = episodeDbMapper.map(networkEpisode)
 
         // THEN
-        Assert.assertEquals(expected, actual)
+        expectedEpisode shouldEqual actualEpisode
     }
 }

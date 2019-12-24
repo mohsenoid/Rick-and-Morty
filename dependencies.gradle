@@ -30,7 +30,7 @@ ext {
     mockitoVersion = '2.27.0'
     mockitoKotlinVersion = '2.1.0'
     robolectricVersion = '4.3.1'
-    jsonVersion = '20190722'
+    kluentVersion = '1.58'
 
     // Retrofit
     okhttpVersion = '4.2.1'

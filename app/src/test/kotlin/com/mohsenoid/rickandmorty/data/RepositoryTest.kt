@@ -28,7 +28,9 @@ import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.nhaarman.mockitokotlin2.whenever
+import org.amshove.kluent.When
+import org.amshove.kluent.calling
+import org.amshove.kluent.itReturns
 import org.junit.Before
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -86,7 +88,6 @@ abstract class RepositoryTest {
     }
 
     fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        whenever(configProvider.isOnline())
-            .thenReturn(isOnline)
+        When calling configProvider.isOnline() itReturns isOnline
     }
 }

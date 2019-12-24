@@ -11,11 +11,19 @@ import com.mohsenoid.rickandmorty.test.DataFactory.randomString
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import java.util.ArrayList
 import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.Verify
+import org.amshove.kluent.VerifyNoFurtherInteractions
+import org.amshove.kluent.VerifyNoInteractions
+import org.amshove.kluent.When
+import org.amshove.kluent.called
+import org.amshove.kluent.calling
+import org.amshove.kluent.itAnswers
+import org.amshove.kluent.itReturns
+import org.amshove.kluent.on
+import org.amshove.kluent.that
+import org.amshove.kluent.was
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -51,7 +59,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).showLoading()
+            Verify on view that view.showLoading() was called
         }
     }
 
@@ -65,7 +73,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).showOfflineMessage(isCritical = false)
+            Verify on view that view.showOfflineMessage(isCritical = false) was called
         }
     }
 
@@ -84,8 +92,11 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(repository, times(1))
-                .queryCharactersByIds(characterIds = eq<List<Int>>(characterIds), callback = any())
+            Verify on repository that repository.queryCharactersByIds(
+                characterIds = eq<List<Int>>(
+                    characterIds
+                ), callback = any()
+            ) was called
         }
     }
 
@@ -101,7 +112,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).setCharacters(characters = eq(characters))
+            Verify on view that view.setCharacters(characters = eq(characters)) was called
         }
     }
 
@@ -116,7 +127,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).showMessage(message = errorMessage)
+            Verify on view that view.showMessage(message = errorMessage) was called
         }
     }
 
@@ -132,7 +143,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).hideLoading()
+            Verify on view that view.hideLoading() was called
         }
     }
 
@@ -146,7 +157,7 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            verify(view, times(1)).hideLoading()
+            Verify on view that view.hideLoading() was called
         }
     }
 
@@ -168,11 +179,11 @@ class CharacterListPresenterTest {
             presenter.killCharacter(character)
 
             // THEN
-            verify(repository, times(1))
-                .killCharacter(
-                    characterId = eq(characterId),
-                    callback = any()
-                )
+            Verify on repository that repository.killCharacter(
+                characterId = eq(characterId),
+                callback = any()
+            ) was called
+            VerifyNoFurtherInteractions on repository
         }
     }
 
@@ -194,40 +205,31 @@ class CharacterListPresenterTest {
             presenter.killCharacter(character)
 
             // THEN
-            verify(repository, times(0))
-                .killCharacter(
-                    characterId = eq(character.id),
-                    callback = any()
-                )
+            VerifyNoInteractions on repository
         }
     }
 
     private fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        whenever(configProvider.isOnline())
-            .thenReturn(isOnline)
+        When calling configProvider.isOnline() itReturns isOnline
     }
 
     private suspend fun stubRepositoryQueryCharactersOnSuccess(characters: List<CharacterEntity>) {
-        whenever(repository.queryCharactersByIds(characterIds = any(), callback = any()))
-            .then { invocation ->
-                val callback =
-                    invocation.getArgument<DataCallback<List<CharacterEntity>>>(
-                        1
-                    )
-                callback.onSuccess(characters)
-                null
-            }
+        When calling repository.queryCharactersByIds(
+            characterIds = any(),
+            callback = any()
+        ) itAnswers { invocation ->
+            val callback = invocation.getArgument<DataCallback<List<CharacterEntity>>>(1)
+            callback.onSuccess(characters)
+        }
     }
 
     private suspend fun stubRepositoryQueryCharactersOnError(exception: Exception) {
-        whenever(repository.queryCharactersByIds(characterIds = any(), callback = any()))
-            .then { invocation ->
-                val callback =
-                    invocation.getArgument<DataCallback<List<CharacterEntity>>>(
-                        1
-                    )
-                callback.onError(exception)
-                null
-            }
+        When calling repository.queryCharactersByIds(
+            characterIds = any(),
+            callback = any()
+        ) itAnswers { invocation ->
+            val callback = invocation.getArgument<DataCallback<List<CharacterEntity>>>(1)
+            callback.onError(exception)
+        }
     }
 }

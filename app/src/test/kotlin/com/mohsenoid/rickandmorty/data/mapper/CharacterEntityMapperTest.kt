@@ -11,8 +11,10 @@ import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert
+import org.amshove.kluent.When
+import org.amshove.kluent.calling
+import org.amshove.kluent.itReturns
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -45,7 +47,7 @@ class CharacterEntityMapperTest {
         val expectedLocation = LocationDataFactory.Entity.makeLocationEntity()
         stubLocationEntityMapper(expectedLocation)
 
-        val expected = CharacterEntity(
+        val expectedCharacter = CharacterEntity(
             id = dbCharacter.id,
             name = dbCharacter.name,
             status = dbCharacter.status,
@@ -67,19 +69,17 @@ class CharacterEntityMapperTest {
         )
 
         // WHEN
-        val actual = characterEntityMapper.map(dbCharacter)
+        val actualCharacter = characterEntityMapper.map(dbCharacter)
 
         // THEN
-        Assert.assertEquals(expected, actual)
+        expectedCharacter shouldEqual actualCharacter
     }
 
     private fun stubOriginEntityMapper(origin: OriginEntity) {
-        whenever(originEntityMapper.map(any()))
-            .thenReturn(origin)
+        When calling originEntityMapper.map(any()) itReturns origin
     }
 
     private fun stubLocationEntityMapper(location: LocationEntity) {
-        whenever(locationEntityMapper.map(any()))
-            .thenReturn(location)
+        When calling locationEntityMapper.map(any()) itReturns location
     }
 }
