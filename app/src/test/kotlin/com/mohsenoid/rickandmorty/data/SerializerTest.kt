@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.data
 import com.mohsenoid.rickandmorty.data.Serializer.deserializeStringList
 import com.mohsenoid.rickandmorty.data.Serializer.serializeIntegerList
 import com.mohsenoid.rickandmorty.data.Serializer.serializeStringList
-import org.junit.Assert.assertEquals
+import org.amshove.kluent.shouldEqual
 import org.junit.Test
 
 class SerializerTest {
@@ -18,7 +18,7 @@ class SerializerTest {
         val actual = serializeIntegerList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 
     @Test
@@ -31,7 +31,7 @@ class SerializerTest {
         val actual = serializeIntegerList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 
     @Test
@@ -44,7 +44,7 @@ class SerializerTest {
         val actual = serializeStringList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 
     @Test
@@ -57,7 +57,7 @@ class SerializerTest {
         val actual = serializeStringList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 
     @Test
@@ -70,7 +70,7 @@ class SerializerTest {
         val actual = deserializeStringList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 
     @Test
@@ -83,6 +83,6 @@ class SerializerTest {
         val actual = deserializeStringList(input)
 
         // THEN
-        assertEquals(expected, actual)
+        expected shouldEqual actual
     }
 }

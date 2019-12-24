@@ -11,8 +11,10 @@ import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Assert.assertEquals
+import org.amshove.kluent.When
+import org.amshove.kluent.calling
+import org.amshove.kluent.itReturns
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -45,7 +47,7 @@ class CharacterDbMapperTest {
         val expectedLocation = LocationDataFactory.Db.makeDbLocationModel()
         stubLocationDbMapper(expectedLocation)
 
-        val expected = DbCharacterModel(
+        val expectedCharacter = DbCharacterModel(
             id = networkCharacter.id,
             name = networkCharacter.name,
             status = networkCharacter.status,
@@ -63,19 +65,17 @@ class CharacterDbMapperTest {
         )
 
         // WHEN
-        val actual = characterDbMapper.map(networkCharacter)
+        val actualCharacter = characterDbMapper.map(networkCharacter)
 
         // THEN
-        assertEquals(expected, actual)
+        expectedCharacter shouldEqual actualCharacter
     }
 
     private fun stubOriginDbMapper(origin: DbOriginModel) {
-        whenever(originDbMapper.map(any()))
-            .thenReturn(origin)
+        When calling originDbMapper.map(any()) itReturns origin
     }
 
     private fun stubLocationDbMapper(location: DbLocationModel) {
-        whenever(locationDbMapper.map(any()))
-            .thenReturn(location)
+        When calling locationDbMapper.map(any()) itReturns location
     }
 }

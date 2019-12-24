@@ -6,8 +6,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,7 +45,7 @@ class ConfigProviderTest {
         val isOnline = configProvider.isOnline()
 
         // THEN
-        assertTrue(isOnline)
+        isOnline.shouldBeTrue()
     }
 
     @Test
@@ -57,6 +57,6 @@ class ConfigProviderTest {
         val isOnline = configProvider.isOnline()
 
         // THEN
-        assertFalse(isOnline)
+        isOnline.shouldBeFalse()
     }
 }
