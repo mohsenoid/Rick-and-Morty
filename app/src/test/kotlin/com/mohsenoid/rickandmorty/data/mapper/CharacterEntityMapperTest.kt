@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
@@ -10,6 +9,8 @@ import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
+import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 import com.nhaarman.mockitokotlin2.any
 import org.amshove.kluent.When
 import org.amshove.kluent.calling
@@ -58,11 +59,7 @@ class CharacterEntityMapperTest {
             origin = expectedOrigin,
             location = expectedLocation,
             imageUrl = dbCharacter.image,
-            episodeIds = Serializer.mapStringListToIntegerList(
-                CharacterEntityMapper.getEpisodeIds(
-                    Serializer.deserializeStringList(dbCharacter.serializedEpisodes)
-                )
-            ),
+            episodeIds = CharacterEntityMapper.getEpisodeIds(dbCharacter.serializedEpisodes.deserializeStringList()).mapStringListToIntegerList(),
             url = dbCharacter.url,
             created = dbCharacter.created,
             killedByUser = false

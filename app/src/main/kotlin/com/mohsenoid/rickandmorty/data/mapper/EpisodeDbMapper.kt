@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
+import com.mohsenoid.rickandmorty.util.extension.serializeStringList
 
 class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
 
@@ -12,7 +12,7 @@ class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
             name = input.name,
             airDate = input.airDate,
             episode = input.episode,
-            serializedCharacterIds = Serializer.serializeStringList(getCharacterIds(input.characters)),
+            serializedCharacterIds = getCharacterIds(input.characters).serializeStringList(),
             url = input.url,
             created = input.created
         )

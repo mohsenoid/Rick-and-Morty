@@ -1,12 +1,9 @@
-package com.mohsenoid.rickandmorty.data
+package com.mohsenoid.rickandmorty.util.extension
 
-import com.mohsenoid.rickandmorty.data.Serializer.deserializeStringList
-import com.mohsenoid.rickandmorty.data.Serializer.serializeIntegerList
-import com.mohsenoid.rickandmorty.data.Serializer.serializeStringList
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
 
-class SerializerTest {
+class ExtensionsTest {
 
     @Test
     fun `test serialize IntegerList`() {
@@ -15,7 +12,7 @@ class SerializerTest {
         val expected = "2,8,10"
 
         // WHEN
-        val actual = serializeIntegerList(input)
+        val actual = input.serializeIntegerList()
 
         // THEN
         expected shouldEqual actual
@@ -28,7 +25,7 @@ class SerializerTest {
         val expected = ""
 
         // WHEN
-        val actual = serializeIntegerList(input)
+        val actual = input.serializeIntegerList()
 
         // THEN
         expected shouldEqual actual
@@ -41,7 +38,7 @@ class SerializerTest {
         val expected = "A,BC,DEF"
 
         // WHEN
-        val actual = serializeStringList(input)
+        val actual = input.serializeStringList()
 
         // THEN
         expected shouldEqual actual
@@ -54,7 +51,7 @@ class SerializerTest {
         val expected = ""
 
         // WHEN
-        val actual = serializeStringList(input)
+        val actual = input.serializeStringList()
 
         // THEN
         expected shouldEqual actual
@@ -67,7 +64,7 @@ class SerializerTest {
         val expected = listOf("A", "BC", "DEF")
 
         // WHEN
-        val actual = deserializeStringList(input)
+        val actual = input.deserializeStringList()
 
         // THEN
         expected shouldEqual actual
@@ -80,7 +77,7 @@ class SerializerTest {
         val expected = emptyList<String>()
 
         // WHEN
-        val actual = deserializeStringList(input)
+        val actual = input.deserializeStringList()
 
         // THEN
         expected shouldEqual actual

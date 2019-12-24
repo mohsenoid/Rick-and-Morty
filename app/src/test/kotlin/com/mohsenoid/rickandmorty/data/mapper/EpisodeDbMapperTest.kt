@@ -1,9 +1,9 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
+import com.mohsenoid.rickandmorty.util.extension.serializeStringList
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
@@ -29,11 +29,7 @@ class EpisodeDbMapperTest {
             name = networkEpisode.name,
             airDate = networkEpisode.airDate,
             episode = networkEpisode.episode,
-            serializedCharacterIds = Serializer.serializeStringList(
-                EpisodeDbMapper.getCharacterIds(
-                    networkEpisode.characters
-                )
-            ),
+            serializedCharacterIds = EpisodeDbMapper.getCharacterIds(networkEpisode.characters).serializeStringList(),
             url = networkEpisode.url,
             created = networkEpisode.created
         )

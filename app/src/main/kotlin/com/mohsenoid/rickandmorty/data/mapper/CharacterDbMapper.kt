@@ -1,13 +1,13 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
 import androidx.annotation.VisibleForTesting
-import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
+import com.mohsenoid.rickandmorty.util.extension.serializeStringList
 
 class CharacterDbMapper(
     private val originDbMapper: Mapper<NetworkOriginModel, DbOriginModel>,
@@ -26,7 +26,7 @@ class CharacterDbMapper(
             origin = originDbMapper.map(input.origin),
             location = locationDbMapper.map(input.location),
             image = input.image,
-            serializedEpisodes = Serializer.serializeStringList(input.episodes),
+            serializedEpisodes = input.episodes.serializeStringList(),
             url = input.url,
             created = input.created,
             killedByUser = false

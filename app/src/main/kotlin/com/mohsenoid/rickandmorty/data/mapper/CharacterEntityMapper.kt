@@ -1,13 +1,13 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer.deserializeStringList
-import com.mohsenoid.rickandmorty.data.Serializer.mapStringListToIntegerList
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
+import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 
 class CharacterEntityMapper(
     private val originEntityMapper: Mapper<DbOriginModel, OriginEntity>,
@@ -26,11 +26,7 @@ class CharacterEntityMapper(
             origin = originEntityMapper.map(input.origin),
             location = locationEntityMapper.map(input.location),
             imageUrl = input.image,
-            episodeIds = mapStringListToIntegerList(
-                getEpisodeIds(
-                    deserializeStringList(input.serializedEpisodes)
-                )
-            ),
+            episodeIds = getEpisodeIds(input.serializedEpisodes.deserializeStringList()).mapStringListToIntegerList(),
             url = input.url,
             created = input.created,
             killedByUser = input.killedByUser
