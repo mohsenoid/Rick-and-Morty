@@ -11,7 +11,6 @@ import com.mohsenoid.rickandmorty.test.DataFactory.randomString
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
-import java.util.ArrayList
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.Verify
 import org.amshove.kluent.VerifyNoFurtherInteractions
@@ -28,6 +27,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import java.util.ArrayList
 
 class CharacterListPresenterTest {
 
