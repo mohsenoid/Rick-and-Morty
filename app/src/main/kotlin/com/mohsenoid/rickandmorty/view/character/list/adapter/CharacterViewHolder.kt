@@ -6,11 +6,11 @@ import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import com.squareup.picasso.Picasso
-import kotlin.coroutines.CoroutineContext
 import kotlinx.android.synthetic.main.item_character.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 class CharacterViewHolder internal constructor(
     internal val view: View

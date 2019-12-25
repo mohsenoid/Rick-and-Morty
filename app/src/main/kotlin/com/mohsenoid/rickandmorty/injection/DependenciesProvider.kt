@@ -47,7 +47,6 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListContract
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
-import java.net.UnknownHostException
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
@@ -55,6 +54,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.UnknownHostException
 
 class DependenciesProvider(private val context: Application) {
 

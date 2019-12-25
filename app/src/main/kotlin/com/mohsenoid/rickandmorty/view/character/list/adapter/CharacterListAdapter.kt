@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import java.util.ArrayList
 import kotlinx.android.synthetic.main.item_character.view.*
+import java.util.ArrayList
 
 class CharacterListAdapter(
     private val dispatcherProvider: DispatcherProvider,

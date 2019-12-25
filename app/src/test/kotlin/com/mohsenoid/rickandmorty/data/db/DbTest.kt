@@ -8,7 +8,6 @@ import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
-import java.io.IOException
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
@@ -24,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.io.IOException
 
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
