@@ -26,7 +26,7 @@ object CharacterDataFactory {
                 origin = OriginDataFactory.Db.makeDbOriginModel(),
                 location = LocationDataFactory.Db.makeDbLocationModel(),
                 image = DataFactory.randomString(),
-                serializedEpisodes = "${DataFactory.randomInt()},${DataFactory.randomInt()},${DataFactory.randomInt()}",
+                episodeIds = DataFactory.randomIntList(5),
                 url = DataFactory.randomString(),
                 created = DataFactory.randomString(),
                 killedByUser = isKilledByUser
@@ -49,18 +49,18 @@ object CharacterDataFactory {
 
         fun makeNetworkCharacterModel(characterId: Int = DataFactory.randomInt()): NetworkCharacterModel {
             return NetworkCharacterModel(
-                characterId,
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                OriginDataFactory.Network.makeNetworkOriginModel(),
-                LocationDataFactory.Network.makeNetworkLocationModel(),
-                DataFactory.randomString(),
-                DataFactory.randomStringList(5),
-                DataFactory.randomString(),
-                DataFactory.randomString()
+                id = characterId,
+                name = DataFactory.randomString(),
+                status = DataFactory.randomString(),
+                species = DataFactory.randomString(),
+                type = DataFactory.randomString(),
+                gender = DataFactory.randomString(),
+                origin = OriginDataFactory.Network.makeNetworkOriginModel(),
+                location = LocationDataFactory.Network.makeNetworkLocationModel(),
+                image = DataFactory.randomString(),
+                episodes = DataFactory.randomIntList(5).map { "${DataFactory.randomString()}/$it" },
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 
@@ -85,20 +85,20 @@ object CharacterDataFactory {
             isKilledByUser: Boolean = false
         ): CharacterEntity {
             return CharacterEntity(
-                characterId,
-                DataFactory.randomString(),
-                status,
-                isAlive,
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                OriginDataFactory.Entity.makeOriginEntity(),
-                LocationDataFactory.Entity.makeLocationEntity(),
-                DataFactory.randomString(),
-                DataFactory.randomIntList(5),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                isKilledByUser
+                id = characterId,
+                name = DataFactory.randomString(),
+                status = status,
+                statusAlive = isAlive,
+                species = DataFactory.randomString(),
+                type = DataFactory.randomString(),
+                gender = DataFactory.randomString(),
+                origin = OriginDataFactory.Entity.makeOriginEntity(),
+                location = LocationDataFactory.Entity.makeLocationEntity(),
+                imageUrl = DataFactory.randomString(),
+                episodeIds = DataFactory.randomIntList(5),
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString(),
+                killedByUser = isKilledByUser
             )
         }
 

@@ -15,7 +15,7 @@ object EpisodeDataFactory {
                 name = DataFactory.randomString(),
                 airDate = DataFactory.randomString(),
                 episode = DataFactory.randomString(),
-                serializedCharacterIds = "${DataFactory.randomInt()},${DataFactory.randomInt()},${DataFactory.randomInt()}",
+                characterIds = DataFactory.randomIntList(5),
                 url = DataFactory.randomString(),
                 created = DataFactory.randomString()
             )
@@ -37,13 +37,13 @@ object EpisodeDataFactory {
 
         fun makeNetworkEpisodeModel(episodeId: Int = DataFactory.randomInt()): NetworkEpisodeModel {
             return NetworkEpisodeModel(
-                episodeId,
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomStringList(5),
-                DataFactory.randomString(),
-                DataFactory.randomString()
+                id = episodeId,
+                name = DataFactory.randomString(),
+                airDate = DataFactory.randomString(),
+                episode = DataFactory.randomString(),
+                characters = DataFactory.randomIntList(5).map { "${DataFactory.randomString()}/$it" },
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 
@@ -63,13 +63,13 @@ object EpisodeDataFactory {
 
         fun makeEpisodeEntity(episodeId: Int = DataFactory.randomInt()): EpisodeEntity {
             return EpisodeEntity(
-                episodeId,
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomIntList(5),
-                DataFactory.randomString(),
-                DataFactory.randomString()
+                id = episodeId,
+                name = DataFactory.randomString(),
+                airDate = DataFactory.randomString(),
+                episode = DataFactory.randomString(),
+                characterIds = DataFactory.randomIntList(5),
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 

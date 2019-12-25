@@ -3,7 +3,10 @@ package com.mohsenoid.rickandmorty.data.db
 import androidx.room.TypeConverter
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
 import com.mohsenoid.rickandmorty.util.extension.fromJson
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
+import com.mohsenoid.rickandmorty.util.extension.serializeIntegerList
 import com.mohsenoid.rickandmorty.util.extension.toJson
 
 class DbConverters {
@@ -26,5 +29,15 @@ class DbConverters {
     @TypeConverter
     fun jsonToOrigin(originJson: String?): DbOriginModel? {
         return originJson?.fromJson()
+    }
+
+    @TypeConverter
+    fun listOfIntToString(list: List<Int>?): String? {
+        return list?.serializeIntegerList()
+    }
+
+    @TypeConverter
+    fun stringToListOfInt(string: String?): List<Int>? {
+        return string?.deserializeStringList()?.mapStringListToIntegerList()
     }
 }

@@ -53,16 +53,16 @@ class DbTest {
     fun `test insertEpisode can inserts a new Episode`() {
         runBlocking {
             // GIVEN
-            val episode = EpisodeDataFactory.Db.makeDbEpisodeModel()
+            val expectedEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel()
 
             // WHEN
-            episodeDao.insertEpisode(episode)
+            episodeDao.insertEpisode(expectedEpisode)
 
             // THEN
-            val episodes = episodeDao.queryAllEpisodes(1)
-            episodes
+            val actualEpisodes = episodeDao.queryAllEpisodes()
+            actualEpisodes
                 .shouldNotBeEmpty()
-                .shouldContain(episode)
+                .shouldContain(expectedEpisode)
         }
     }
 
@@ -79,8 +79,8 @@ class DbTest {
             episodeDao.insertEpisode(updatedEpisode)
 
             // THEN
-            val episodes = episodeDao.queryAllEpisodes(1)
-            episodes
+            val actualEpisodes = episodeDao.queryAllEpisodes()
+            actualEpisodes
                 .shouldNotBeEmpty()
                 .shouldContain(updatedEpisode)
                 .shouldNotContain(oldEpisode)

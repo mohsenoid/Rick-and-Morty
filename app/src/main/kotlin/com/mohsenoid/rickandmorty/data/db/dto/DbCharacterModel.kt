@@ -38,8 +38,8 @@ data class DbCharacterModel(
     @ColumnInfo(name = "image")
     val image: String,
 
-    @ColumnInfo(name = "episode")
-    val serializedEpisodes: String,
+    @ColumnInfo(name = "episode_ids")
+    val episodeIds: List<Int>,
 
     @ColumnInfo(name = "url")
     val url: String,

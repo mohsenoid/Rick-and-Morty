@@ -36,7 +36,7 @@ class RepositoryImpl(
         if (configProvider.isOnline()) {
             queryNetworkEpisodes(page, callback)
         } else {
-            queryDbEpisodes(page, callback)
+            queryDbEpisodes(page, PAGE_SIZE, callback)
         }
     }
 
@@ -56,21 +56,22 @@ class RepositoryImpl(
                     }
                 }
 
-                queryDbEpisodes(page, callback)
+                queryDbEpisodes(page, PAGE_SIZE, callback)
             } catch (e: Exception) {
                 e.printStackTrace()
-                queryDbEpisodes(page, callback)
+                queryDbEpisodes(page, PAGE_SIZE, callback)
             }
         }
     }
 
     private suspend fun queryDbEpisodes(
         page: Int,
+        pageSize: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val dbEpisodes = episodeDao.queryAllEpisodes(page)
+                val dbEpisodes = episodeDao.queryAllEpisodesByPage(page, pageSize)
 
                 val episodes = dbEpisodes.map(episodeEntityMapper::map)
 
@@ -218,5 +219,9 @@ class RepositoryImpl(
                 withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 20
     }
 }

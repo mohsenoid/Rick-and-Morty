@@ -9,8 +9,6 @@ import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
-import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
-import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 import com.nhaarman.mockitokotlin2.any
 import org.amshove.kluent.When
 import org.amshove.kluent.calling
@@ -29,7 +27,7 @@ class CharacterEntityMapperTest {
     @Mock
     private lateinit var locationEntityMapper: Mapper<DbLocationModel, LocationEntity>
 
-    lateinit var characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
+    private lateinit var characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
 
     @Before
     fun setUp() {
@@ -59,7 +57,7 @@ class CharacterEntityMapperTest {
             origin = expectedOrigin,
             location = expectedLocation,
             imageUrl = dbCharacter.image,
-            episodeIds = CharacterEntityMapper.getEpisodeIds(dbCharacter.serializedEpisodes.deserializeStringList()).mapStringListToIntegerList(),
+            episodeIds = dbCharacter.episodeIds,
             url = dbCharacter.url,
             created = dbCharacter.created,
             killedByUser = false

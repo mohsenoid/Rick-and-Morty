@@ -21,7 +21,7 @@ data class DbEpisodeModel(
     val episode: String,
 
     @ColumnInfo(name = "character_ids")
-    val serializedCharacterIds: String,
+    val characterIds: List<Int>,
 
     @ColumnInfo(name = "url")
     val url: String,
