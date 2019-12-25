@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.data.mapper
 
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
-import com.mohsenoid.rickandmorty.util.extension.serializeStringList
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 
 class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
 
@@ -12,7 +12,7 @@ class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
             name = input.name,
             airDate = input.airDate,
             episode = input.episode,
-            serializedCharacterIds = getCharacterIds(input.characters).serializeStringList(),
+            characterIds = getCharacterIds(input.characters).mapStringListToIntegerList(),
             url = input.url,
             created = input.created
         )

@@ -18,7 +18,7 @@ class RepositoryQueryEpisodesTest : RepositoryTest() {
             repository.queryEpisodes(page = page, callback = null)
 
             // THEN
-            verify(episodeDao, times(1)).queryAllEpisodes(page)
+            verify(episodeDao, times(1)).queryAllEpisodesByPage(page, RepositoryImpl.PAGE_SIZE)
             verify(networkClient, times(1)).getEpisodes(page)
         }
     }
@@ -34,7 +34,7 @@ class RepositoryQueryEpisodesTest : RepositoryTest() {
             repository.queryEpisodes(page, null)
 
             // THEN
-            verify(episodeDao, times(1)).queryAllEpisodes(page)
+            verify(episodeDao, times(1)).queryAllEpisodesByPage(page, RepositoryImpl.PAGE_SIZE)
             verify(networkClient, times(0)).getEpisodes(page)
         }
     }

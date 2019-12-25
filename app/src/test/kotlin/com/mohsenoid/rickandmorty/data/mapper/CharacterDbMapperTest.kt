@@ -9,7 +9,7 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
-import com.mohsenoid.rickandmorty.util.extension.serializeStringList
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 import com.nhaarman.mockitokotlin2.any
 import org.amshove.kluent.When
 import org.amshove.kluent.calling
@@ -58,7 +58,7 @@ class CharacterDbMapperTest {
             origin = expectedOrigin,
             location = expectedLocation,
             image = networkCharacter.image,
-            serializedEpisodes = networkCharacter.episodes.serializeStringList(),
+            episodeIds = CharacterDbMapper.extractEpisodeIds(networkCharacter.episodes).mapStringListToIntegerList(),
             url = networkCharacter.url,
             created = networkCharacter.created,
             killedByUser = false

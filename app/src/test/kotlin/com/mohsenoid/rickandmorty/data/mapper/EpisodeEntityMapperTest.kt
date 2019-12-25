@@ -3,8 +3,6 @@ package com.mohsenoid.rickandmorty.data.mapper
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
-import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
-import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +28,7 @@ class EpisodeEntityMapperTest {
             name = dbEpisode.name,
             airDate = dbEpisode.airDate,
             episode = dbEpisode.episode,
-            characterIds = dbEpisode.serializedCharacterIds.deserializeStringList().mapStringListToIntegerList(),
+            characterIds = dbEpisode.characterIds,
             url = dbEpisode.url,
             created = dbEpisode.created
         )
