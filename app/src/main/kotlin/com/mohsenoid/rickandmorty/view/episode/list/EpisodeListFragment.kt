@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +59,7 @@ class EpisodeListFragment : BaseFragment(),
                 view: RecyclerView
             ) {
                 launch {
-                    presenter.loadMoreEpisodes(page + 1)
+                    presenter.loadMoreEpisodes(page = page + 1)
                 }
             }
         }.also {
@@ -133,7 +134,7 @@ class EpisodeListFragment : BaseFragment(),
     }
 
     override fun onEpisodeRowClick(episode: EpisodeEntity) {
-        val characterListIntent =
+        val characterListIntent: Intent =
             CharacterListActivity.newIntent(context, episode.characterIds)
         startActivity(characterListIntent)
     }

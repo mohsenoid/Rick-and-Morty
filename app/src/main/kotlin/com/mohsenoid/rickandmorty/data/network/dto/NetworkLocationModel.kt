@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class NetworkLocationModel(
 
-    @SerializedName("name")
+    @SerializedName(value = "name")
     val name: String,
 
-    @SerializedName("url")
+    @SerializedName(value = "url")
     val url: String
 )

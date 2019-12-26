@@ -13,7 +13,7 @@ abstract class EndlessRecyclerViewScrollListener(private val layoutManager: Line
     private val startingPageIndex = 0
 
     override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
-        val totalItemCount = layoutManager.itemCount
+        val totalItemCount: Int = layoutManager.itemCount
         val lastVisibleItemPosition: Int = layoutManager.findLastVisibleItemPosition()
 
         if (totalItemCount < previousTotalItemCount) {

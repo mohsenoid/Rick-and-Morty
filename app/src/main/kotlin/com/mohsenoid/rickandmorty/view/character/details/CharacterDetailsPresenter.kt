@@ -2,6 +2,7 @@ package com.mohsenoid.rickandmorty.view.character.details
 
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
+import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 
 class CharacterDetailsPresenter(
@@ -9,7 +10,7 @@ class CharacterDetailsPresenter(
     private val configProvider: ConfigProvider
 ) : CharacterDetailsContract.Presenter {
 
-    override var characterId = -1
+    override var characterId: Int = -1
 
     private var view: CharacterDetailsContract.View? = null
 
@@ -28,11 +29,11 @@ class CharacterDetailsPresenter(
 
     private suspend fun queryCharacter(characterId: Int) {
         if (!configProvider.isOnline()) {
-            view?.showOfflineMessage(false)
+            view?.showOfflineMessage(isCritical = false)
         }
 
         try {
-            val result = repository.getCharacterDetails(characterId)
+            val result: CharacterEntity = repository.getCharacterDetails(characterId)
             view?.setCharacter(result)
         } catch (e: Exception) {
             if (e is NoOfflineDataException) {

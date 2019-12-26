@@ -5,13 +5,18 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.NetworkResponseFactory
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.Verify
+import org.amshove.kluent.VerifyNoFurtherInteractions
+import org.amshove.kluent.VerifyNoInteractions
 import org.amshove.kluent.When
 import org.amshove.kluent.any
+import org.amshove.kluent.called
 import org.amshove.kluent.calling
 import org.amshove.kluent.itReturns
+import org.amshove.kluent.on
+import org.amshove.kluent.that
+import org.amshove.kluent.was
 import org.junit.Test
 import retrofit2.Response
 
@@ -21,17 +26,21 @@ class RepositoryGetCharacterDetailsTest : RepositoryTest() {
     fun `test if getCharacterDetails calls networkClient when isOnline`() {
         runBlocking {
             // GIVEN
-            val characterId = DataFactory.randomInt()
-            stubConfigProviderIsOnline(true)
+            val characterId: Int = DataFactory.randomInt()
+            stubConfigProviderIsOnline(isOnline = true)
             stubNetworkClientFetchCharacterDetails(NetworkResponseFactory.CharacterDetails.characterResponse())
-            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeDbCharacterModel(characterId))
+            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeCharacter(characterId = characterId))
 
             // WHEN
-            repository.getCharacterDetails(characterId)
+            repository.getCharacterDetails(characterId = characterId)
 
             // THEN
-            verify(characterDao, times(1)).queryCharacter(characterId)
-            verify(networkClient, times(1)).fetchCharacterDetails(characterId)
+            Verify on networkClient that networkClient.fetchCharacterDetails(characterId = any()) was called
+            VerifyNoFurtherInteractions on networkClient
+
+            Verify on characterDao that characterDao.insertOrUpdateCharacter(character = any()) was called
+            Verify on characterDao that characterDao.queryCharacter(characterId = any()) was called
+            VerifyNoFurtherInteractions on characterDao
         }
     }
 
@@ -39,24 +48,26 @@ class RepositoryGetCharacterDetailsTest : RepositoryTest() {
     fun `test if getCharacterDetails calls db only when isOffline`() {
         runBlocking {
             // GIVEN
-            val characterId = DataFactory.randomInt()
-            stubConfigProviderIsOnline(false)
-            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeDbCharacterModel(characterId))
+            val characterId: Int = DataFactory.randomInt()
+            stubConfigProviderIsOnline(isOnline = false)
+            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeCharacter(characterId = characterId))
 
             // WHEN
-            repository.getCharacterDetails(characterId)
+            repository.getCharacterDetails(characterId = characterId)
 
             // THEN
-            verify(characterDao, times(1)).queryCharacter(characterId)
-            verify(networkClient, times(0)).fetchCharacterDetails(characterId)
+            VerifyNoInteractions on networkClient
+
+            Verify on characterDao that characterDao.queryCharacter(characterId = any()) was called
+            VerifyNoFurtherInteractions on characterDao
         }
     }
 
     private suspend fun stubNetworkClientFetchCharacterDetails(character: Response<NetworkCharacterModel>) {
-        When calling networkClient.fetchCharacterDetails(any()) itReturns character
+        When calling networkClient.fetchCharacterDetails(characterId = any()) itReturns character
     }
 
     private suspend fun stubCharacterDaoQueryCharacter(character: DbCharacterModel?) {
-        When calling characterDao.queryCharacter(any()) itReturns character
+        When calling characterDao.queryCharacter(characterId = any()) itReturns character
     }
 }

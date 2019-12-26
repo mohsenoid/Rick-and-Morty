@@ -10,13 +10,13 @@ interface DbCharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: DbCharacterModel)
 
-    @Query("SELECT * FROM characters WHERE _id IN (:characterIds)")
+    @Query(value = "SELECT * FROM characters WHERE _id IN (:characterIds)")
     suspend fun queryCharactersByIds(characterIds: List<Int>): List<DbCharacterModel>
 
-    @Query("SELECT * FROM characters WHERE _id = :characterId LIMIT 1")
+    @Query(value = "SELECT * FROM characters WHERE _id = :characterId LIMIT 1")
     suspend fun queryCharacter(characterId: Int): DbCharacterModel?
 
-    @Query("UPDATE characters SET killedByUser = 1 WHERE _id = :characterId")
+    @Query(value = "UPDATE characters SET killedByUser = 1 WHERE _id = :characterId")
     suspend fun killCharacter(characterId: Int)
 
     suspend fun insertOrUpdateCharacter(character: DbCharacterModel)

@@ -8,7 +8,7 @@ object OriginDataFactory {
 
     object Db {
 
-        fun makeDbOriginModel(): DbOriginModel {
+        fun makeOrigin(): DbOriginModel {
             return DbOriginModel(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
@@ -18,7 +18,7 @@ object OriginDataFactory {
 
     object Network {
 
-        fun makeNetworkOriginModel(): NetworkOriginModel {
+        fun makeOrigin(): NetworkOriginModel {
             return NetworkOriginModel(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
@@ -28,7 +28,7 @@ object OriginDataFactory {
 
     object Entity {
 
-        fun makeOriginEntity(): OriginEntity {
+        fun makeOrigin(): OriginEntity {
             return OriginEntity(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()

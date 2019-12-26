@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     private fun extractCharacterIds(): ArrayList<Int>? {
-        val args = arguments ?: return null
+        val args: Bundle = arguments ?: return null
         return args.getIntegerArrayList(ARG_CHARACTER_IDS)
     }
 
@@ -115,7 +116,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     override fun onCharacterRowClick(character: CharacterEntity) {
-        val characterDetailsIntent =
+        val characterDetailsIntent: Intent =
             CharacterDetailsActivity.newIntent(context, character.id)
         startActivity(characterDetailsIntent)
     }
@@ -128,7 +129,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
 
     companion object {
 
-        private const val ARG_CHARACTER_IDS = "character_ids"
+        private const val ARG_CHARACTER_IDS: String = "character_ids"
 
         fun newInstance(characterIds: List<Int>): CharacterListFragment {
             val fragment = CharacterListFragment()

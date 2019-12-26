@@ -38,12 +38,12 @@ class CharacterEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbCharacter = CharacterDataFactory.Db.makeDbCharacterModel()
+        val dbCharacter: DbCharacterModel = CharacterDataFactory.Db.makeCharacter()
 
-        val expectedOrigin = OriginDataFactory.Entity.makeOriginEntity()
+        val expectedOrigin: OriginEntity = OriginDataFactory.Entity.makeOrigin()
         stubOriginEntityMapper(expectedOrigin)
 
-        val expectedLocation = LocationDataFactory.Entity.makeLocationEntity()
+        val expectedLocation: LocationEntity = LocationDataFactory.Entity.makeEntity()
         stubLocationEntityMapper(expectedLocation)
 
         val expectedCharacter = CharacterEntity(
@@ -64,7 +64,7 @@ class CharacterEntityMapperTest {
         )
 
         // WHEN
-        val actualCharacter = characterEntityMapper.map(dbCharacter)
+        val actualCharacter: CharacterEntity = characterEntityMapper.map(dbCharacter)
 
         // THEN
         expectedCharacter shouldEqual actualCharacter

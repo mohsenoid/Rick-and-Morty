@@ -29,8 +29,8 @@ class ConfigProviderTest {
 
     @Before
     fun setUp() {
-        val application = ApplicationProvider.getApplicationContext<Application>()
-        val connectivityManager =
+        val application: Application = ApplicationProvider.getApplicationContext()
+        val connectivityManager: ConnectivityManager =
             (application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         shadowOfActiveNetworkInfo = Shadows.shadowOf(connectivityManager.activeNetworkInfo)
         configProvider = ConfigProviderImpl(application)
@@ -42,7 +42,7 @@ class ConfigProviderTest {
         shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTED)
 
         // WHEN
-        val isOnline = configProvider.isOnline()
+        val isOnline: Boolean = configProvider.isOnline()
 
         // THEN
         isOnline.shouldBeTrue()
@@ -54,7 +54,7 @@ class ConfigProviderTest {
         shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED)
 
         // WHEN
-        val isOnline = configProvider.isOnline()
+        val isOnline: Boolean = configProvider.isOnline()
 
         // THEN
         isOnline.shouldBeFalse()

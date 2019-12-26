@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class NetworkInfoModel(
 
-    @SerializedName("count")
+    @SerializedName(value = "count")
     val count: Int,
 
-    @SerializedName("pages")
+    @SerializedName(value = "pages")
     val pages: Int,
 
-    @SerializedName("next")
+    @SerializedName(value = "next")
     val next: String,
 
-    @SerializedName("prev")
+    @SerializedName(value = "prev")
     val prev: String
 )

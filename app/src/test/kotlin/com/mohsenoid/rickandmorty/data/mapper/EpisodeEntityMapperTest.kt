@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations
 
 class EpisodeEntityMapperTest {
 
-    lateinit var episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>
+    private lateinit var episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>
 
     @Before
     fun setUp() {
@@ -21,7 +21,7 @@ class EpisodeEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbEpisode = EpisodeDataFactory.Db.makeDbEpisodeModel()
+        val dbEpisode: DbEpisodeModel = EpisodeDataFactory.Db.makeEpisode()
 
         val expectedEpisode = EpisodeEntity(
             id = dbEpisode.id,
@@ -34,7 +34,7 @@ class EpisodeEntityMapperTest {
         )
 
         // WHEN
-        val actualEpisode = episodeEntityMapper.map(dbEpisode)
+        val actualEpisode: EpisodeEntity = episodeEntityMapper.map(dbEpisode)
 
         // THEN
         expectedEpisode shouldEqual actualEpisode

@@ -2,6 +2,7 @@ package com.mohsenoid.rickandmorty.view.episode.list
 
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
+import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 
 class EpisodeListPresenter(
@@ -35,11 +36,11 @@ class EpisodeListPresenter(
 
     private suspend fun getEpisodes() {
         if (!configProvider.isOnline()) {
-            view?.showOfflineMessage(false)
+            view?.showOfflineMessage(isCritical = false)
         }
 
         try {
-            val result = repository.getEpisodes(page)
+            val result: List<EpisodeEntity> = repository.getEpisodes(page)
             if (page == 1) {
                 view?.setEpisodes(result)
             } else {

@@ -11,20 +11,20 @@ import retrofit2.Response
 object NetworkResponseFactory {
 
     object Episode {
-        private const val VALUE_COUNT = 1
-        private const val VALUE_PAGE = 1
-        private const val VALUE_NEXT = ""
-        private const val VALUE_PREV = ""
+        private const val VALUE_COUNT: Int = 1
+        private const val VALUE_PAGE: Int = 1
+        private const val VALUE_NEXT: String = ""
+        private const val VALUE_PREV: String = ""
 
-        private const val VALUE_ID = 1
-        private const val VALUE_NAME = "Pilot"
-        private const val VALUE_AIR_DATE = "December 2, 2013"
-        private const val VALUE_EPISODE = "S01E01"
-        private const val VALUE_CHARACTER = "https://rickandmortyapi.com/api/character/1"
-        private const val VALUE_URL = "https://rickandmortyapi.com/api/episode/1"
-        private const val VALUE_CREATED = "2017-11-10T12:56:33.798Z"
+        private const val VALUE_ID: Int = 1
+        private const val VALUE_NAME: String = "Pilot"
+        private const val VALUE_AIR_DATE: String = "December 2, 2013"
+        private const val VALUE_EPISODE: String = "S01E01"
+        private const val VALUE_CHARACTER: String = "https://rickandmortyapi.com/api/character/1"
+        private const val VALUE_URL: String = "https://rickandmortyapi.com/api/episode/1"
+        private const val VALUE_CREATED: String = "2017-11-10T12:56:33.798Z"
 
-        const val EPISODES_JSON = """{
+        const val EPISODES_JSON: String = """{
   "info": {
     "count": $VALUE_COUNT,
     "pages": $VALUE_PAGE,
@@ -75,32 +75,33 @@ object NetworkResponseFactory {
 
     object Characters {
 
-        const val CHARACTERS_JSON = "[\n  ${CharacterDetails.CHARACTER_DETAILS_JSON}\n]"
+        const val CHARACTERS_JSON: String = "[\n  ${CharacterDetails.CHARACTER_DETAILS_JSON}\n]"
 
         fun charactersResponse(): Response<List<NetworkCharacterModel>> {
-            val character = CharacterDetails.character()
+            val character: NetworkCharacterModel = CharacterDetails.character()
             return Response.success(arrayListOf(character))
         }
     }
 
     object CharacterDetails {
 
-        private const val VALUE_ID = 1
-        private const val VALUE_NAME = "Rick Sanchez"
-        private const val VALUE_STATUS = "Alive"
-        private const val VALUE_SPECIES = "Human"
-        private const val VALUE_TYPE = ""
-        private const val VALUE_GENDER = "Male"
-        private const val VALUE_ORIGIN_NAME = "Earth (C-137)"
-        private const val VALUE_ORIGIN_URL = "https://rickandmortyapi.com/api/location/1"
-        private const val VALUE_LOCATION_NAME = "Earth (Replacement Dimension)"
-        private const val VALUE_LOCATION_URL = "https://rickandmortyapi.com/api/location/20"
-        private const val VALUE_IMAGE = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-        private const val VALUE_EPISODE = "https://rickandmortyapi.com/api/episode/1"
-        private const val VALUE_URL = "https://rickandmortyapi.com/api/character/1"
-        private const val VALUE_CREATED = "2017-11-04T18:48:46.250Z"
+        private const val VALUE_ID: Int = 1
+        private const val VALUE_NAME: String = "Rick Sanchez"
+        private const val VALUE_STATUS: String = "Alive"
+        private const val VALUE_SPECIES: String = "Human"
+        private const val VALUE_TYPE: String = ""
+        private const val VALUE_GENDER: String = "Male"
+        private const val VALUE_ORIGIN_NAME: String = "Earth (C-137)"
+        private const val VALUE_ORIGIN_URL: String = "https://rickandmortyapi.com/api/location/1"
+        private const val VALUE_LOCATION_NAME: String = "Earth (Replacement Dimension)"
+        private const val VALUE_LOCATION_URL: String = "https://rickandmortyapi.com/api/location/20"
+        private const val VALUE_IMAGE: String =
+            "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+        private const val VALUE_EPISODE: String = "https://rickandmortyapi.com/api/episode/1"
+        private const val VALUE_URL: String = "https://rickandmortyapi.com/api/character/1"
+        private const val VALUE_CREATED: String = "2017-11-04T18:48:46.250Z"
 
-        const val CHARACTER_DETAILS_JSON = """{
+        const val CHARACTER_DETAILS_JSON: String = """{
   "id": $VALUE_ID,
   "name": "$VALUE_NAME",
   "status": "$VALUE_STATUS",

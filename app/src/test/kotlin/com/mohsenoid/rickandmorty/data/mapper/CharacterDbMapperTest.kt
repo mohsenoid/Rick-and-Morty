@@ -39,19 +39,23 @@ class CharacterDbMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val networkCharacter = CharacterDataFactory.Network.makeNetworkCharacterModel()
+        val networkCharacter: NetworkCharacterModel =
+            CharacterDataFactory.Network.makeCharacter()
 
-        val expectedOrigin = OriginDataFactory.Db.makeDbOriginModel()
+        val expectedOrigin: DbOriginModel = OriginDataFactory.Db.makeOrigin()
         stubOriginDbMapper(expectedOrigin)
 
-        val expectedLocation = LocationDataFactory.Db.makeDbLocationModel()
+        val expectedLocation: DbLocationModel = LocationDataFactory.Db.makeLocation()
         stubLocationDbMapper(expectedLocation)
 
         val expectedCharacter = DbCharacterModel(
             id = networkCharacter.id,
             name = networkCharacter.name,
             status = networkCharacter.status,
-            statusAlive = networkCharacter.status.equals(CharacterDbMapper.ALIVE, true),
+            statusAlive = networkCharacter.status.equals(
+                other = CharacterDbMapper.ALIVE,
+                ignoreCase = true
+            ),
             species = networkCharacter.species,
             type = networkCharacter.type,
             gender = networkCharacter.gender,
@@ -65,7 +69,7 @@ class CharacterDbMapperTest {
         )
 
         // WHEN
-        val actualCharacter = characterDbMapper.map(networkCharacter)
+        val actualCharacter: DbCharacterModel = characterDbMapper.map(networkCharacter)
 
         // THEN
         expectedCharacter shouldEqual actualCharacter

@@ -18,8 +18,7 @@ class CharacterListActivity : BaseActivity() {
         dependenciesProvider: DependenciesProvider
     ) {
         characterListFragment = if (savedInstanceState == null) {
-            val characterIds: List<Int>? =
-                intent.getIntegerArrayListExtra(ARG_CHARACTER_IDS)
+            val characterIds: List<Int>? = intent.getIntegerArrayListExtra(ARG_CHARACTER_IDS)
             if (characterIds == null) {
                 onBackPressed()
                 return
@@ -40,20 +39,15 @@ class CharacterListActivity : BaseActivity() {
     }
 
     private fun attachFragments() {
-        val fragmentTransaction =
-            supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(
-            R.id.container,
-            characterListFragment,
-            TAG_CHARACTER_LIST_FRAGMENT
-        )
-        fragmentTransaction.commit()
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.container, characterListFragment, TAG_CHARACTER_LIST_FRAGMENT)
+        }.commit()
     }
 
     companion object {
-        private const val TAG_CHARACTER_LIST_FRAGMENT = "character_list_fragment"
+        private const val TAG_CHARACTER_LIST_FRAGMENT: String = "character_list_fragment"
 
-        private const val ARG_CHARACTER_IDS = "character_ids"
+        private const val ARG_CHARACTER_IDS: String = "character_ids"
 
         fun newIntent(context: Context?, characterIds: List<Int>): Intent {
             return Intent(context, CharacterListActivity::class.java).apply {

@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class NetworkEpisodesResponse(
 
-    @SerializedName("info")
+    @SerializedName(value = "info")
     val info: NetworkInfoModel,
 
-    @SerializedName("results")
+    @SerializedName(value = "results")
     val results: List<NetworkEpisodeModel>
 )

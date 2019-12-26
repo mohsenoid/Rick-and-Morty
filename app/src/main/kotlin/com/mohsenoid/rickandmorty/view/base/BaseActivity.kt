@@ -15,7 +15,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
     override lateinit var coroutineContext: CoroutineContext
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val dependenciesProvider =
+        val dependenciesProvider: DependenciesProvider =
             (applicationContext as RickAndMortyApplication).dependenciesProvider
 
         job = SupervisorJob()

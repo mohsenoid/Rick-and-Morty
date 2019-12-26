@@ -9,7 +9,7 @@ import org.junit.Test
 
 class OriginEntityMapperTest {
 
-    lateinit var originEntityMapper: Mapper<DbOriginModel, OriginEntity>
+    private lateinit var originEntityMapper: Mapper<DbOriginModel, OriginEntity>
 
     @Before
     fun setUp() {
@@ -19,7 +19,7 @@ class OriginEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbOrigin = OriginDataFactory.Db.makeDbOriginModel()
+        val dbOrigin: DbOriginModel = OriginDataFactory.Db.makeOrigin()
 
         val expectedOrigin = OriginEntity(
             name = dbOrigin.name,
@@ -27,7 +27,7 @@ class OriginEntityMapperTest {
         )
 
         // WHEN
-        val actualOrigin = originEntityMapper.map(dbOrigin)
+        val actualOrigin: OriginEntity = originEntityMapper.map(dbOrigin)
 
         // THEN
         expectedOrigin shouldEqual actualOrigin
