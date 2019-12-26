@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.Db
+import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
+import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException
@@ -17,7 +18,8 @@ import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.coroutines.withContext
 
 class RepositoryImpl(
-    private val db: Db,
+    private val characterDao: DbCharacterDao,
+    private val episodeDao: DbEpisodeDao,
     private val networkClient: NetworkClient,
     private val dispatcherProvider: DispatcherProvider,
     private val configProvider: ConfigProvider,
@@ -34,7 +36,7 @@ class RepositoryImpl(
         if (configProvider.isOnline()) {
             queryNetworkEpisodes(page, callback)
         } else {
-            queryDbEpisodes(page, callback)
+            queryDbEpisodes(page, PAGE_SIZE, callback)
         }
     }
 
@@ -50,25 +52,26 @@ class RepositoryImpl(
                     networkEpisodesResponse.body()?.let { networkEpisodes ->
                         networkEpisodes.results
                             .map(episodeDbMapper::map)
-                            .forEach { db.insertEpisode(it) }
+                            .forEach { episodeDao.insertEpisode(it) }
                     }
                 }
 
-                queryDbEpisodes(page, callback)
+                queryDbEpisodes(page, PAGE_SIZE, callback)
             } catch (e: Exception) {
                 e.printStackTrace()
-                queryDbEpisodes(page, callback)
+                queryDbEpisodes(page, PAGE_SIZE, callback)
             }
         }
     }
 
     private suspend fun queryDbEpisodes(
         page: Int,
+        pageSize: Int,
         callback: DataCallback<List<EpisodeEntity>>?
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val dbEpisodes = db.queryAllEpisodes(page)
+                val dbEpisodes = episodeDao.queryAllEpisodesByPage(page, pageSize)
 
                 val episodes = dbEpisodes.map(episodeEntityMapper::map)
 
@@ -109,7 +112,7 @@ class RepositoryImpl(
                     networkCharactersResponse.body()?.let { networkCharacters ->
                         networkCharacters
                             .map(characterDbMapper::map)
-                            .forEach { db.insertCharacter(it) }
+                            .forEach { characterDao.insertOrUpdateCharacter(it) }
                     }
                 }
 
@@ -127,7 +130,7 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val dbCharacters = db.queryCharactersByIds(characterIds)
+                val dbCharacters = characterDao.queryCharactersByIds(characterIds)
 
                 val characters = dbCharacters.map(characterEntityMapper::map)
 
@@ -167,7 +170,7 @@ class RepositoryImpl(
                 if (networkCharacterResponse.isSuccessful) {
                     networkCharacterResponse.body()?.let { networkCharacter ->
                         val dbCharacterModel = characterDbMapper.map(networkCharacter)
-                        db.insertCharacter(dbCharacterModel)
+                        characterDao.insertOrUpdateCharacter(dbCharacterModel)
                     }
                 }
 
@@ -185,7 +188,7 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                val dbCharacter = db.queryCharacter(characterId)
+                val dbCharacter = characterDao.queryCharacter(characterId)
                 if (dbCharacter != null) {
                     val character = characterEntityMapper.map(dbCharacter)
                     withContext(dispatcherProvider.mainDispatcher) {
@@ -209,12 +212,16 @@ class RepositoryImpl(
     ) {
         withContext(dispatcherProvider.ioDispatcher) {
             try {
-                db.killCharacter(characterId)
+                characterDao.killCharacter(characterId)
                 queryCharacterDetails(characterId, callback)
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(dispatcherProvider.mainDispatcher) { callback?.onError(e) }
             }
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 20
     }
 }

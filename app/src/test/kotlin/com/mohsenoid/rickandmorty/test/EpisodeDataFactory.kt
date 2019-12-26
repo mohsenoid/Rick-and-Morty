@@ -3,25 +3,21 @@ package com.mohsenoid.rickandmorty.test
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.test.DataFactory.randomInt
-import com.mohsenoid.rickandmorty.test.DataFactory.randomIntList
-import com.mohsenoid.rickandmorty.test.DataFactory.randomString
-import com.mohsenoid.rickandmorty.test.DataFactory.randomStringList
 import java.util.ArrayList
 
 object EpisodeDataFactory {
 
     object Db {
 
-        fun makeDbEpisodeModel(episodeId: Int = randomInt()): DbEpisodeModel {
+        fun makeDbEpisodeModel(episodeId: Int = DataFactory.randomInt()): DbEpisodeModel {
             return DbEpisodeModel(
                 id = episodeId,
-                name = randomString(),
-                airDate = randomString(),
-                episode = randomString(),
-                serializedCharacterIds = randomString() + "," + randomString() + "," + randomString(),
-                url = randomString(),
-                created = randomString()
+                name = DataFactory.randomString(),
+                airDate = DataFactory.randomString(),
+                episode = DataFactory.randomString(),
+                characterIds = DataFactory.randomIntList(5),
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 
@@ -39,15 +35,15 @@ object EpisodeDataFactory {
 
     object Network {
 
-        fun makeNetworkEpisodeModel(episodeId: Int = randomInt()): NetworkEpisodeModel {
+        fun makeNetworkEpisodeModel(episodeId: Int = DataFactory.randomInt()): NetworkEpisodeModel {
             return NetworkEpisodeModel(
-                episodeId,
-                randomString(),
-                randomString(),
-                randomString(),
-                randomStringList(5),
-                randomString(),
-                randomString()
+                id = episodeId,
+                name = DataFactory.randomString(),
+                airDate = DataFactory.randomString(),
+                episode = DataFactory.randomString(),
+                characters = DataFactory.randomIntList(5).map { "${DataFactory.randomString()}/$it" },
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 
@@ -65,15 +61,15 @@ object EpisodeDataFactory {
 
     object Entity {
 
-        fun makeEpisodeEntity(episodeId: Int = randomInt()): EpisodeEntity {
+        fun makeEpisodeEntity(episodeId: Int = DataFactory.randomInt()): EpisodeEntity {
             return EpisodeEntity(
-                episodeId,
-                randomString(),
-                randomString(),
-                randomString(),
-                randomIntList(5),
-                randomString(),
-                randomString()
+                id = episodeId,
+                name = DataFactory.randomString(),
+                airDate = DataFactory.randomString(),
+                episode = DataFactory.randomString(),
+                characterIds = DataFactory.randomIntList(5),
+                url = DataFactory.randomString(),
+                created = DataFactory.randomString()
             )
         }
 

@@ -1,7 +1,5 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer.deserializeStringList
-import com.mohsenoid.rickandmorty.data.Serializer.mapStringListToIntegerList
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 
@@ -13,11 +11,7 @@ class EpisodeEntityMapper : Mapper<DbEpisodeModel, EpisodeEntity> {
             name = input.name,
             airDate = input.airDate,
             episode = input.episode,
-            characterIds = mapStringListToIntegerList(
-                deserializeStringList(
-                    input.serializedCharacterIds
-                )
-            ),
+            characterIds = input.characterIds,
             url = input.url,
             created = input.created
         )

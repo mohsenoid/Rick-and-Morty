@@ -1,7 +1,5 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer.deserializeStringList
-import com.mohsenoid.rickandmorty.data.Serializer.mapStringListToIntegerList
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
@@ -26,22 +24,10 @@ class CharacterEntityMapper(
             origin = originEntityMapper.map(input.origin),
             location = locationEntityMapper.map(input.location),
             imageUrl = input.image,
-            episodeIds = mapStringListToIntegerList(
-                getEpisodeIds(
-                    deserializeStringList(input.serializedEpisodes)
-                )
-            ),
+            episodeIds = input.episodeIds,
             url = input.url,
             created = input.created,
             killedByUser = input.killedByUser
         )
-    }
-
-    private fun getEpisodeIds(episodes: List<String>): List<String> {
-        return episodes.map { it.split(SEPARATOR).last() }
-    }
-
-    companion object {
-        private const val SEPARATOR = "/"
     }
 }

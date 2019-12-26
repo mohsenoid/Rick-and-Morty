@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.Serializer
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
+import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 
 class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
 
@@ -12,17 +12,17 @@ class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
             name = input.name,
             airDate = input.airDate,
             episode = input.episode,
-            serializedCharacterIds = Serializer.serializeStringList(getCharacterIds(input.characters)),
+            characterIds = getCharacterIds(input.characters).mapStringListToIntegerList(),
             url = input.url,
             created = input.created
         )
     }
 
-    private fun getCharacterIds(characters: List<String>): List<String> {
-        return characters.map { it.split(SEPARATOR).last() }
-    }
-
     companion object {
         private const val SEPARATOR = "/"
+
+        fun getCharacterIds(characters: List<String>): List<String> {
+            return characters.map { it.split(SEPARATOR).last() }
+        }
     }
 }

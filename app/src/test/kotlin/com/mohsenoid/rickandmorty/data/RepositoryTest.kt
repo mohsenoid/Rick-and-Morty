@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.Db
+import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
+import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
@@ -27,7 +28,9 @@ import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
-import com.nhaarman.mockitokotlin2.whenever
+import org.amshove.kluent.When
+import org.amshove.kluent.calling
+import org.amshove.kluent.itReturns
 import org.junit.Before
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
@@ -35,7 +38,10 @@ import org.mockito.MockitoAnnotations
 abstract class RepositoryTest {
 
     @Mock
-    lateinit var db: Db
+    lateinit var characterDao: DbCharacterDao
+
+    @Mock
+    lateinit var episodeDao: DbEpisodeDao
 
     @Mock
     lateinit var networkClient: NetworkClient
@@ -69,7 +75,8 @@ abstract class RepositoryTest {
         MockitoAnnotations.initMocks(this)
 
         repository = RepositoryImpl(
-            db = db,
+            characterDao = characterDao,
+            episodeDao = episodeDao,
             networkClient = networkClient,
             dispatcherProvider = testDispatcherProvider,
             configProvider = configProvider,
@@ -81,7 +88,6 @@ abstract class RepositoryTest {
     }
 
     fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        whenever(configProvider.isOnline())
-            .thenReturn(isOnline)
+        When calling configProvider.isOnline() itReturns isOnline
     }
 }

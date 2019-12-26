@@ -3,7 +3,6 @@ package com.mohsenoid.rickandmorty.test
 import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
-import com.mohsenoid.rickandmorty.test.DataFactory.randomString
 
 object LocationDataFactory {
 
@@ -11,8 +10,8 @@ object LocationDataFactory {
 
         fun makeDbLocationModel(): DbLocationModel {
             return DbLocationModel(
-                name = randomString(),
-                url = randomString()
+                name = DataFactory.randomString(),
+                url = DataFactory.randomString()
             )
         }
     }
@@ -21,8 +20,8 @@ object LocationDataFactory {
 
         fun makeNetworkLocationModel(): NetworkLocationModel {
             return NetworkLocationModel(
-                name = randomString(),
-                url = randomString()
+                name = DataFactory.randomString(),
+                url = DataFactory.randomString()
             )
         }
     }
@@ -31,8 +30,8 @@ object LocationDataFactory {
 
         fun makeLocationEntity(): LocationEntity {
             return LocationEntity(
-                name = randomString(),
-                url = randomString()
+                name = DataFactory.randomString(),
+                url = DataFactory.randomString()
             )
         }
     }
