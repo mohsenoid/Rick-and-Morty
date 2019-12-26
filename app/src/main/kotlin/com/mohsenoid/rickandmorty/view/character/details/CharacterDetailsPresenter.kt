@@ -1,9 +1,7 @@
 package com.mohsenoid.rickandmorty.view.character.details
 
-import com.mohsenoid.rickandmorty.data.DataCallback
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 
 class CharacterDetailsPresenter(
@@ -32,20 +30,18 @@ class CharacterDetailsPresenter(
         if (!configProvider.isOnline()) {
             view?.showOfflineMessage(false)
         }
-        repository.queryCharacterDetails(characterId, object : DataCallback<CharacterEntity> {
-            override fun onSuccess(result: CharacterEntity) {
-                view?.setCharacter(result)
-                view?.hideLoading()
-            }
 
-            override fun onError(exception: Exception) {
-                view?.hideLoading()
-                if (exception is NoOfflineDataException) {
-                    view?.onNoOfflineData()
-                } else {
-                    view?.showMessage(exception.message ?: exception.toString())
-                }
+        try {
+            val result = repository.getCharacterDetails(characterId)
+            view?.setCharacter(result)
+        } catch (e: Exception) {
+            if (e is NoOfflineDataException) {
+                view?.onNoOfflineData()
+            } else {
+                view?.showMessage(e.message ?: e.toString())
             }
-        })
+        } finally {
+            view?.hideLoading()
+        }
     }
 }

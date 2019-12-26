@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
-import com.mohsenoid.rickandmorty.data.DataCallback
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
@@ -92,10 +91,10 @@ class CharacterListPresenterTest {
             presenter.loadCharacters()
 
             // THEN
-            Verify on repository that repository.queryCharactersByIds(
+            Verify on repository that repository.getCharactersByIds(
                 characterIds = eq<List<Int>>(
                     characterIds
-                ), callback = any()
+                )
             ) was called
         }
     }
@@ -180,8 +179,7 @@ class CharacterListPresenterTest {
 
             // THEN
             Verify on repository that repository.killCharacter(
-                characterId = eq(characterId),
-                callback = any()
+                characterId = eq(characterId)
             ) was called
             VerifyNoFurtherInteractions on repository
         }
@@ -214,22 +212,10 @@ class CharacterListPresenterTest {
     }
 
     private suspend fun stubRepositoryQueryCharactersOnSuccess(characters: List<CharacterEntity>) {
-        When calling repository.queryCharactersByIds(
-            characterIds = any(),
-            callback = any()
-        ) itAnswers { invocation ->
-            val callback = invocation.getArgument<DataCallback<List<CharacterEntity>>>(1)
-            callback.onSuccess(characters)
-        }
+        When calling repository.getCharactersByIds(any()) itReturns characters
     }
 
     private suspend fun stubRepositoryQueryCharactersOnError(exception: Exception) {
-        When calling repository.queryCharactersByIds(
-            characterIds = any(),
-            callback = any()
-        ) itAnswers { invocation ->
-            val callback = invocation.getArgument<DataCallback<List<CharacterEntity>>>(1)
-            callback.onError(exception)
-        }
+        When calling repository.getCharactersByIds(any()) itAnswers { throw exception }
     }
 }
