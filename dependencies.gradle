@@ -7,6 +7,7 @@ ext {
     toolsBuildGradleVersion = '3.5.3'
     jacocoVersion = '0.8.3'
     ktlintVersion = '0.36.0'
+    dokkaVersion = '0.10.0'
 
     // Android Jetpack
     androidxAppCompatVersion = '1.1.0'
@@ -41,5 +42,5 @@ ext {
     // Dependencies
     timberVersion = '4.7.1'
     picassoVersion = '2.71828'
-    roomVersion ='2.2.3'
+    roomVersion = '2.2.3'
 }

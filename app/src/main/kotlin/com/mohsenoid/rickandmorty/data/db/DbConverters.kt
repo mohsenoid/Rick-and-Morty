@@ -6,7 +6,7 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.util.extension.deserializeStringList
 import com.mohsenoid.rickandmorty.util.extension.fromJson
 import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
-import com.mohsenoid.rickandmorty.util.extension.serializeIntegerList
+import com.mohsenoid.rickandmorty.util.extension.serializeIntegerListToCsv
 import com.mohsenoid.rickandmorty.util.extension.toJson
 
 class DbConverters {
@@ -33,7 +33,7 @@ class DbConverters {
 
     @TypeConverter
     fun listOfIntToString(list: List<Int>?): String? {
-        return list?.serializeIntegerList()
+        return list?.serializeIntegerListToCsv()
     }
 
     @TypeConverter

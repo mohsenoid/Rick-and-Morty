@@ -12,7 +12,7 @@ class ExtensionsTest {
         val expected = "2,8,10"
 
         // WHEN
-        val actual = input.serializeIntegerList()
+        val actual = input.serializeIntegerListToCsv()
 
         // THEN
         expected shouldEqual actual
@@ -25,7 +25,7 @@ class ExtensionsTest {
         val expected = ""
 
         // WHEN
-        val actual = input.serializeIntegerList()
+        val actual = input.serializeIntegerListToCsv()
 
         // THEN
         expected shouldEqual actual
@@ -38,7 +38,7 @@ class ExtensionsTest {
         val expected = "A,BC,DEF"
 
         // WHEN
-        val actual = input.serializeStringList()
+        val actual = input.serializeStringListToCsv()
 
         // THEN
         expected shouldEqual actual
@@ -51,7 +51,7 @@ class ExtensionsTest {
         val expected = ""
 
         // WHEN
-        val actual = input.serializeStringList()
+        val actual = input.serializeStringListToCsv()
 
         // THEN
         expected shouldEqual actual

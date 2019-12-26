@@ -6,6 +6,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'org.jetbrains.dokka'
+
 apply from: "$rootDir/jacoco.gradle"
 
 apply from: "$rootDir/ktlint.gradle"
@@ -53,6 +55,11 @@ android {
                 srcDirs += 'src/androidTest/kotlin'
             }
         }
+    }
+
+    dokka {
+        outputFormat = 'html'
+        outputDirectory = "$buildDir/dokka"
     }
 
     testOptions {
