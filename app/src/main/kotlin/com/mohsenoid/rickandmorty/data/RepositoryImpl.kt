@@ -11,12 +11,14 @@ import com.mohsenoid.rickandmorty.data.mapper.Mapper
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
+import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 
 class RepositoryImpl(
     private val characterDao: DbCharacterDao,
@@ -34,7 +36,7 @@ class RepositoryImpl(
         return withContext(dispatcherProvider.ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
-                    val episodes = fetchNetworkEpisodes(page)
+                    val episodes: List<NetworkEpisodeModel> = fetchNetworkEpisodes(page)
                     cacheNetworkEpisodes(episodes)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -46,16 +48,20 @@ class RepositoryImpl(
     }
 
     private suspend fun fetchNetworkEpisodes(page: Int): List<NetworkEpisodeModel> {
-        val networkEpisodesResponse = networkClient.fetchEpisodes(page)
+        val networkEpisodesResponse: Response<NetworkEpisodesResponse> =
+            networkClient.fetchEpisodes(page)
 
         if (networkEpisodesResponse.isSuccessful) {
             networkEpisodesResponse.body()?.let { networkEpisodes ->
                 return networkEpisodes.results
-            } ?: throw ServerException(networkEpisodesResponse.code(), "Response body is empty!")
+            } ?: throw ServerException(
+                code = networkEpisodesResponse.code(),
+                error = "Response body is empty!"
+            )
         } else {
             throw ServerException(
-                networkEpisodesResponse.code(),
-                networkEpisodesResponse.errorBody().toString()
+                code = networkEpisodesResponse.code(),
+                error = networkEpisodesResponse.errorBody().toString()
             )
         }
     }
@@ -66,8 +72,8 @@ class RepositoryImpl(
     }
 
     private suspend fun queryDbEpisodes(page: Int, pageSize: Int): List<EpisodeEntity> {
-        val dbEpisodes = episodeDao.queryAllEpisodesByPage(page, pageSize)
-        val episodes = dbEpisodes.map(episodeEntityMapper::map)
+        val dbEpisodes: List<DbEpisodeModel> = episodeDao.queryAllEpisodesByPage(page, pageSize)
+        val episodes: List<EpisodeEntity> = dbEpisodes.map(episodeEntityMapper::map)
 
         if (episodes.isEmpty()) throw EndOfListException()
 
@@ -78,28 +84,33 @@ class RepositoryImpl(
         return withContext(dispatcherProvider.ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
-                    val characters = fetchNetworkCharactersByIds(characterIds)
+                    val characters: List<NetworkCharacterModel> =
+                        fetchNetworkCharactersByIds(characterIds)
                     cacheNetworkCharacters(characters)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
 
-            queryDbCharactersByIds(characterIds)
+            return@withContext queryDbCharactersByIds(characterIds)
         }
     }
 
     private suspend fun fetchNetworkCharactersByIds(characterIds: List<Int>): List<NetworkCharacterModel> {
-        val networkCharactersResponse = networkClient.fetchCharactersByIds(characterIds)
+        val networkCharactersResponse: Response<List<NetworkCharacterModel>> =
+            networkClient.fetchCharactersByIds(characterIds)
 
         if (networkCharactersResponse.isSuccessful) {
             networkCharactersResponse.body()?.let { networkCharacters ->
                 return networkCharacters
-            } ?: throw ServerException(networkCharactersResponse.code(), "Response body is empty!")
+            } ?: throw ServerException(
+                code = networkCharactersResponse.code(),
+                error = "Response body is empty!"
+            )
         } else {
             throw ServerException(
-                networkCharactersResponse.code(),
-                networkCharactersResponse.errorBody().toString()
+                code = networkCharactersResponse.code(),
+                error = networkCharactersResponse.errorBody().toString()
             )
         }
     }
@@ -111,13 +122,14 @@ class RepositoryImpl(
 
     private suspend fun queryDbCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
         return withContext(dispatcherProvider.ioDispatcher) {
-            val dbCharacters = characterDao.queryCharactersByIds(characterIds)
+            val dbCharacters: List<DbCharacterModel> =
+                characterDao.queryCharactersByIds(characterIds)
 
-            val characters = dbCharacters.map(characterEntityMapper::map)
+            val characters: List<CharacterEntity> = dbCharacters.map(characterEntityMapper::map)
 
             if (characters.isEmpty()) throw NoOfflineDataException()
 
-            characters
+            return@withContext characters
         }
     }
 
@@ -125,14 +137,14 @@ class RepositoryImpl(
         return withContext(dispatcherProvider.ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
-                    val character = fetchNetworkCharacterDetails(characterId)
+                    val character: NetworkCharacterModel = fetchNetworkCharacterDetails(characterId)
                     cacheNetworkCharacter(character)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
 
-            queryDbCharacterDetails(characterId)
+            return@withContext queryDbCharacterDetails(characterId)
         }
     }
 
@@ -142,11 +154,14 @@ class RepositoryImpl(
         if (networkCharacterResponse.isSuccessful) {
             networkCharacterResponse.body()?.let { networkCharacter ->
                 return networkCharacter
-            } ?: throw ServerException(networkCharacterResponse.code(), "Response body is empty!")
+            } ?: throw ServerException(
+                code = networkCharacterResponse.code(),
+                error = "Response body is empty!"
+            )
         } else {
             throw ServerException(
-                networkCharacterResponse.code(),
-                networkCharacterResponse.errorBody().toString()
+                code = networkCharacterResponse.code(),
+                error = networkCharacterResponse.errorBody().toString()
             )
         }
     }
@@ -157,22 +172,21 @@ class RepositoryImpl(
 
     private suspend fun queryDbCharacterDetails(characterId: Int): CharacterEntity {
         return withContext(dispatcherProvider.ioDispatcher) {
-            val dbCharacter =
+            val dbCharacter: DbCharacterModel =
                 characterDao.queryCharacter(characterId) ?: throw NoOfflineDataException()
 
-            val character = characterEntityMapper.map(dbCharacter)
-            character
+            return@withContext characterEntityMapper.map(dbCharacter)
         }
     }
 
     override suspend fun killCharacter(characterId: Int): CharacterEntity {
         return withContext(dispatcherProvider.ioDispatcher) {
             characterDao.killCharacter(characterId)
-            getCharacterDetails(characterId)
+            return@withContext getCharacterDetails(characterId)
         }
     }
 
     companion object {
-        const val PAGE_SIZE = 20
+        const val PAGE_SIZE: Int = 20
     }
 }

@@ -16,6 +16,7 @@ data class CharacterEntity(
     val created: String,
     val killedByUser: Boolean
 ) {
+
     val isAlive: Boolean
         get() = statusAlive && !killedByUser
 }

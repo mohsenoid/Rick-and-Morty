@@ -9,7 +9,7 @@ import org.junit.Test
 
 class LocationEntityMapperTest {
 
-    lateinit var locationEntityMapper: Mapper<DbLocationModel, LocationEntity>
+    private lateinit var locationEntityMapper: Mapper<DbLocationModel, LocationEntity>
 
     @Before
     fun setUp() {
@@ -19,7 +19,7 @@ class LocationEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbLocation = LocationDataFactory.Db.makeDbLocationModel()
+        val dbLocation: DbLocationModel = LocationDataFactory.Db.makeLocation()
 
         val expectedLocation = LocationEntity(
             name = dbLocation.name,
@@ -27,7 +27,7 @@ class LocationEntityMapperTest {
         )
 
         // WHEN
-        val actualLocation = locationEntityMapper.map(dbLocation)
+        val actualLocation: LocationEntity = locationEntityMapper.map(dbLocation)
 
         // THEN
         expectedLocation shouldEqual actualLocation

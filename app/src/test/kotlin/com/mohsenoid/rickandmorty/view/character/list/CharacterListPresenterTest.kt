@@ -4,9 +4,7 @@ import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
-import com.mohsenoid.rickandmorty.test.CharacterDataFactory.Entity.makeEntityCharactersModelList
-import com.mohsenoid.rickandmorty.test.DataFactory.randomInt
-import com.mohsenoid.rickandmorty.test.DataFactory.randomString
+import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.eq
@@ -82,9 +80,9 @@ class CharacterListPresenterTest {
             // GIVEN
             stubConfigProviderIsOnline(true)
             val characterIds: MutableList<Int> = ArrayList()
-            characterIds.add(randomInt())
-            characterIds.add(randomInt())
-            characterIds.add(randomInt())
+            characterIds.add(DataFactory.randomInt())
+            characterIds.add(DataFactory.randomInt())
+            characterIds.add(DataFactory.randomInt())
             presenter.characterIds = characterIds
 
             // WHEN
@@ -103,8 +101,8 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view setCharacters OnSuccess`() {
         runBlocking {
             // GIVEN
-            val characters =
-                makeEntityCharactersModelList(5)
+            val characters: List<CharacterEntity> =
+                CharacterDataFactory.Entity.makeCharacters(count = 5)
             stubRepositoryQueryCharactersOnSuccess(characters)
 
             // WHEN
@@ -119,7 +117,7 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view showMessage OnError`() {
         runBlocking {
             // GIVEN
-            val errorMessage = randomString()
+            val errorMessage = DataFactory.randomString()
             stubRepositoryQueryCharactersOnError(Exception(errorMessage))
 
             // WHEN
@@ -134,8 +132,8 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view hideLoading OnSuccess`() {
         runBlocking {
             // GIVEN
-            val characters =
-                makeEntityCharactersModelList(5)
+            val characters: List<CharacterEntity> =
+                CharacterDataFactory.Entity.makeCharacters(count = 5)
             stubRepositoryQueryCharactersOnSuccess(characters)
 
             // WHEN
@@ -165,14 +163,13 @@ class CharacterListPresenterTest {
         runBlocking {
             // GIVEN
             stubConfigProviderIsOnline(true)
-            val characterId = randomInt()
-            val character: CharacterEntity =
-                CharacterDataFactory.Entity.makeCharacterEntity(
-                    characterId = characterId,
-                    status = CharacterDbMapper.ALIVE,
-                    isAlive = true,
-                    isKilledByUser = false
-                )
+            val characterId = DataFactory.randomInt()
+            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
+                characterId = characterId,
+                status = CharacterDbMapper.ALIVE,
+                isAlive = true,
+                isKilledByUser = false
+            )
 
             // WHEN
             presenter.killCharacter(character)
@@ -190,14 +187,13 @@ class CharacterListPresenterTest {
         runBlocking {
             // GIVEN
             stubConfigProviderIsOnline(true)
-            val characterId = randomInt()
-            val character: CharacterEntity =
-                CharacterDataFactory.Entity.makeCharacterEntity(
-                    characterId = characterId,
-                    status = CharacterDbMapper.ALIVE,
-                    isAlive = true,
-                    isKilledByUser = true
-                )
+            val characterId = DataFactory.randomInt()
+            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
+                characterId = characterId,
+                status = CharacterDbMapper.ALIVE,
+                isAlive = true,
+                isKilledByUser = true
+            )
 
             // WHEN
             presenter.killCharacter(character)

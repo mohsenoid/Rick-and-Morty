@@ -13,7 +13,7 @@ object DataFactory {
     fun randomStringList(count: Int): List<String> {
         val list: MutableList<String> = ArrayList()
 
-        for (i in 0 until count) {
+        for (i: Int in 0 until count) {
             list.add(randomString())
         }
 
@@ -27,7 +27,7 @@ object DataFactory {
     fun randomIntList(count: Int, min: Int = Int.MIN_VALUE, max: Int = Int.MAX_VALUE): List<Int> {
         val list: MutableList<Int> = ArrayList()
 
-        for (i in 0 until count) {
+        for (i: Int in 0 until count) {
             list.add(randomInt(min, max))
         }
 

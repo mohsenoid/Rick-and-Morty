@@ -19,7 +19,7 @@ class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
     }
 
     companion object {
-        private const val SEPARATOR = "/"
+        private const val SEPARATOR: Char = '/'
 
         fun getCharacterIds(characters: List<String>): List<String> {
             return characters.map { it.split(SEPARATOR).last() }

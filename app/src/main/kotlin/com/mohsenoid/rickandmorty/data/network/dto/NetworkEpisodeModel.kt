@@ -4,24 +4,24 @@ import com.google.gson.annotations.SerializedName
 
 data class NetworkEpisodeModel(
 
-    @SerializedName("id")
+    @SerializedName(value = "id")
     val id: Int,
 
-    @SerializedName("name")
+    @SerializedName(value = "name")
     val name: String,
 
-    @SerializedName("air_date")
+    @SerializedName(value = "air_date")
     val airDate: String,
 
-    @SerializedName("episode")
+    @SerializedName(value = "episode")
     val episode: String,
 
-    @SerializedName("characters")
+    @SerializedName(value = "characters")
     val characters: List<String>,
 
-    @SerializedName("url")
+    @SerializedName(value = "url")
     val url: String,
 
-    @SerializedName("created")
+    @SerializedName(value = "created")
     val created: String
 )

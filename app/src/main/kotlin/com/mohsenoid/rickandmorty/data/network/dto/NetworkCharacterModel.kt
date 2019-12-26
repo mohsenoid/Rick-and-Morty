@@ -4,39 +4,39 @@ import com.google.gson.annotations.SerializedName
 
 data class NetworkCharacterModel(
 
-    @SerializedName("id")
+    @SerializedName(value = "id")
     val id: Int,
 
-    @SerializedName("name")
+    @SerializedName(value = "name")
     val name: String,
 
-    @SerializedName("status")
+    @SerializedName(value = "status")
     val status: String,
 
-    @SerializedName("species")
+    @SerializedName(value = "species")
     val species: String,
 
-    @SerializedName("type")
+    @SerializedName(value = "type")
     val type: String,
 
-    @SerializedName("gender")
+    @SerializedName(value = "gender")
     val gender: String,
 
-    @SerializedName("origin")
+    @SerializedName(value = "origin")
     val origin: NetworkOriginModel,
 
-    @SerializedName("location")
+    @SerializedName(value = "location")
     val location: NetworkLocationModel,
 
-    @SerializedName("image")
+    @SerializedName(value = "image")
     val image: String,
 
-    @SerializedName("episode")
+    @SerializedName(value = "episode")
     val episodes: List<String>,
 
-    @SerializedName("url")
+    @SerializedName(value = "url")
     val url: String,
 
-    @SerializedName("created")
+    @SerializedName(value = "created")
     val created: String
 )

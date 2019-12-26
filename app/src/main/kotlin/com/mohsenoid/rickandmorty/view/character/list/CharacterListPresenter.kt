@@ -29,11 +29,11 @@ class CharacterListPresenter(
 
     private suspend fun queryCharacters() {
         if (!configProvider.isOnline()) {
-            view?.showOfflineMessage(false)
+            view?.showOfflineMessage(isCritical = false)
         }
 
         try {
-            val result = repository.getCharactersByIds(characterIds)
+            val result: List<CharacterEntity> = repository.getCharactersByIds(characterIds)
             view?.setCharacters(result)
         } catch (e: Exception) {
             if (e is NoOfflineDataException) {
@@ -50,7 +50,7 @@ class CharacterListPresenter(
         if (!character.isAlive) return
 
         try {
-            val result = repository.killCharacter(character.id)
+            val result: CharacterEntity = repository.killCharacter(character.id)
             view?.updateCharacter(result)
         } catch (e: Exception) {
             view?.showMessage(e.message ?: e.toString())

@@ -5,13 +5,18 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.NetworkResponseFactory
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.Verify
+import org.amshove.kluent.VerifyNoFurtherInteractions
+import org.amshove.kluent.VerifyNoInteractions
 import org.amshove.kluent.When
 import org.amshove.kluent.any
+import org.amshove.kluent.called
 import org.amshove.kluent.calling
 import org.amshove.kluent.itReturns
+import org.amshove.kluent.on
+import org.amshove.kluent.that
+import org.amshove.kluent.was
 import org.junit.Test
 import retrofit2.Response
 
@@ -21,17 +26,21 @@ class RepositoryGetCharactersTest : RepositoryTest() {
     fun `test if getCharactersByIds calls networkClient when isOnline`() {
         runBlocking {
             // GIVEN
-            val characterIds = DataFactory.randomIntList(5)
-            stubConfigProviderIsOnline(true)
+            val characterIds: List<Int> = DataFactory.randomIntList(count = 5)
+            stubConfigProviderIsOnline(isOnline = true)
             stubNetworkClientFetchCharactersByIds(NetworkResponseFactory.Characters.charactersResponse())
-            stubCharacterDaoQueryCharactersByIds(CharacterDataFactory.Db.makeDbCharactersModelList(5))
+            stubCharacterDaoQueryCharactersByIds(CharacterDataFactory.Db.makeCharacters(count = 5))
 
             // WHEN
-            repository.getCharactersByIds(characterIds)
+            repository.getCharactersByIds(characterIds = characterIds)
 
             // THEN
-            verify(characterDao, times(1)).queryCharactersByIds(characterIds)
-            verify(networkClient, times(1)).fetchCharactersByIds(characterIds)
+            Verify on networkClient that networkClient.fetchCharactersByIds(characterIds = any())
+            VerifyNoFurtherInteractions on networkClient
+
+            Verify on characterDao that characterDao.insertOrUpdateCharacter(character = any()) was called
+            Verify on characterDao that characterDao.queryCharactersByIds(characterIds = any()) was called
+            VerifyNoFurtherInteractions on characterDao
         }
     }
 
@@ -39,24 +48,26 @@ class RepositoryGetCharactersTest : RepositoryTest() {
     fun `test if getCharactersByIds calls db only when isOffline`() {
         runBlocking {
             // GIVEN
-            val characterIds = DataFactory.randomIntList(5)
-            stubConfigProviderIsOnline(false)
-            stubCharacterDaoQueryCharactersByIds(CharacterDataFactory.Db.makeDbCharactersModelList(5))
+            val characterIds: List<Int> = DataFactory.randomIntList(count = 5)
+            stubConfigProviderIsOnline(isOnline = false)
+            stubCharacterDaoQueryCharactersByIds(CharacterDataFactory.Db.makeCharacters(count = 5))
 
             // WHEN
-            repository.getCharactersByIds(characterIds)
+            repository.getCharactersByIds(characterIds = characterIds)
 
             // THEN
-            verify(characterDao, times(1)).queryCharactersByIds(characterIds)
-            verify(networkClient, times(0)).fetchCharactersByIds(characterIds)
+            VerifyNoInteractions on networkClient
+
+            Verify on characterDao that characterDao.queryCharactersByIds(characterIds = any()) was called
+            VerifyNoFurtherInteractions on characterDao
         }
     }
 
     private suspend fun stubNetworkClientFetchCharactersByIds(charactersResponse: Response<List<NetworkCharacterModel>>) {
-        When calling networkClient.fetchCharactersByIds(any()) itReturns charactersResponse
+        When calling networkClient.fetchCharactersByIds(characterIds = any()) itReturns charactersResponse
     }
 
     private suspend fun stubCharacterDaoQueryCharactersByIds(characters: List<DbCharacterModel>) {
-        When calling characterDao.queryCharactersByIds(any()) itReturns characters
+        When calling characterDao.queryCharactersByIds(characterIds = any()) itReturns characters
     }
 }
