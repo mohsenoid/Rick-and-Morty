@@ -19,8 +19,9 @@ import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
 
-class RepositoryImpl(
+class RepositoryImpl @Inject internal constructor(
     private val characterDao: DbCharacterDao,
     private val episodeDao: DbEpisodeDao,
     private val networkClient: NetworkClient,

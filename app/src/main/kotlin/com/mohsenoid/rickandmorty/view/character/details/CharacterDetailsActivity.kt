@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.mohsenoid.rickandmorty.R
-import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseActivity
 import timber.log.Timber
 
@@ -12,25 +11,20 @@ class CharacterDetailsActivity : BaseActivity() {
 
     private lateinit var characterDetailsFragment: CharacterDetailsFragment
 
-    public override fun injectDependencies(
-        savedInstanceState: Bundle?,
-        dependenciesProvider: DependenciesProvider
-    ) {
-        characterDetailsFragment = if (savedInstanceState == null) {
-            val characterId: Int = intent.getIntExtra(ARG_CHARACTER_ID, -1)
-            if (characterId == -1) {
-                onBackPressed()
-                return
-            }
-            dependenciesProvider.getCharacterDetailsFragment(characterId)
-        } else {
-            supportFragmentManager.findFragmentByTag(TAG_CHARACTER_DETAILS_FRAGMENT) as CharacterDetailsFragment
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val characterId: Int? = intent.extras?.getInt(ARG_CHARACTER_ID)
+        if (characterId == null) {
+            onBackPressed()
+            return
+        }
+
+        characterDetailsFragment =
+            supportFragmentManager.findFragmentByTag(TAG_CHARACTER_DETAILS_FRAGMENT) as? CharacterDetailsFragment
+                ?: CharacterDetailsFragment.newInstance(characterId)
+
         if (savedInstanceState == null) {
             attachFragments()
         }
