@@ -1,12 +1,14 @@
 package com.mohsenoid.rickandmorty.data.network.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkLocationModel(
 
-    @SerializedName("name")
+    @SerialName(value = "name")
     val name: String,
 
-    @SerializedName("url")
+    @SerialName(value = "url")
     val url: String
 )

@@ -2,13 +2,13 @@ package com.mohsenoid.rickandmorty.data.network
 
 object NetworkConstants {
 
-    const val BASE_URL = "https://rickandmortyapi.com/api/"
+    const val BASE_URL: String = "https://rickandmortyapi.com/api/"
 
-    const val EPISODE_ENDPOINT = "episode/"
-    const val CHARACTER_ENDPOINT = "character/"
+    const val EPISODE_ENDPOINT: String = "episode/"
+    const val CHARACTER_ENDPOINT: String = "character/"
 
-    const val PARAM_KEY_PAGE = "page"
+    const val PARAM_KEY_PAGE: String = "page"
 
-    const val PATH_KEY_CHARACTER_IDS = "characterIds"
-    const val PATH_KEY_CHARACTER_ID = "characterId"
+    const val PATH_KEY_CHARACTER_IDS: String = "characterIds"
+    const val PATH_KEY_CHARACTER_ID: String = "characterId"
 }

@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import com.mohsenoid.rickandmorty.data.DataCallback
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
@@ -26,39 +25,36 @@ class EpisodeListPresenter(
     override suspend fun loadEpisodes() {
         view?.showLoading()
         page = 1
-        queryEpisodes()
+        getEpisodes()
     }
 
     override suspend fun loadMoreEpisodes(page: Int) {
         view?.showLoadingMore()
         this.page = page
-        queryEpisodes()
+        getEpisodes()
     }
 
-    private suspend fun queryEpisodes() {
+    private suspend fun getEpisodes() {
         if (!configProvider.isOnline()) {
-            view?.showOfflineMessage(false)
+            view?.showOfflineMessage(isCritical = false)
         }
-        repository.queryEpisodes(page, object : DataCallback<List<EpisodeEntity>> {
-            override fun onSuccess(result: List<EpisodeEntity>) {
-                if (page == 1) {
-                    view?.setEpisodes(result)
-                    view?.hideLoading()
-                } else {
-                    view?.updateEpisodes(result)
-                    view?.hideLoadingMore()
-                }
-            }
 
-            override fun onError(exception: Exception) {
-                view?.hideLoading()
-                view?.hideLoadingMore()
-                if (exception is EndOfListException) {
-                    view?.reachedEndOfList()
-                } else {
-                    view?.showMessage(exception.message ?: exception.toString())
-                }
+        try {
+            val result: List<EpisodeEntity> = repository.getEpisodes(page)
+            if (page == 1) {
+                view?.setEpisodes(result)
+            } else {
+                view?.updateEpisodes(result)
             }
-        })
+        } catch (e: Exception) {
+            if (e is EndOfListException) {
+                view?.reachedEndOfList()
+            } else {
+                view?.showMessage(e.message ?: e.toString())
+            }
+        } finally {
+            view?.hideLoading()
+            view?.hideLoadingMore()
+        }
     }
 }

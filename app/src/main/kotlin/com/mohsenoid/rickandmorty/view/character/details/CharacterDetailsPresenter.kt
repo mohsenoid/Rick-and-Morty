@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.view.character.details
 
-import com.mohsenoid.rickandmorty.data.DataCallback
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
@@ -11,7 +10,7 @@ class CharacterDetailsPresenter(
     private val configProvider: ConfigProvider
 ) : CharacterDetailsContract.Presenter {
 
-    override var characterId = -1
+    override var characterId: Int = -1
 
     private var view: CharacterDetailsContract.View? = null
 
@@ -30,22 +29,20 @@ class CharacterDetailsPresenter(
 
     private suspend fun queryCharacter(characterId: Int) {
         if (!configProvider.isOnline()) {
-            view?.showOfflineMessage(false)
+            view?.showOfflineMessage(isCritical = false)
         }
-        repository.queryCharacterDetails(characterId, object : DataCallback<CharacterEntity> {
-            override fun onSuccess(result: CharacterEntity) {
-                view?.setCharacter(result)
-                view?.hideLoading()
-            }
 
-            override fun onError(exception: Exception) {
-                view?.hideLoading()
-                if (exception is NoOfflineDataException) {
-                    view?.onNoOfflineData()
-                } else {
-                    view?.showMessage(exception.message ?: exception.toString())
-                }
+        try {
+            val result: CharacterEntity = repository.getCharacterDetails(characterId)
+            view?.setCharacter(result)
+        } catch (e: Exception) {
+            if (e is NoOfflineDataException) {
+                view?.onNoOfflineData()
+            } else {
+                view?.showMessage(e.message ?: e.toString())
             }
-        })
+        } finally {
+            view?.hideLoading()
+        }
     }
 }

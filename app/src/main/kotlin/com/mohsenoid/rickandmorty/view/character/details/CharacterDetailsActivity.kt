@@ -17,8 +17,7 @@ class CharacterDetailsActivity : BaseActivity() {
         dependenciesProvider: DependenciesProvider
     ) {
         characterDetailsFragment = if (savedInstanceState == null) {
-            val characterId =
-                intent.getIntExtra(ARG_CHARACTER_ID, -1)
+            val characterId: Int = intent.getIntExtra(ARG_CHARACTER_ID, -1)
             if (characterId == -1) {
                 onBackPressed()
                 return
@@ -41,13 +40,12 @@ class CharacterDetailsActivity : BaseActivity() {
     private fun attachFragments() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.container, characterDetailsFragment, TAG_CHARACTER_DETAILS_FRAGMENT)
-            commit()
-        }
+        }.commit()
     }
 
     companion object {
-        private const val TAG_CHARACTER_DETAILS_FRAGMENT = "character_details_fragment"
-        private const val ARG_CHARACTER_ID = "character_id"
+        private const val TAG_CHARACTER_DETAILS_FRAGMENT: String = "character_details_fragment"
+        private const val ARG_CHARACTER_ID: String = "character_id"
 
         fun newIntent(context: Context?, characterId: Int): Intent {
             val intent = Intent(context, CharacterDetailsActivity::class.java)

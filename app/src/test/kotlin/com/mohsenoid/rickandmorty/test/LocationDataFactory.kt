@@ -8,7 +8,7 @@ object LocationDataFactory {
 
     object Db {
 
-        fun makeDbLocationModel(): DbLocationModel {
+        fun makeLocation(): DbLocationModel {
             return DbLocationModel(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
@@ -18,7 +18,7 @@ object LocationDataFactory {
 
     object Network {
 
-        fun makeNetworkLocationModel(): NetworkLocationModel {
+        fun makeLocation(): NetworkLocationModel {
             return NetworkLocationModel(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
@@ -28,7 +28,7 @@ object LocationDataFactory {
 
     object Entity {
 
-        fun makeLocationEntity(): LocationEntity {
+        fun makeEntity(): LocationEntity {
             return LocationEntity(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()

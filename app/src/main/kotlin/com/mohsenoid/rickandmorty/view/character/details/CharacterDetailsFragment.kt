@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.injection.DependenciesProvider
@@ -71,7 +72,7 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     override fun showOfflineMessage(isCritical: Boolean) {
         Toast.makeText(context, R.string.offline_app, Toast.LENGTH_LONG).show()
         if (isCritical) {
-            val activity = activity
+            val activity: FragmentActivity? = activity
             if (activity != null && !activity.isFinishing) activity.finish()
         }
     }
@@ -116,7 +117,7 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     }
 
     companion object {
-        private const val ARG_CHARACTER_ID = "character_id"
+        private const val ARG_CHARACTER_ID: String = "character_id"
 
         fun newInstance(characterId: Int): CharacterDetailsFragment {
             val fragment = CharacterDetailsFragment()

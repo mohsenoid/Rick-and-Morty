@@ -1,18 +1,20 @@
 package com.mohsenoid.rickandmorty.data.network.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkInfoModel(
 
-    @SerializedName("count")
+    @SerialName(value = "count")
     val count: Int,
 
-    @SerializedName("pages")
+    @SerialName(value = "pages")
     val pages: Int,
 
-    @SerializedName("next")
+    @SerialName(value = "next")
     val next: String,
 
-    @SerializedName("prev")
+    @SerialName(value = "prev")
     val prev: String
 )

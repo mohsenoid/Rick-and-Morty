@@ -9,7 +9,7 @@ import org.junit.Test
 
 class LocationDbMapperTest {
 
-    lateinit var locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel>
+    private lateinit var locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel>
 
     @Before
     fun setUp() {
@@ -19,7 +19,7 @@ class LocationDbMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val networkLocation = LocationDataFactory.Network.makeNetworkLocationModel()
+        val networkLocation: NetworkLocationModel = LocationDataFactory.Network.makeLocation()
 
         val expectedLocation = DbLocationModel(
             name = networkLocation.name,
@@ -27,7 +27,7 @@ class LocationDbMapperTest {
         )
 
         // WHEN
-        val actualLocation = locationDbMapper.map(networkLocation)
+        val actualLocation: DbLocationModel = locationDbMapper.map(networkLocation)
 
         // THEN
         expectedLocation shouldEqual actualLocation

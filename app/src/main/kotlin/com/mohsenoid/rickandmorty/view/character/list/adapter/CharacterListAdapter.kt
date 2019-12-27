@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.view.character.list.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.R
@@ -21,18 +22,18 @@ class CharacterListAdapter(
     }
 
     fun updateCharacter(character: CharacterEntity) {
-        val index = characters.indexOfFirst { it.id == character.id }
+        val index: Int = characters.indexOfFirst { it.id == character.id }
         characters[index] = character
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context)
+        val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_character, parent, false)
         return CharacterViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        val character = characters[position]
+        val character: CharacterEntity = characters[position]
         holder.onBind(dispatcherProvider)
         holder.setCharacter(character)
         holder.view.setOnClickListener { listener.onCharacterRowClick(character) }

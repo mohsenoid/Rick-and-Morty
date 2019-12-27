@@ -7,10 +7,10 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 abstract class DbCharacterDaoAbs : DbCharacterDao {
 
     override suspend fun insertOrUpdateCharacter(character: DbCharacterModel) {
-        val oldCharacter = queryCharacter(characterId = character.id)
+        val oldCharacter: DbCharacterModel? = queryCharacter(characterId = character.id)
 
         insertCharacter(
-            if (oldCharacter != null)
+            character = if (oldCharacter != null)
                 character.copy(killedByUser = oldCharacter.killedByUser)
             else
                 character

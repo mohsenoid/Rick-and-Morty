@@ -33,11 +33,10 @@ class EpisodeListActivity : BaseActivity() {
     private fun attachFragments() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.container, episodeListFragment, TAG_EPISODE_LIST_FRAGMENT)
-            commit()
-        }
+        }.commit()
     }
 
     companion object {
-        private const val TAG_EPISODE_LIST_FRAGMENT = "episodeListFragment"
+        private const val TAG_EPISODE_LIST_FRAGMENT: String = "episodeListFragment"
     }
 }

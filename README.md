@@ -55,6 +55,7 @@ There are some unit tests using **Mockito** and **Kluent** and some Android test
 - **Timber** logger library made by [Jake Wharton](https://github.com/JakeWharton/timber)
 - **Picasso** image downloading and caching library made by [square](https://github.com/square/picasso)
 - **Retrofit** and **OkHttp** API libraries made by [square](https://github.com/square/retrofit)
+- **Kotlin Serialization** plugin made by [jetbrains](https://github.com/Kotlin/kotlinx.serialization)
 - **Kluent** assertions library made by [MarkusAmshove](https://github.com/MarkusAmshove/Kluent)
 
 ### References

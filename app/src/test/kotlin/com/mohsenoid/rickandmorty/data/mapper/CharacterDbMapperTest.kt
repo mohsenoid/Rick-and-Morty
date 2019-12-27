@@ -9,7 +9,6 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
-import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 import com.nhaarman.mockitokotlin2.any
 import org.amshove.kluent.When
 import org.amshove.kluent.calling
@@ -39,33 +38,37 @@ class CharacterDbMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val networkCharacter = CharacterDataFactory.Network.makeNetworkCharacterModel()
+        val networkCharacter: NetworkCharacterModel =
+            CharacterDataFactory.Network.makeCharacter()
 
-        val expectedOrigin = OriginDataFactory.Db.makeDbOriginModel()
+        val expectedOrigin: DbOriginModel = OriginDataFactory.Db.makeOrigin()
         stubOriginDbMapper(expectedOrigin)
 
-        val expectedLocation = LocationDataFactory.Db.makeDbLocationModel()
+        val expectedLocation: DbLocationModel = LocationDataFactory.Db.makeLocation()
         stubLocationDbMapper(expectedLocation)
 
         val expectedCharacter = DbCharacterModel(
             id = networkCharacter.id,
             name = networkCharacter.name,
             status = networkCharacter.status,
-            statusAlive = networkCharacter.status.equals(CharacterDbMapper.ALIVE, true),
+            statusAlive = networkCharacter.status.equals(
+                other = CharacterDbMapper.ALIVE,
+                ignoreCase = true
+            ),
             species = networkCharacter.species,
             type = networkCharacter.type,
             gender = networkCharacter.gender,
             origin = expectedOrigin,
             location = expectedLocation,
             image = networkCharacter.image,
-            episodeIds = CharacterDbMapper.extractEpisodeIds(networkCharacter.episodes).mapStringListToIntegerList(),
+            episodeIds = CharacterDbMapper.extractEpisodeIds(networkCharacter.episodes),
             url = networkCharacter.url,
             created = networkCharacter.created,
             killedByUser = false
         )
 
         // WHEN
-        val actualCharacter = characterDbMapper.map(networkCharacter)
+        val actualCharacter: DbCharacterModel = characterDbMapper.map(networkCharacter)
 
         // THEN
         expectedCharacter shouldEqual actualCharacter

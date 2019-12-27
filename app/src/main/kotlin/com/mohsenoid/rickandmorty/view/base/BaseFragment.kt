@@ -15,7 +15,7 @@ abstract class BaseFragment : Fragment(), CoroutineScope {
     override lateinit var coroutineContext: CoroutineContext
 
     override fun onAttach(context: Context) {
-        val dependenciesProvider =
+        val dependenciesProvider: DependenciesProvider =
             (context.applicationContext as RickAndMortyApplication).dependenciesProvider
 
         job = SupervisorJob()
