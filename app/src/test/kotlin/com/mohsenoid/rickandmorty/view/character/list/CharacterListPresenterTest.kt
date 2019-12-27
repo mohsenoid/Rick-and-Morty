@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
+import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
@@ -7,7 +8,6 @@ import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.Verify
 import org.amshove.kluent.VerifyNoFurtherInteractions
@@ -24,7 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import java.util.ArrayList
 
 class CharacterListPresenterTest {
 
@@ -47,10 +46,9 @@ class CharacterListPresenterTest {
     }
 
     @Test
-    fun `test if isOnline loadCharacters calls view showLoading`() {
+    fun `test if loadCharacters calls view showLoading`() {
         runBlocking {
             // GIVEN
-            stubConfigProviderIsOnline(true)
 
             // WHEN
             presenter.loadCharacters()
@@ -78,22 +76,19 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls repository queryCharactersByIds`() {
         runBlocking {
             // GIVEN
-            stubConfigProviderIsOnline(true)
-            val characterIds: MutableList<Int> = ArrayList()
-            characterIds.add(DataFactory.randomInt())
-            characterIds.add(DataFactory.randomInt())
-            characterIds.add(DataFactory.randomInt())
+            val characterIds: List<Int> = listOf(
+                DataFactory.randomInt(),
+                DataFactory.randomInt(),
+                DataFactory.randomInt()
+            )
+
             presenter.characterIds = characterIds
 
             // WHEN
             presenter.loadCharacters()
 
             // THEN
-            Verify on repository that repository.getCharactersByIds(
-                characterIds = eq<List<Int>>(
-                    characterIds
-                )
-            ) was called
+            Verify on repository that repository.getCharactersByIds(characterIds = characterIds) was called
         }
     }
 
@@ -103,13 +98,13 @@ class CharacterListPresenterTest {
             // GIVEN
             val characters: List<CharacterEntity> =
                 CharacterDataFactory.Entity.makeCharacters(count = 5)
-            stubRepositoryQueryCharactersOnSuccess(characters)
+            stubRepositoryGetCharactersByIdsOnSuccess(characters)
 
             // WHEN
             presenter.loadCharacters()
 
             // THEN
-            Verify on view that view.setCharacters(characters = eq(characters)) was called
+            Verify on view that view.setCharacters(characters = characters) was called
         }
     }
 
@@ -118,7 +113,7 @@ class CharacterListPresenterTest {
         runBlocking {
             // GIVEN
             val errorMessage = DataFactory.randomString()
-            stubRepositoryQueryCharactersOnError(Exception(errorMessage))
+            stubRepositoryGetCharactersByIdsOnError(Exception(errorMessage))
 
             // WHEN
             presenter.loadCharacters()
@@ -129,12 +124,26 @@ class CharacterListPresenterTest {
     }
 
     @Test
+    fun `test loadCharacters calls view onNoOfflineData having NoOfflineDataException OnError`() {
+        runBlocking {
+            // GIVEN
+            stubRepositoryGetCharactersByIdsOnError(NoOfflineDataException())
+
+            // WHEN
+            presenter.loadCharacters()
+
+            // THEN
+            Verify on view that view.onNoOfflineData() was called
+        }
+    }
+
+    @Test
     fun `test loadCharacters calls view hideLoading OnSuccess`() {
         runBlocking {
             // GIVEN
             val characters: List<CharacterEntity> =
                 CharacterDataFactory.Entity.makeCharacters(count = 5)
-            stubRepositoryQueryCharactersOnSuccess(characters)
+            stubRepositoryGetCharactersByIdsOnSuccess(characters)
 
             // WHEN
             presenter.loadCharacters()
@@ -148,7 +157,7 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view hideLoading OnError`() {
         runBlocking {
             // GIVEN
-            stubRepositoryQueryCharactersOnError(Exception())
+            stubRepositoryGetCharactersByIdsOnError(Exception())
 
             // WHEN
             presenter.loadCharacters()
@@ -162,7 +171,6 @@ class CharacterListPresenterTest {
     fun `test killCharacter calls repository killCharacter when character isAlive`() {
         runBlocking {
             // GIVEN
-            stubConfigProviderIsOnline(true)
             val characterId = DataFactory.randomInt()
             val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
                 characterId = characterId,
@@ -176,7 +184,7 @@ class CharacterListPresenterTest {
 
             // THEN
             Verify on repository that repository.killCharacter(
-                characterId = eq(characterId)
+                characterId = characterId
             ) was called
             VerifyNoFurtherInteractions on repository
         }
@@ -186,7 +194,6 @@ class CharacterListPresenterTest {
     fun `test killCharacter skips calling repository killCharacter when character isNotAlive`() {
         runBlocking {
             // GIVEN
-            stubConfigProviderIsOnline(true)
             val characterId = DataFactory.randomInt()
             val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
                 characterId = characterId,
@@ -207,11 +214,11 @@ class CharacterListPresenterTest {
         When calling configProvider.isOnline() itReturns isOnline
     }
 
-    private suspend fun stubRepositoryQueryCharactersOnSuccess(characters: List<CharacterEntity>) {
+    private suspend fun stubRepositoryGetCharactersByIdsOnSuccess(characters: List<CharacterEntity>) {
         When calling repository.getCharactersByIds(any()) itReturns characters
     }
 
-    private suspend fun stubRepositoryQueryCharactersOnError(exception: Exception) {
+    private suspend fun stubRepositoryGetCharactersByIdsOnError(exception: Exception) {
         When calling repository.getCharactersByIds(any()) itAnswers { throw exception }
     }
 }
