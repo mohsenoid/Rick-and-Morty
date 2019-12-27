@@ -36,8 +36,7 @@ ext {
     // Retrofit
     okhttpVersion = '4.2.1'
     retrofitVersion = '2.6.2'
-    retrofitAdapterVersion = '1.0.0'
-    gsonVersion = '2.8.5'
+    retrofitKotlinSerializationVersion = '0.4.0'
 
     // Dependencies
     timberVersion = '4.7.1'

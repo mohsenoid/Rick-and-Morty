@@ -2,8 +2,7 @@ package com.mohsenoid.rickandmorty.injection
 
 import android.app.Application
 import androidx.room.Room
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.RepositoryImpl
 import com.mohsenoid.rickandmorty.data.db.Db
@@ -47,13 +46,15 @@ import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListContract
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
 import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListPresenter
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.net.UnknownHostException
 
 class DependenciesProvider(private val context: Application) {
@@ -69,12 +70,13 @@ class DependenciesProvider(private val context: Application) {
             ?: throw UnknownHostException("Invalid host: " + NetworkConstants.BASE_URL)
     }
 
-    private val gson: Gson by lazy {
-        GsonBuilder().serializeNulls().create()
+    private val json: Json by lazy {
+        Json(JsonConfiguration.Stable)
     }
 
-    private val converterFactory: Converter.Factory by lazy {
-        GsonConverterFactory.create(gson)
+    private val jsonConverterFactory: Converter.Factory by lazy {
+        val contentType = "application/json".toMediaType()
+        json.asConverterFactory(contentType)
     }
 
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
@@ -92,9 +94,10 @@ class DependenciesProvider(private val context: Application) {
     }
 
     private val retrofit: Retrofit by lazy {
+
         Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(converterFactory)
+            .addConverterFactory(jsonConverterFactory)
             .client(okHttpClient)
             .build()
     }

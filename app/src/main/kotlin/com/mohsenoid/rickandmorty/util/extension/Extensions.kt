@@ -1,7 +1,6 @@
 package com.mohsenoid.rickandmorty.util.extension
 
 import androidx.annotation.VisibleForTesting
-import com.google.gson.Gson
 
 @VisibleForTesting
 private val SEPARATOR = ","
@@ -55,22 +54,4 @@ fun String.deserializeStringList(): List<String> {
  */
 fun List<String>.mapStringListToIntegerList(): List<Int> {
     return map { it.toInt() }
-}
-
-/**
- * [Any] extension function which serialize the object into its Json representation.
- *
- * @return a Json
- */
-fun Any.toJson(): String {
-    return Gson().toJson(this)
-}
-
-/**
- * [String] extension function which deserialize the object out of its Json representation.
- *
- * @return a Object of type [T]
- */
-inline fun <reified T> String.fromJson(): T {
-    return Gson().fromJson(this, T::class.java)
 }
