@@ -12,27 +12,26 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivity
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_episode_list.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class EpisodeListFragment : BaseFragment(),
     EpisodeListContract.View,
     EpisodeListAdapter.ClickListener,
     OnRefreshListener {
 
-    private lateinit var presenter: EpisodeListContract.Presenter
-    private lateinit var adapter: EpisodeListAdapter
-    private var endlessScrollListener: EndlessRecyclerViewScrollListener? = null
+    @Inject
+    lateinit var presenter: EpisodeListContract.Presenter
 
-    public override fun injectDependencies(dependenciesProvider: DependenciesProvider) {
-        presenter = dependenciesProvider.getEpisodesListFragmentPresenter()
-        adapter = dependenciesProvider.getEpisodesListAdapter(this)
-    }
+    @Inject
+    lateinit var adapter: EpisodeListAdapter
+
+    private var endlessScrollListener: EndlessRecyclerViewScrollListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,

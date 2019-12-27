@@ -10,42 +10,39 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.injection.DependenciesProvider
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
 import java.util.ArrayList
+import javax.inject.Inject
+import javax.inject.Named
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     CharacterListAdapter.ClickListener {
 
-    private lateinit var presenter: CharacterListContract.Presenter
+    @JvmField
+    @field:[Inject Named(ARG_CHARACTER_IDS)]
+    var characterIds: List<Int>? = null
 
-    private lateinit var adapter: CharacterListAdapter
+    @Inject
+    lateinit var presenter: CharacterListContract.Presenter
 
-    public override fun injectDependencies(dependenciesProvider: DependenciesProvider) {
-        presenter = dependenciesProvider.getCharacterListFragmentPresenter()
-        adapter = dependenciesProvider.getCharacterListAdapter(this)
-    }
+    @Inject
+    lateinit var adapter: CharacterListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val characterIds = extractCharacterIds()
-
-        if (characterIds == null) {
-            Toast.makeText(context, "Character ids are missing!", Toast.LENGTH_SHORT).show()
-            activity?.onBackPressed()
-        } else {
-            presenter.characterIds = characterIds
+        characterIds.let { characterIds ->
+            if (characterIds == null) {
+                Toast.makeText(context, "Character ids are missing!", Toast.LENGTH_SHORT).show()
+                activity?.onBackPressed()
+            } else {
+                presenter.characterIds = characterIds
+            }
         }
-    }
-
-    private fun extractCharacterIds(): ArrayList<Int>? {
-        val args: Bundle = arguments ?: return null
-        return args.getIntegerArrayList(ARG_CHARACTER_IDS)
     }
 
     override fun onCreateView(
@@ -129,7 +126,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
 
     companion object {
 
-        private const val ARG_CHARACTER_IDS: String = "character_ids"
+        const val ARG_CHARACTER_IDS: String = "character_ids"
 
         fun newInstance(characterIds: List<Int>): CharacterListFragment {
             val fragment = CharacterListFragment()

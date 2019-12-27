@@ -7,8 +7,9 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
+import javax.inject.Inject
 
-class CharacterDbMapper(
+class CharacterDbMapper @Inject internal constructor(
     private val originDbMapper: Mapper<NetworkOriginModel, DbOriginModel>,
     private val locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel>
 ) : Mapper<NetworkCharacterModel, DbCharacterModel> {
