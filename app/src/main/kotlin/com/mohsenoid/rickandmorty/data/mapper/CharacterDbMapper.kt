@@ -7,7 +7,6 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
-import com.mohsenoid.rickandmorty.util.extension.mapStringListToIntegerList
 
 class CharacterDbMapper(
     private val originDbMapper: Mapper<NetworkOriginModel, DbOriginModel>,
@@ -26,7 +25,7 @@ class CharacterDbMapper(
             origin = originDbMapper.map(input.origin),
             location = locationDbMapper.map(input.location),
             image = input.image,
-            episodeIds = extractEpisodeIds(input.episodes).mapStringListToIntegerList(),
+            episodeIds = extractEpisodeIds(input.episodes),
             url = input.url,
             created = input.created,
             killedByUser = false
@@ -39,8 +38,8 @@ class CharacterDbMapper(
 
         private const val SEPARATOR: Char = '/'
 
-        fun extractEpisodeIds(episodes: List<String>): List<String> {
-            return episodes.map { it.split(SEPARATOR).last() }
+        fun extractEpisodeIds(episodes: List<String>): List<Int> {
+            return episodes.map { it.split(SEPARATOR).last().toInt() }
         }
     }
 }

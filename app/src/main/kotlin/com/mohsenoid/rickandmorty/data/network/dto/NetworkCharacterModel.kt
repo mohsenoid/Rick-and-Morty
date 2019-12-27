@@ -1,42 +1,44 @@
 package com.mohsenoid.rickandmorty.data.network.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkCharacterModel(
 
-    @SerializedName(value = "id")
+    @SerialName(value = "id")
     val id: Int,
 
-    @SerializedName(value = "name")
+    @SerialName(value = "name")
     val name: String,
 
-    @SerializedName(value = "status")
+    @SerialName(value = "status")
     val status: String,
 
-    @SerializedName(value = "species")
+    @SerialName(value = "species")
     val species: String,
 
-    @SerializedName(value = "type")
+    @SerialName(value = "type")
     val type: String,
 
-    @SerializedName(value = "gender")
+    @SerialName(value = "gender")
     val gender: String,
 
-    @SerializedName(value = "origin")
+    @SerialName(value = "origin")
     val origin: NetworkOriginModel,
 
-    @SerializedName(value = "location")
+    @SerialName(value = "location")
     val location: NetworkLocationModel,
 
-    @SerializedName(value = "image")
+    @SerialName(value = "image")
     val image: String,
 
-    @SerializedName(value = "episode")
+    @SerialName(value = "episode")
     val episodes: List<String>,
 
-    @SerializedName(value = "url")
+    @SerialName(value = "url")
     val url: String,
 
-    @SerializedName(value = "created")
+    @SerialName(value = "created")
     val created: String
 )

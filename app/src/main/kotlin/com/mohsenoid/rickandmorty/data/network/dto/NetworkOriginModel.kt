@@ -1,12 +1,14 @@
 package com.mohsenoid.rickandmorty.data.network.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkOriginModel(
 
-    @SerializedName(value = "name")
+    @SerialName(value = "name")
     val name: String,
 
-    @SerializedName(value = "url")
+    @SerialName(value = "url")
     val url: String
 )
