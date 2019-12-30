@@ -68,7 +68,7 @@ object EpisodeDataFactory {
             )
         }
 
-        fun makeEpisodesList(count: Int): List<EpisodeEntity> {
+        fun makeEpisodes(count: Int): List<EpisodeEntity> {
             val episodes: MutableList<EpisodeEntity> = ArrayList()
             for (i in 0 until count) {
                 val episode: EpisodeEntity = makeEpisode()

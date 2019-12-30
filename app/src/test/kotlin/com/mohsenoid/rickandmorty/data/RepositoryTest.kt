@@ -78,7 +78,7 @@ abstract class RepositoryTest {
             characterDao = characterDao,
             episodeDao = episodeDao,
             networkClient = networkClient,
-            dispatcherProvider = testDispatcherProvider,
+            ioDispatcher = testDispatcherProvider.ioDispatcher,
             configProvider = configProvider,
             episodeDbMapper = episodeDbMapper,
             episodeEntityMapper = episodeEntityMapper,

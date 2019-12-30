@@ -15,16 +15,19 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Named
 
-class RepositoryImpl(
+class RepositoryImpl @Inject internal constructor(
     private val characterDao: DbCharacterDao,
     private val episodeDao: DbEpisodeDao,
     private val networkClient: NetworkClient,
-    private val dispatcherProvider: DispatcherProvider,
+    @Named(QualifiersNames.IO_DISPATCHER) private val ioDispatcher: CoroutineDispatcher,
     private val configProvider: ConfigProvider,
     private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel>,
     private val episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>,
@@ -33,7 +36,7 @@ class RepositoryImpl(
 ) : Repository {
 
     override suspend fun getEpisodes(page: Int): List<EpisodeEntity> {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
                     val episodes: List<NetworkEpisodeModel> = fetchNetworkEpisodes(page)
@@ -81,7 +84,7 @@ class RepositoryImpl(
     }
 
     override suspend fun getCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
                     val characters: List<NetworkCharacterModel> =
@@ -121,7 +124,7 @@ class RepositoryImpl(
     }
 
     private suspend fun queryDbCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             val dbCharacters: List<DbCharacterModel> =
                 characterDao.queryCharactersByIds(characterIds)
 
@@ -134,7 +137,7 @@ class RepositoryImpl(
     }
 
     override suspend fun getCharacterDetails(characterId: Int): CharacterEntity {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
                     val character: NetworkCharacterModel = fetchNetworkCharacterDetails(characterId)
@@ -171,7 +174,7 @@ class RepositoryImpl(
     }
 
     private suspend fun queryDbCharacterDetails(characterId: Int): CharacterEntity {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             val dbCharacter: DbCharacterModel =
                 characterDao.queryCharacter(characterId) ?: throw NoOfflineDataException()
 
@@ -180,7 +183,7 @@ class RepositoryImpl(
     }
 
     override suspend fun killCharacter(characterId: Int): CharacterEntity {
-        return withContext(dispatcherProvider.ioDispatcher) {
+        return withContext(ioDispatcher) {
             characterDao.killCharacter(characterId)
             return@withContext getCharacterDetails(characterId)
         }
