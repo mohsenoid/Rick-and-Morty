@@ -17,10 +17,6 @@ class EpisodeListAdapter(private val listener: ClickListener) :
         this.episodes = episodes.toMutableList()
     }
 
-    fun addMoreEpisodes(episodes: List<EpisodeEntity>) {
-        this.episodes.addAll(episodes)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_episode, parent, false)

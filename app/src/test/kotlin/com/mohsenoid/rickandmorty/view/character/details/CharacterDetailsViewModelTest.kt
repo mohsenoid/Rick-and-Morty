@@ -22,7 +22,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class CharacterDetailsPresenterTest {
+class CharacterDetailsViewModelTest {
 
     @Mock
     lateinit var repository: Repository

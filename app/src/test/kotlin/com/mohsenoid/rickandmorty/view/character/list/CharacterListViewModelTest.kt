@@ -25,7 +25,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class CharacterListPresenterTest {
+class CharacterListViewModelTest {
 
     @Mock
     lateinit var repository: Repository
@@ -41,7 +41,7 @@ class CharacterListPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = CharacterListPresenter(repository = repository, configProvider = configProvider)
+        presenter = CharacterListViewModel(repository = repository, configProvider = configProvider)
         presenter.bind(view)
     }
 

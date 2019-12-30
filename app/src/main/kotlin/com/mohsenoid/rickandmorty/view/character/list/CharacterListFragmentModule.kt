@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProviders
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import dagger.Module
@@ -18,8 +19,13 @@ class CharacterListFragmentModule {
     }
 
     @Provides
-    fun provideCharacterListFragmentPresenter(presenter: CharacterListPresenter): CharacterListContract.Presenter {
-        return presenter
+    fun provideCharacterListFragmentPresenter(
+        fragment: CharacterListFragment,
+        factory: CharacterListViewModel.Factory
+    ): CharacterListViewModel {
+        return fragment.activity?.run {
+            ViewModelProviders.of(fragment, factory).get(CharacterListViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
     }
 
     @Provides

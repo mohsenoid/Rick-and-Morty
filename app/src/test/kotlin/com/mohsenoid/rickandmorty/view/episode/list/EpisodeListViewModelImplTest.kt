@@ -22,7 +22,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class EpisodeListPresenterTest {
+class EpisodeListViewModelImplTest {
 
     @Mock
     lateinit var repository: Repository
@@ -31,15 +31,15 @@ class EpisodeListPresenterTest {
     lateinit var configProvider: ConfigProvider
 
     @Mock
-    lateinit var view: EpisodeListContract.View
+    lateinit var view: EpisodeListViewModel.View
 
-    private lateinit var presenter: EpisodeListContract.Presenter
+    private lateinit var viewModel: EpisodeListViewModel.ViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = EpisodeListPresenter(repository = repository, configProvider = configProvider)
-        presenter.bind(view)
+        viewModel = EpisodeListViewModel(repository = repository, configProvider = configProvider)
+        viewModel.bind(view)
     }
 
     @Test
@@ -48,7 +48,7 @@ class EpisodeListPresenterTest {
             // GIVEN
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.showLoading() was called
@@ -62,7 +62,7 @@ class EpisodeListPresenterTest {
             val page = 2
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.showLoadingMore() was called
@@ -76,7 +76,7 @@ class EpisodeListPresenterTest {
             stubConfigProviderIsOnline(false)
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.showOfflineMessage(isCritical = false) was called
@@ -91,7 +91,7 @@ class EpisodeListPresenterTest {
             val page = 2
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.showOfflineMessage(isCritical = false) was called
@@ -105,7 +105,7 @@ class EpisodeListPresenterTest {
             val page = 1
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on repository that repository.getEpisodes(page = page) was called
@@ -119,7 +119,7 @@ class EpisodeListPresenterTest {
             val page = 2
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on repository that repository.getEpisodes(page = page) was called
@@ -134,7 +134,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.setEpisodes(episodes = episodes) was called
@@ -150,7 +150,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.updateEpisodes(episodes = episodes) was called
@@ -165,7 +165,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(Exception(errorMessage))
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.showMessage(message = errorMessage) was called
@@ -181,7 +181,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(Exception(errorMessage))
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.showMessage(message = errorMessage) was called
@@ -195,7 +195,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(EndOfListException())
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.reachedEndOfList() was called
@@ -210,7 +210,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(EndOfListException())
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.reachedEndOfList() was called
@@ -225,7 +225,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.hideLoading() was called
@@ -241,7 +241,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.hideLoadingMore() was called
@@ -255,7 +255,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(Exception())
 
             // WHEN
-            presenter.loadEpisodes()
+            viewModel.loadEpisodes()
 
             // THEN
             Verify on view that view.hideLoading() was called
@@ -270,7 +270,7 @@ class EpisodeListPresenterTest {
             stubRepositoryGetEpisodesOnError(Exception())
 
             // WHEN
-            presenter.loadMoreEpisodes(page = page)
+            viewModel.loadMoreEpisodes(page = page)
 
             // THEN
             Verify on view that view.hideLoadingMore() was called

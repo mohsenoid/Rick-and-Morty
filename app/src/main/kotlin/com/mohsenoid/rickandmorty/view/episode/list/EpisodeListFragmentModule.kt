@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
+import androidx.lifecycle.ViewModelProviders
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import dagger.Module
 import dagger.Provides
@@ -8,8 +9,13 @@ import dagger.Provides
 class EpisodeListFragmentModule {
 
     @Provides
-    fun provideEpisodeListPresenter(presenter: EpisodeListPresenter): EpisodeListContract.Presenter {
-        return presenter
+    fun provideEpisodeListPresenter(
+        fragment: EpisodeListFragment,
+        factory: EpisodeListViewModel.Factory
+    ): EpisodeListViewModel {
+        return fragment.activity?.run {
+            ViewModelProviders.of(fragment, factory).get(EpisodeListViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
     }
 
     @Provides

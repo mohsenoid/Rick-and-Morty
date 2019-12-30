@@ -1,12 +1,12 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
@@ -19,15 +19,14 @@ import java.util.ArrayList
 import javax.inject.Inject
 import javax.inject.Named
 
-class CharacterListFragment : BaseFragment(), CharacterListContract.View,
-    CharacterListAdapter.ClickListener {
+class CharacterListFragment : BaseFragment(), CharacterListAdapter.ClickListener {
 
     @JvmField
     @field:[Inject Named(ARG_CHARACTER_IDS)]
     var characterIds: List<Int>? = null
 
     @Inject
-    lateinit var presenter: CharacterListContract.Presenter
+    lateinit var viewModel: CharacterListViewModel
 
     @Inject
     lateinit var adapter: CharacterListAdapter
@@ -40,7 +39,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
                 Toast.makeText(context, "Character ids are missing!", Toast.LENGTH_SHORT).show()
                 activity?.onBackPressed()
             } else {
-                presenter.characterIds = characterIds
+                viewModel.characterIds = characterIds
             }
         }
     }
@@ -50,6 +49,21 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        viewModel.getStateLiveData().observe(this, Observer { state ->
+            when (state) {
+                is CharacterListViewModel.State.Loading -> showLoading()
+                is CharacterListViewModel.State.NoOfflineData -> onNoOfflineData()
+                is CharacterListViewModel.State.Offline -> showOfflineMessage()
+                is CharacterListViewModel.State.Error -> showMessage(state.errorMessage)
+            }
+        })
+
+        viewModel.getCharactersLiveData().observe(this, Observer { characters ->
+            hideLoading()
+            setCharacters(characters)
+        })
+
         return inflater.inflate(R.layout.fragment_character_list, container, false)
     }
 
@@ -64,51 +78,29 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
         characterList.adapter = adapter
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        presenter.bind(this)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        launch {
-            presenter.loadCharacters()
-        }
-    }
-
-    override fun showMessage(message: String) {
+    private fun showMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showOfflineMessage(isCritical: Boolean) {
+    private fun showOfflineMessage() {
         Toast.makeText(context, R.string.offline_app, Toast.LENGTH_LONG).show()
     }
 
-    override fun showLoading() {
+    private fun showLoading() {
         characterListProgress.visibility = View.VISIBLE
     }
 
-    override fun hideLoading() {
+    private fun hideLoading() {
         characterListProgress.visibility = View.GONE
     }
 
-    override fun onNoOfflineData() {
+    private fun onNoOfflineData() {
         Toast.makeText(context, R.string.no_offline_data, Toast.LENGTH_LONG).show()
         activity?.onBackPressed()
     }
 
-    override fun setCharacters(characters: List<CharacterEntity>) {
+    private fun setCharacters(characters: List<CharacterEntity>) {
         adapter.setCharacters(characters)
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun updateCharacter(character: CharacterEntity) {
-        adapter.updateCharacter(character)
         adapter.notifyDataSetChanged()
     }
 
@@ -120,7 +112,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
 
     override fun onCharacterStatusClick(character: CharacterEntity) {
         launch {
-            presenter.killCharacter(character)
+            viewModel.killCharacter(character)
         }
     }
 
