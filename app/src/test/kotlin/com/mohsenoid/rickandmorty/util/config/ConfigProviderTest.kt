@@ -8,9 +8,11 @@ import android.os.Build
 import androidx.test.core.app.ApplicationProvider
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
@@ -34,6 +36,11 @@ class ConfigProviderTest {
             (application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         shadowOfActiveNetworkInfo = Shadows.shadowOf(connectivityManager.activeNetworkInfo)
         configProvider = ConfigProviderImpl(application)
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 
     @Test

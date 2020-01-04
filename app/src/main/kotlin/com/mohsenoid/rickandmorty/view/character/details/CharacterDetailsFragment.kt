@@ -15,14 +15,13 @@ import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
 
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var presenter: CharacterDetailsContract.Presenter
+    private val presenter: CharacterDetailsContract.Presenter by currentScope.inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,

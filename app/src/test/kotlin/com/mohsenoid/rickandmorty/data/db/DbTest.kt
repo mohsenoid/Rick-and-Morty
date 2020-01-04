@@ -23,6 +23,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.IOException
@@ -49,6 +50,7 @@ class DbTest {
     @Throws(IOException::class)
     fun tearDown() {
         db.close()
+        stopKoin()
     }
 
     @Test

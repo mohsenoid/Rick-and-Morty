@@ -21,42 +21,34 @@ import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
-import dagger.Binds
-import dagger.Module
-import javax.inject.Singleton
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Module
-abstract class DataMapperModule {
+val dataMapperModule = module {
 
-    @Binds
-    @Singleton
-    abstract fun provideEpisodeDbMapper(mapper: EpisodeDbMapper): Mapper<NetworkEpisodeModel, DbEpisodeModel>
+    single<Mapper<NetworkEpisodeModel, DbEpisodeModel>>(named<EpisodeDbMapper>()) { EpisodeDbMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideEpisodeEntityMapper(mapper: EpisodeEntityMapper): Mapper<DbEpisodeModel, EpisodeEntity>
+    single<Mapper<DbEpisodeModel, EpisodeEntity>>(named<EpisodeEntityMapper>()) { EpisodeEntityMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideOriginDbMapper(mapper: OriginDbMapper): Mapper<NetworkOriginModel, DbOriginModel>
+    single<Mapper<NetworkOriginModel, DbOriginModel>>(named<OriginDbMapper>()) { OriginDbMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideOriginEntityMapper(mapper: OriginEntityMapper): Mapper<DbOriginModel, OriginEntity>
+    single<Mapper<DbOriginModel, OriginEntity>>(named<OriginEntityMapper>()) { OriginEntityMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideLocationDbMapper(mapper: LocationDbMapper): Mapper<NetworkLocationModel, DbLocationModel>
+    single<Mapper<NetworkLocationModel, DbLocationModel>>(named<LocationDbMapper>()) { LocationDbMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideLocationEntityMapper(mapper: LocationEntityMapper): Mapper<DbLocationModel, LocationEntity>
+    single<Mapper<DbLocationModel, LocationEntity>>(named<LocationEntityMapper>()) { LocationEntityMapper() }
 
-    @Binds
-    @Singleton
-    abstract fun provideCharacterDbMapper(mapper: CharacterDbMapper): Mapper<NetworkCharacterModel, DbCharacterModel>
+    single<Mapper<NetworkCharacterModel, DbCharacterModel>>(named<CharacterDbMapper>()) {
+        CharacterDbMapper(
+            originDbMapper = get(named<OriginDbMapper>()),
+            locationDbMapper = get(named<LocationDbMapper>())
+        )
+    }
 
-    @Binds
-    @Singleton
-    abstract fun provideCharacterEntityMapper(mapper: CharacterEntityMapper): Mapper<DbCharacterModel, CharacterEntity>
+    single<Mapper<DbCharacterModel, CharacterEntity>>(named<CharacterEntityMapper>()) {
+        CharacterEntityMapper(
+            originEntityMapper = get(named<OriginEntityMapper>()),
+            locationEntityMapper = get(named<LocationEntityMapper>())
+        )
+    }
 }

@@ -1,32 +1,15 @@
 package com.mohsenoid.rickandmorty.injection
 
-import android.app.Application
 import com.mohsenoid.rickandmorty.data.db.Db
 import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
-import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
-import com.mohsenoid.rickandmorty.injection.qualifier.ApplicationContext
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.module
 
-@Module
-class DataDbModule {
+val dataDbModule = module {
 
-    @Provides
-    @Singleton
-    fun provideDb(@ApplicationContext context: Application): Db {
-        return Db.create(context = context)
-    }
+    single { Db.create(context = androidContext()) }
 
-    @Provides
-    @Singleton
-    fun provideEpisodeDao(db: Db): DbEpisodeDao {
-        return db.episodeDao
-    }
+    single { get<Db>().episodeDao }
 
-    @Provides
-    @Singleton
-    fun provideDbCharacterDao(db: Db): DbCharacterDao {
-        return db.characterDao
-    }
+    single<DbCharacterDao> { get<Db>().characterDao }
 }

@@ -17,20 +17,24 @@ import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_episode_list.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.getKoin
+import org.koin.android.scope.currentScope
 
 class EpisodeListFragment : BaseFragment(),
     EpisodeListContract.View,
     EpisodeListAdapter.ClickListener,
     OnRefreshListener {
 
-    @Inject
-    lateinit var presenter: EpisodeListContract.Presenter
+    private val presenter: EpisodeListContract.Presenter by currentScope.inject()
 
-    @Inject
-    lateinit var adapter: EpisodeListAdapter
+    private val adapter: EpisodeListAdapter = EpisodeListAdapter(listener = this)
 
     private var endlessScrollListener: EndlessRecyclerViewScrollListener? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getKoin().setProperty("EpisodeListFragment", this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

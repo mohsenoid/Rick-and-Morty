@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.util.config
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -15,7 +14,7 @@ import android.os.Build
  * @constructor Creates a ConfigProvider using the Android Application context.
  * @param context the Android Application context.
  */
-class ConfigProviderImpl(private val context: Application) : ConfigProvider {
+class ConfigProviderImpl(private val context: Context) : ConfigProvider {
 
     /**
      * This function uses [ConnectivityManager]  to check active Network Capabilities to know the Android phone network connectivity status.

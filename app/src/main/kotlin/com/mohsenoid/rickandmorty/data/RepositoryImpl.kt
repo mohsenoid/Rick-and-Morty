@@ -15,19 +15,16 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import javax.inject.Inject
-import javax.inject.Named
 
-class RepositoryImpl @Inject internal constructor(
+class RepositoryImpl(
     private val characterDao: DbCharacterDao,
     private val episodeDao: DbEpisodeDao,
     private val networkClient: NetworkClient,
-    @Named(QualifiersNames.IO_DISPATCHER) private val ioDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
     private val configProvider: ConfigProvider,
     private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel>,
     private val episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>,

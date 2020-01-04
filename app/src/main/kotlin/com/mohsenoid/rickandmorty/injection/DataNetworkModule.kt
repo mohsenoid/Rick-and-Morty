@@ -1,11 +1,8 @@
 package com.mohsenoid.rickandmorty.injection
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
-import com.mohsenoid.rickandmorty.data.network.NetworkConstants
-import dagger.Module
-import dagger.Provides
+import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.HttpUrl
@@ -13,66 +10,55 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.net.UnknownHostException
-import javax.inject.Singleton
 
-@Module
-class DataNetworkModule {
+val dataNetworkModule = module {
 
-    @Provides
-    @Singleton
-    fun provideBaseUrl(): HttpUrl {
-        return NetworkConstants.BASE_URL.toHttpUrlOrNull()
-            ?: throw UnknownHostException("Invalid host: " + NetworkConstants.BASE_URL)
+    single {
+        val baseUrl: String = getProperty(QualifiersNames.BASE_URL)
+        baseUrl.toHttpUrlOrNull() ?: throw UnknownHostException("Invalid host: $baseUrl")
     }
 
-    @Provides
-    @Singleton
-    fun providejson(): Json = Json(JsonConfiguration.Stable)
+    single { Json(JsonConfiguration.Stable) }
 
-    @Provides
-    @Singleton
-    fun provideJsonConverterFactory(json: Json): Converter.Factory {
+    single {
         val contentType = "application/json".toMediaType()
-        return json.asConverterFactory(contentType)
+        get<Json>().asConverterFactory(contentType)
     }
 
-    @Provides
-    @Singleton
-    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
+    single {
+        HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
-        return OkHttpClient.Builder().apply {
-            if (BuildConfig.DEBUG)
-                addInterceptor(loggingInterceptor)
+    single {
+        OkHttpClient.Builder().apply {
+            val isDebug: Boolean = getProperty(QualifiersNames.IS_DEBUG)
+            if (isDebug) {
+                val interceptor: HttpLoggingInterceptor = get()
+                addInterceptor(interceptor)
+            }
         }.build()
     }
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(
-        baseUrl: HttpUrl,
-        jsonConverterFactory: Converter.Factory,
-        okHttpClient: OkHttpClient
-    ): Retrofit {
-        return Retrofit.Builder()
+    single<Retrofit> {
+        val baseUrl: HttpUrl = get()
+        val converterFactory: Converter.Factory = get()
+        val okHttpClient: OkHttpClient = get()
+
+        Retrofit.Builder()
             .baseUrl(baseUrl)
-            .addConverterFactory(jsonConverterFactory)
+            .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideNetworkClient(retrofit: Retrofit): NetworkClient {
-        return retrofit.create(NetworkClient::class.java)
+    single<NetworkClient> {
+        val retrofit: Retrofit = get()
+        retrofit.create(NetworkClient::class.java)
     }
 }
