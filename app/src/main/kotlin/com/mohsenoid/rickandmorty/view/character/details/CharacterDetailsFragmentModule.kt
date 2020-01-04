@@ -1,13 +1,14 @@
 package com.mohsenoid.rickandmorty.view.character.details
 
-import dagger.Module
-import dagger.Provides
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Module
-class CharacterDetailsFragmentModule {
+val characterDetailsFragmentModule = module {
 
-    @Provides
-    fun provideCharacterDetailsPresenter(presenter: CharacterDetailsPresenter): CharacterDetailsContract.Presenter {
-        return presenter
+    scope(named<CharacterDetailsFragment>()) {
+
+        scoped<CharacterDetailsContract.Presenter> {
+            CharacterDetailsPresenter(repository = get(), configProvider = get())
+        }
     }
 }

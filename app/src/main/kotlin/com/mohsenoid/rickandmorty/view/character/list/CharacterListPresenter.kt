@@ -4,9 +4,8 @@ import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import javax.inject.Inject
 
-class CharacterListPresenter @Inject internal constructor(
+class CharacterListPresenter(
     private val repository: Repository,
     private val configProvider: ConfigProvider
 ) : CharacterListContract.Presenter {

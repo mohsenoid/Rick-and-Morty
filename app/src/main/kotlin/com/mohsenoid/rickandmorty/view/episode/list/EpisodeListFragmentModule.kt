@@ -1,24 +1,17 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
-import dagger.Module
-import dagger.Provides
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Module
-class EpisodeListFragmentModule {
+val episodeListFragmentModule = module {
 
-    @Provides
-    fun provideEpisodeListPresenter(presenter: EpisodeListPresenter): EpisodeListContract.Presenter {
-        return presenter
-    }
+    scope(named<EpisodeListFragment>()) {
 
-    @Provides
-    fun provideEpisodeListAdapterClickListener(fragment: EpisodeListFragment): EpisodeListAdapter.ClickListener {
-        return fragment
-    }
-
-    @Provides
-    fun provideEpisodesListAdapter(listener: EpisodeListAdapter.ClickListener): EpisodeListAdapter {
-        return EpisodeListAdapter(listener = listener)
+        scoped<EpisodeListContract.Presenter> {
+            EpisodeListPresenter(
+                repository = get(),
+                configProvider = get()
+            )
+        }
     }
 }

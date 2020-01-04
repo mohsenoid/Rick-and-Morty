@@ -4,9 +4,8 @@ import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import javax.inject.Inject
 
-class EpisodeListPresenter @Inject internal constructor(
+class EpisodeListPresenter(
     private val repository: Repository,
     private val configProvider: ConfigProvider
 ) : EpisodeListContract.Presenter {
