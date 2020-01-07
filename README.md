@@ -4,6 +4,13 @@ This repository contains Rick and Morty Android application which I am using as 
 
 ![Screenshot](SCREENSHOT1.png) ![Screenshot](SCREENSHOT2.png)
 
+## User Stories
+
+1. The first thing a user should see is a list of episodes.
+2. If the user taps into an episode the app has to display a list of characters with a clear distinction between dead and alive characters
+3. If the user taps into a character the app has to display that character's information and picture
+4. The user should have the ability to kill a character and if a character gets kill the character lists should update accordingly
+
 ## Functionality
 
 The app is composed of 3 main screens:
