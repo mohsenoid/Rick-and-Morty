@@ -11,7 +11,7 @@ class EpisodeListActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_episode_list)
 
         episodeListFragment =
             supportFragmentManager.findFragmentByTag(TAG_EPISODE_LIST_FRAGMENT) as? EpisodeListFragment

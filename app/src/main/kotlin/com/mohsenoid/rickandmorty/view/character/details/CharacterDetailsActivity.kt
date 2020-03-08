@@ -13,7 +13,7 @@ class CharacterDetailsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_character_details)
 
         val characterId: Int? = intent.extras?.getInt(ARG_CHARACTER_ID)
         if (characterId == null) {
