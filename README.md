@@ -8,8 +8,8 @@ This repository contains Rick and Morty Android application which I am using as 
 
 1. The first thing a user should see is a list of episodes.
 2. If the user taps into an episode the app has to display a list of characters with a clear distinction between dead and alive characters
-3. If the user taps into a character the app has to display that character's information and picture
-4. The user should have the ability to kill a character and if a character gets kill the character lists should update accordingly
+3. If the user taps into a character the app has to display that character's picture and information.
+4. The user should have the ability to kill a character and if a character gets killed the character lists should update accordingly
 
 ## Functionality
 
@@ -17,15 +17,15 @@ The app is composed of 3 main screens:
 
 ### Episodes List
 
-It allows you to list episodes in pages. Network results are kept in the database in `episodes` table. Each time a new page is fetched, the same `episode` record in database is updated with the new data.
+It allows you to list episodes in pages. Network results are kept in the database in the `episodes` table. Each time a new page is fetched, the same `episode` record in the database is updated with the new data.
 
 ### Episode's Characters List
 
-Shows you the list of episode characters. Network results are also kept in the database in characters table. Each time a new character is fetched, the same `character` record in database is updated with the new data and we make sure we don't override *is killed by user* data.
+Shows you the list of episode characters. Network results are also kept in the database in the `characters table`. Each time a new character is fetched, the same `character` record in the database is updated with the new data and we make sure we don't override *is killed by user* data.
 
 ### Character Details
 
-This screen displays the details of a character and if *is killed by user*.
+This screen displays the details of a character and if *is killed by the user*.
 
 ## Building
 
@@ -49,13 +49,15 @@ The **Domain** layer consists of a **Repository** which allows access to the Dat
 
 ![Repository Pattern](REPOSITORY_PATTERN.png)
 
-The **View** layer is done with multiple Activities and Fragments which uses their contract interfaces to implement the *view* and *presenter* to respond to user interactions.
+The **View** layer is done with the [Android Navigation Component](https://developer.android.com/guide/navigation) including one MainActivity which holds the navigation host fragment and 3 different Fragments which uses their contract interfaces to implement the *view* and *presenter* for responding to user interactions.
+
+![Navigation Graph](NAV_GRAPH.png)
 
 The **Dagger** library does the *dependency injections* in the whole app. It also uses **Base** objects to inject dependencies into **Activities** and **Fragments**.
 
-[**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo tests and build Gradle tasks and **jacoco** plugin generates and submit the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
+[**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo tests and build Gradle tasks and **jacoco** plugin generates and submits the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
 
-There are some unit tests using **Mockito** and **Kluent** and some Android tests using **Robolectric**.
+Code is covered by unit tests implemented using **Mockito** and **Kluent**. Also, some Android tests using **Robolectric**.
 
 ## Libraries
 
