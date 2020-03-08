@@ -7,17 +7,16 @@ abstract class EndlessRecyclerViewScrollListener(private val layoutManager: Line
     RecyclerView.OnScrollListener() {
 
     private var visibleThreshold = 5
-    private var currentPage = 0
+    private var currentPage = STARTING_PAGE_INDEX
     private var previousTotalItemCount = 0
     private var loading = true
-    private val startingPageIndex = 0
 
     override fun onScrolled(view: RecyclerView, dx: Int, dy: Int) {
         val totalItemCount: Int = layoutManager.itemCount
         val lastVisibleItemPosition: Int = layoutManager.findLastVisibleItemPosition()
 
         if (totalItemCount < previousTotalItemCount) {
-            currentPage = startingPageIndex
+            currentPage = STARTING_PAGE_INDEX
             previousTotalItemCount = totalItemCount
             if (totalItemCount == 0) {
                 loading = true
@@ -35,10 +34,14 @@ abstract class EndlessRecyclerViewScrollListener(private val layoutManager: Line
     }
 
     fun resetState() {
-        currentPage = startingPageIndex
+        currentPage = STARTING_PAGE_INDEX
         previousTotalItemCount = 0
         loading = true
     }
 
     abstract fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView)
+
+    companion object {
+        private const val STARTING_PAGE_INDEX = 1
+    }
 }

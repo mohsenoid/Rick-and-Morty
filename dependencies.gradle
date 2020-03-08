@@ -43,4 +43,5 @@ ext {
     picassoVersion = '2.71828'
     roomVersion = '2.2.3'
     daggerVersion = '2.25.3'
+    lifecycleVersion = '2.1.0'
 }

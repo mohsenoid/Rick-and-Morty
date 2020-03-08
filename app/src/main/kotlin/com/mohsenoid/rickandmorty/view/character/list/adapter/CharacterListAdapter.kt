@@ -21,11 +21,6 @@ class CharacterListAdapter(
         this.characters = characters.toMutableList()
     }
 
-    fun updateCharacter(character: CharacterEntity) {
-        val index: Int = characters.indexOfFirst { it.id == character.id }
-        characters[index] = character
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_character, parent, false)
