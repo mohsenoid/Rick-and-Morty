@@ -1,12 +1,14 @@
 package com.mohsenoid.rickandmorty
 
 import com.mohsenoid.rickandmorty.injection.scope.PerActivity
-import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity
-import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivityModule
-import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivity
-import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivityModule
-import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListActivity
-import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListActivityModule
+import com.mohsenoid.rickandmorty.view.MainActivity
+import com.mohsenoid.rickandmorty.view.MainActivityModule
+import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsFragment
+import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsFragmentModule
+import com.mohsenoid.rickandmorty.view.character.list.CharacterListFragment
+import com.mohsenoid.rickandmorty.view.character.list.CharacterListFragmentModule
+import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragment
+import com.mohsenoid.rickandmorty.view.episode.list.EpisodeListFragmentModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -17,14 +19,18 @@ import dagger.android.ContributesAndroidInjector
 abstract class RickAndMortyApplicationBuildersModule {
 
     @PerActivity
-    @ContributesAndroidInjector(modules = [EpisodeListActivityModule::class])
-    abstract fun bindEpisodeListActivity(): EpisodeListActivity
+    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    abstract fun bindMainActivity(): MainActivity
 
     @PerActivity
-    @ContributesAndroidInjector(modules = [CharacterListActivityModule::class])
-    abstract fun bindCharacterListActivity(): CharacterListActivity
+    @ContributesAndroidInjector(modules = [EpisodeListFragmentModule::class])
+    abstract fun contributeEpisodeListFragment(): EpisodeListFragment
 
     @PerActivity
-    @ContributesAndroidInjector(modules = [CharacterDetailsActivityModule::class])
-    abstract fun bindCharacterDetailsActivity(): CharacterDetailsActivity
+    @ContributesAndroidInjector(modules = [CharacterListFragmentModule::class])
+    abstract fun contributeCharacterListFragment(): CharacterListFragment
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = [CharacterDetailsFragmentModule::class])
+    abstract fun contributeCharacterDetailsFragment(): CharacterDetailsFragment
 }

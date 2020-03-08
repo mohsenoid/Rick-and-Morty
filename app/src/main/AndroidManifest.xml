@@ -16,7 +16,7 @@
 
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity=".view.episode.list.EpisodeListActivity">
+            android:targetActivity=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -25,9 +25,7 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".view.episode.list.EpisodeListActivity" />
-        <activity android:name=".view.character.list.CharacterListActivity" />
-        <activity android:name=".view.character.details.CharacterDetailsActivity" />
+        <activity android:name=".view.MainActivity" />
     </application>
 
 </manifest>

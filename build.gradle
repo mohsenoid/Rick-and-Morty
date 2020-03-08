@@ -12,7 +12,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:$toolsBuildGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokkaVersion}"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationComponentVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

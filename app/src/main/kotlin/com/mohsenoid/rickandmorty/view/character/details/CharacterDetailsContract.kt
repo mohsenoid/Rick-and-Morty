@@ -15,8 +15,6 @@ interface CharacterDetailsContract {
 
     interface Presenter : BasePresenter<View> {
 
-        var characterId: Int
-
-        suspend fun loadCharacter()
+        suspend fun loadCharacter(characterId: Int)
     }
 }
