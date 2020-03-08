@@ -4,7 +4,7 @@ ext {
     compileSdkVersion = 29
 
     // Project
-    toolsBuildGradleVersion = '3.5.3'
+    toolsBuildGradleVersion = '3.6.1'
     jacocoVersion = '0.8.3'
     ktlintVersion = '0.36.0'
     dokkaVersion = '0.10.0'
