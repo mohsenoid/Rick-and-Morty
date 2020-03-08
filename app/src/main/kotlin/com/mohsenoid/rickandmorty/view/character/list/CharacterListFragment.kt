@@ -1,49 +1,32 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
-import com.mohsenoid.rickandmorty.view.character.details.CharacterDetailsActivity
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 import javax.inject.Inject
-import javax.inject.Named
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     CharacterListAdapter.ClickListener {
 
-    @JvmField
-    @field:[Inject Named(ARG_CHARACTER_IDS)]
-    var characterIds: List<Int>? = null
+    private val args: CharacterListFragmentArgs by navArgs()
 
     @Inject
     lateinit var presenter: CharacterListContract.Presenter
 
     @Inject
     lateinit var adapter: CharacterListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        characterIds.let { characterIds ->
-            if (characterIds == null) {
-                Toast.makeText(context, "Character ids are missing!", Toast.LENGTH_SHORT).show()
-                activity?.onBackPressed()
-            } else {
-                presenter.characterIds = characterIds
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +60,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     override fun onResume() {
         super.onResume()
         launch {
-            presenter.loadCharacters()
+            presenter.loadCharacters(args.characterIds.toList())
         }
     }
 
@@ -113,30 +96,14 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     override fun onCharacterRowClick(character: CharacterEntity) {
-        val characterDetailsIntent: Intent =
-            CharacterDetailsActivity.newIntent(context, character.id)
-        startActivity(characterDetailsIntent)
+        val action = CharacterListFragmentDirections
+            .actionCharacterListFragmentToCharacterDetailsFragment(character.id)
+        view?.findNavController()?.navigate(action)
     }
 
     override fun onCharacterStatusClick(character: CharacterEntity) {
         launch {
             presenter.killCharacter(character)
-        }
-    }
-
-    companion object {
-
-        const val ARG_CHARACTER_IDS: String = "character_ids"
-
-        fun newInstance(characterIds: List<Int>): CharacterListFragment {
-            val fragment = CharacterListFragment()
-            fragment.arguments = Bundle().apply {
-                putIntegerArrayList(
-                    ARG_CHARACTER_IDS,
-                    ArrayList(characterIds)
-                )
-            }
-            return fragment
         }
     }
 }

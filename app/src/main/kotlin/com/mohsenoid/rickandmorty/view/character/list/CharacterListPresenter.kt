@@ -13,8 +13,6 @@ class CharacterListPresenter @Inject internal constructor(
 
     private var view: CharacterListContract.View? = null
 
-    override var characterIds: List<Int> = emptyList()
-
     override fun bind(view: CharacterListContract.View) {
         this.view = view
     }
@@ -23,12 +21,12 @@ class CharacterListPresenter @Inject internal constructor(
         view = null
     }
 
-    override suspend fun loadCharacters() {
+    override suspend fun loadCharacters(characterIds: List<Int>) {
         view?.showLoading()
-        queryCharacters()
+        queryCharacters(characterIds)
     }
 
-    private suspend fun queryCharacters() {
+    private suspend fun queryCharacters(characterIds: List<Int>) {
         if (!configProvider.isOnline()) {
             view?.showOfflineMessage(isCritical = false)
         }
