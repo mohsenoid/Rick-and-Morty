@@ -53,7 +53,7 @@ The **View** layer is done with the [Android Navigation Component](https://devel
 
 ![Navigation Graph](NAV_GRAPH.png)
 
-The **Dagger** library does the *dependency injections* in the whole app. It also uses **Base** objects to inject dependencies into **Activities** and **Fragments**.
+The **Koin** library does the *dependency injections* in the whole app. It also uses **Base** objects to define scopes and inject dependencies into **Activities** and **Fragments**.
 
 [**GitHub Actions CI service**](https://github.com/mohsenoid/Rick-and-Morty/actions) is running the repo tests and build Gradle tasks and **jacoco** plugin generates and submits the code coverage reports to [**codecov.io**](https://codecov.io/gh/mohsenoid/Rick-and-Morty).
 
@@ -65,7 +65,7 @@ Code is covered by unit tests implemented using **Mockito** and **Kluent**. Also
 - **Picasso** image downloading and caching library made by [square](https://github.com/square/picasso)
 - **Retrofit** and **OkHttp** API libraries made by [square](https://github.com/square/retrofit)
 - **Kotlin Serialization** plugin made by [jetbrains](https://github.com/Kotlin/kotlinx.serialization)
-- **Dagger2** dependency injector library made by [google](https://github.com/google/dagger)
+- **Koin** dependency injector library made by [InsertKoinIO](https://github.com/InsertKoinIO/koin)
 - **Kluent** assertions library made by [MarkusAmshove](https://github.com/MarkusAmshove/Kluent)
 
 ### References
