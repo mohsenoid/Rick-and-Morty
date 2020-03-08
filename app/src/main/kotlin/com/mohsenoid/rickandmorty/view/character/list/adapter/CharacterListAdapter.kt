@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.android.synthetic.main.item_character.view.*
 import java.util.ArrayList
 
 class CharacterListAdapter(
-    private val dispatcherProvider: DispatcherProvider,
     private val listener: ClickListener
 ) : RecyclerView.Adapter<CharacterViewHolder>() {
 
@@ -34,15 +32,9 @@ class CharacterListAdapter(
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character: CharacterEntity = characters[position]
-        holder.onBind(dispatcherProvider)
         holder.setCharacter(character)
         holder.view.setOnClickListener { listener.onCharacterRowClick(character) }
         holder.view.characterStatus.setOnClickListener { listener.onCharacterStatusClick(character) }
-    }
-
-    override fun onViewRecycled(holder: CharacterViewHolder) {
-        holder.onRecycled()
-        super.onViewRecycled(holder)
     }
 
     override fun getItemCount(): Int {

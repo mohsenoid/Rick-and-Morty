@@ -6,9 +6,8 @@ import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
-import javax.inject.Inject
 
-class CharacterEntityMapper @Inject internal constructor(
+class CharacterEntityMapper(
     private val originEntityMapper: Mapper<DbOriginModel, OriginEntity>,
     private val locationEntityMapper: Mapper<DbLocationModel, LocationEntity>
 ) : Mapper<DbCharacterModel, CharacterEntity> {

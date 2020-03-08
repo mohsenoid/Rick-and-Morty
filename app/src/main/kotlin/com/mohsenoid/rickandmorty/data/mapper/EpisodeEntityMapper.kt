@@ -2,9 +2,8 @@ package com.mohsenoid.rickandmorty.data.mapper
 
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import javax.inject.Inject
 
-class EpisodeEntityMapper @Inject internal constructor() : Mapper<DbEpisodeModel, EpisodeEntity> {
+class EpisodeEntityMapper : Mapper<DbEpisodeModel, EpisodeEntity> {
 
     override fun map(input: DbEpisodeModel): EpisodeEntity {
         return EpisodeEntity(

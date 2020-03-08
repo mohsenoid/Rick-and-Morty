@@ -15,18 +15,16 @@ import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.scope.currentScope
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     CharacterListAdapter.ClickListener {
 
     private val args: CharacterListFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var presenter: CharacterListContract.Presenter
+    private val presenter: CharacterListContract.Presenter by currentScope.inject()
 
-    @Inject
-    lateinit var adapter: CharacterListAdapter
+    private val adapter: CharacterListAdapter = CharacterListAdapter(listener = this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
