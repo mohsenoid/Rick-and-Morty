@@ -17,9 +17,7 @@ interface CharacterListContract {
 
     interface Presenter : BasePresenter<View> {
 
-        var characterIds: List<Int>
-
-        suspend fun loadCharacters()
+        suspend fun loadCharacters(characterIds: List<Int>)
 
         suspend fun killCharacter(character: CharacterEntity)
     }

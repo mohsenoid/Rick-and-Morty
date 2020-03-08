@@ -49,7 +49,7 @@ class CharacterDetailsPresenterTest {
             // GIVEN
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.showLoading() was called
@@ -63,7 +63,7 @@ class CharacterDetailsPresenterTest {
             stubConfigProviderIsOnline(false)
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.showOfflineMessage(isCritical = false) was called
@@ -75,10 +75,9 @@ class CharacterDetailsPresenterTest {
         runBlocking {
             // GIVEN
             val characterId: Int = DataFactory.randomInt()
-            presenter.characterId = characterId
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(characterId)
 
             // THEN
             Verify on repository that repository.getCharacterDetails(characterId = characterId) was called
@@ -93,7 +92,7 @@ class CharacterDetailsPresenterTest {
             stubRepositoryGetCharacterDetailsOnSuccess(character)
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.setCharacter(character = character) was called
@@ -108,7 +107,7 @@ class CharacterDetailsPresenterTest {
             stubRepositoryGetCharacterDetailsOnError(Exception(errorMessage))
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.showMessage(message = errorMessage) was called
@@ -122,7 +121,7 @@ class CharacterDetailsPresenterTest {
             stubRepositoryGetCharacterDetailsOnError(NoOfflineDataException())
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.onNoOfflineData() was called
@@ -137,7 +136,7 @@ class CharacterDetailsPresenterTest {
             stubRepositoryGetCharacterDetailsOnSuccess(character)
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.hideLoading() was called
@@ -151,7 +150,7 @@ class CharacterDetailsPresenterTest {
             stubRepositoryGetCharacterDetailsOnError(Exception())
 
             // WHEN
-            presenter.loadCharacter()
+            presenter.loadCharacter(DataFactory.randomInt())
 
             // THEN
             Verify on view that view.hideLoading() was called

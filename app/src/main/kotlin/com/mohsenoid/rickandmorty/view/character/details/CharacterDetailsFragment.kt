@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.fragment.navArgs
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
@@ -15,29 +16,13 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
-    @JvmField
-    @field:[Inject Named(ARG_CHARACTER_ID)]
-    var characterId: Int? = null
+    private val args: CharacterDetailsFragmentArgs by navArgs()
 
     @Inject
     lateinit var presenter: CharacterDetailsContract.Presenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        characterId.let { characterId ->
-            if (characterId == null) {
-                Toast.makeText(context, "Character id is missing!", Toast.LENGTH_SHORT).show()
-                parentActivityOnBackPressed()
-            } else {
-                presenter.characterId = characterId
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +45,7 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     override fun onResume() {
         super.onResume()
         launch {
-            presenter.loadCharacter()
+            presenter.loadCharacter(args.characterId)
         }
     }
 
@@ -113,17 +98,5 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
         characterGender.text = character.gender
         characterOrigin.text = character.origin.name
         characterLastLocation.text = character.location.name
-    }
-
-    companion object {
-        const val ARG_CHARACTER_ID: String = "character_id"
-
-        fun newInstance(characterId: Int): CharacterDetailsFragment {
-            val fragment = CharacterDetailsFragment()
-            fragment.arguments = Bundle().apply {
-                putInt(ARG_CHARACTER_ID, characterId)
-            }
-            return fragment
-        }
     }
 }

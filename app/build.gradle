@@ -8,6 +8,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlinx-serialization'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 apply plugin: 'org.jetbrains.dokka'
 
 apply from: "$rootDir/jacoco.gradle"
@@ -77,6 +79,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 check.dependsOn ktlint
@@ -126,6 +132,12 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
+
+    // Navigation component
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationComponentVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationComponentVersion"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigationComponentVersion"
+    androidTestImplementation "androidx.navigation:navigation-testing:$navigationComponentVersion"
 
     // Others
     implementation "com.jakewharton.timber:timber:$timberVersion"

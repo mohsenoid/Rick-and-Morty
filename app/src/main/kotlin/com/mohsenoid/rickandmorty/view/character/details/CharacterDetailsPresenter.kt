@@ -11,8 +11,6 @@ class CharacterDetailsPresenter @Inject internal constructor(
     private val configProvider: ConfigProvider
 ) : CharacterDetailsContract.Presenter {
 
-    override var characterId: Int = -1
-
     private var view: CharacterDetailsContract.View? = null
 
     override fun bind(view: CharacterDetailsContract.View) {
@@ -23,7 +21,7 @@ class CharacterDetailsPresenter @Inject internal constructor(
         view = null
     }
 
-    override suspend fun loadCharacter() {
+    override suspend fun loadCharacter(characterId: Int) {
         view?.showLoading()
         queryCharacter(characterId)
     }
