@@ -1,19 +1,18 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
-import com.mohsenoid.rickandmorty.view.character.list.CharacterListActivity
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_episode_list.*
@@ -133,9 +132,9 @@ class EpisodeListFragment : BaseFragment(),
     }
 
     override fun onEpisodeRowClick(episode: EpisodeEntity) {
-        val characterListIntent: Intent =
-            CharacterListActivity.newIntent(context, episode.characterIds)
-        startActivity(characterListIntent)
+        val action = EpisodeListFragmentDirections
+            .actionEpisodeListFragmentToCharacterListFragment(episode.characterIds.toIntArray())
+        view?.findNavController()?.navigate(action)
     }
 
     companion object {

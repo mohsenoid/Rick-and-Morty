@@ -4,7 +4,7 @@ ext {
     compileSdkVersion = 29
 
     // Project
-    toolsBuildGradleVersion = '3.5.3'
+    toolsBuildGradleVersion = '3.6.1'
     jacocoVersion = '0.8.3'
     ktlintVersion = '0.36.0'
     dokkaVersion = '0.10.0'
@@ -19,6 +19,7 @@ ext {
     androidxTestCoreVersion = '1.2.0'
     androidxTestExtVersion = '1.1.1'
     androidxTestEspressoVersion = '3.2.0'
+    navigationComponentVersion = '2.3.0-alpha03'
 
     // Kotlin
     kotlinVersion = '1.3.61'
