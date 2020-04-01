@@ -1,4 +1,4 @@
-# ![launcher icon](logo.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty)
+# ![launcher icon](logo.png) Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty) [![CodeFactor](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty/badge)](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty)
 
 This repository contains Rick and Morty Android application which I am using as training material.
 

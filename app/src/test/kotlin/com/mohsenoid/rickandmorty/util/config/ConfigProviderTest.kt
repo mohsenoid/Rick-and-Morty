@@ -33,7 +33,7 @@ class ConfigProviderTest {
     fun setUp() {
         val application: Application = ApplicationProvider.getApplicationContext()
         val connectivityManager: ConnectivityManager =
-            (application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         shadowOfActiveNetworkInfo = Shadows.shadowOf(connectivityManager.activeNetworkInfo)
         configProvider = ConfigProviderImpl(application)
     }
