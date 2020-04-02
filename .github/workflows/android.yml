@@ -20,7 +20,7 @@ jobs:
         run: ./gradlew build
 
       - name: Generate Code-Coverage report
-        run: ./gradlew jacocoReport
+        run: ./gradlew jacoco
 
       - name: Push Code-Coverage Report to codecov.io
         env:
