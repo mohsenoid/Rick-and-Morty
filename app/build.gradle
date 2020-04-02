@@ -135,7 +135,9 @@ dependencies {
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigationComponentVersion"
     androidTestImplementation "androidx.navigation:navigation-testing:$navigationComponentVersion"
 
-    // Others
+    // timber
     implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    // picasso
     implementation "com.squareup.picasso:picasso:$picassoVersion"
 }
