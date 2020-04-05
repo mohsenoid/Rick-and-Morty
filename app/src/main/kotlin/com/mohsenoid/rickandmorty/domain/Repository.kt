@@ -1,11 +1,12 @@
 package com.mohsenoid.rickandmorty.domain
 
+import androidx.lifecycle.LiveData
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 
 interface Repository {
 
-    suspend fun getEpisodes(page: Int): List<EpisodeEntity>
+    suspend fun getEpisodes(page: Int): LiveData<List<EpisodeEntity>>
 
     suspend fun getCharactersByIds(characterIds: List<Int>): List<CharacterEntity>
 

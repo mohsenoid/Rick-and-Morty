@@ -117,6 +117,7 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     testImplementation "org.koin:koin-test:$koinVersion"
     implementation "org.koin:koin-android-scope:$koinVersion"
+    implementation "org.koin:koin-android-viewmodel:$koinVersion"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -128,6 +129,12 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
+
+    // Android Architecture Component
+    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    kapt "android.arch.lifecycle:common-java8:$lifecycleVersion"
+    testImplementation "android.arch.core:core-testing:$lifecycleVersion"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationComponentVersion"

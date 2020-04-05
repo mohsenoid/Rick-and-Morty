@@ -4,7 +4,7 @@ ext {
     compileSdkVersion = 29
 
     // Project
-    toolsBuildGradleVersion = '3.6.1'
+    toolsBuildGradleVersion = '3.6.2'
     jacocoVersion = '0.8.3'
     ktlintVersion = '0.36.0'
     dokkaVersion = '0.10.0'
@@ -44,4 +44,5 @@ ext {
     picassoVersion = '2.71828'
     roomVersion = '2.2.5'
     koinVersion= '2.1.0-alpha-10'
+    lifecycleVersion = "2.1.0"
 }

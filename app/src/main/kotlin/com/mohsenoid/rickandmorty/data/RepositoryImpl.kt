@@ -1,10 +1,11 @@
 package com.mohsenoid.rickandmorty.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
 import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
 import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
 import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
-import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.data.exception.ServerException
 import com.mohsenoid.rickandmorty.data.mapper.Mapper
@@ -32,7 +33,7 @@ class RepositoryImpl(
     private val characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
 ) : Repository {
 
-    override suspend fun getEpisodes(page: Int): List<EpisodeEntity> {
+    override suspend fun getEpisodes(page: Int): LiveData<List<EpisodeEntity>> {
         return withContext(ioDispatcher) {
             if (configProvider.isOnline()) {
                 try {
@@ -71,13 +72,12 @@ class RepositoryImpl(
             .forEach { episodeDao.insertEpisode(it) }
     }
 
-    private suspend fun queryDbEpisodes(page: Int, pageSize: Int): List<EpisodeEntity> {
-        val dbEpisodes: List<DbEpisodeModel> = episodeDao.queryAllEpisodesByPage(page, pageSize)
-        val episodes: List<EpisodeEntity> = dbEpisodes.map(episodeEntityMapper::map)
-
-        if (episodes.isEmpty()) throw EndOfListException()
-
-        return episodes
+    private fun queryDbEpisodes(page: Int, pageSize: Int): LiveData<List<EpisodeEntity>> {
+        return Transformations.map(episodeDao.queryAllEpisodesByPage(page, pageSize)) {
+            it.map(
+                episodeEntityMapper::map
+            )
+        }
     }
 
     override suspend fun getCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
