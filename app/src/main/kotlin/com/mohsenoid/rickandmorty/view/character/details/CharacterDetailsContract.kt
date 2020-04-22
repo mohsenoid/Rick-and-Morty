@@ -13,8 +13,8 @@ interface CharacterDetailsContract {
         fun setCharacter(character: CharacterEntity)
     }
 
-    interface Presenter : BasePresenter<View> {
+    abstract class Presenter : BasePresenter<View>() {
 
-        suspend fun loadCharacter(characterId: Int)
+        abstract suspend fun loadCharacter(characterId: Int)
     }
 }

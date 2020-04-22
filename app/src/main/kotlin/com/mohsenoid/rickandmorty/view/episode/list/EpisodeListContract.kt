@@ -19,10 +19,10 @@ interface EpisodeListContract {
         fun reachedEndOfList()
     }
 
-    interface Presenter : BasePresenter<View> {
+    abstract class Presenter : BasePresenter<View>() {
 
-        suspend fun loadEpisodes()
+        abstract suspend fun loadEpisodes()
 
-        suspend fun loadMoreEpisodes(page: Int)
+        abstract suspend fun loadMoreEpisodes(page: Int)
     }
 }
