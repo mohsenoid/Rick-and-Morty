@@ -116,7 +116,7 @@ dependencies {
     // Koin
     implementation "org.koin:koin-android:$koinVersion"
     testImplementation "org.koin:koin-test:$koinVersion"
-    implementation "org.koin:koin-android-scope:$koinVersion"
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

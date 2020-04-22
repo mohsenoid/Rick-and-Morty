@@ -1,7 +1,6 @@
 package com.mohsenoid.rickandmorty.view.character.details
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +14,20 @@ import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.coroutines.launch
-import org.koin.android.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
 
-    private val presenter: CharacterDetailsContract.Presenter by currentScope.inject()
+    private val presenter: CharacterDetailsContract.Presenter by viewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadKoinModules(characterDetailsFragmentModule)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,14 +37,9 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
         return inflater.inflate(R.layout.fragment_character_details, container, false)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.bind(this)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
     }
 
     override fun onResume() {
@@ -97,5 +98,15 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
         characterGender.text = character.gender
         characterOrigin.text = character.origin.name
         characterLastLocation.text = character.location.name
+    }
+
+    override fun onDestroyView() {
+        presenter.unbind()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(characterDetailsFragmentModule)
+        super.onDestroy()
     }
 }
