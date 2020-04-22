@@ -8,7 +8,7 @@ import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 class CharacterDetailsPresenter(
     private val repository: Repository,
     private val configProvider: ConfigProvider
-) : CharacterDetailsContract.Presenter {
+) : CharacterDetailsContract.Presenter() {
 
     private var view: CharacterDetailsContract.View? = null
 

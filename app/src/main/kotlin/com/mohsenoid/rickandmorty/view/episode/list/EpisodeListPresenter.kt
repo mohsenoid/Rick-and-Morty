@@ -8,7 +8,7 @@ import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 class EpisodeListPresenter(
     private val repository: Repository,
     private val configProvider: ConfigProvider
-) : EpisodeListContract.Presenter {
+) : EpisodeListContract.Presenter() {
 
     private var view: EpisodeListContract.View? = null
 

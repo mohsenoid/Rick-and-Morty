@@ -15,10 +15,10 @@ interface CharacterListContract {
         fun updateCharacter(character: CharacterEntity)
     }
 
-    interface Presenter : BasePresenter<View> {
+    abstract class Presenter : BasePresenter<View>() {
 
-        suspend fun loadCharacters(characterIds: List<Int>)
+        abstract suspend fun loadCharacters(characterIds: List<Int>)
 
-        suspend fun killCharacter(character: CharacterEntity)
+        abstract suspend fun killCharacter(character: CharacterEntity)
     }
 }

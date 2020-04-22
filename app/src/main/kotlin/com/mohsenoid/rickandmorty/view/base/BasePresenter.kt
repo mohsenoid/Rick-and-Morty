@@ -1,8 +1,10 @@
 package com.mohsenoid.rickandmorty.view.base
 
-interface BasePresenter<V : BaseView> {
+import androidx.lifecycle.ViewModel
 
-    fun bind(view: V)
+abstract class BasePresenter<V : BaseView> : ViewModel() {
 
-    fun unbind()
+    abstract fun bind(view: V)
+
+    abstract fun unbind()
 }
