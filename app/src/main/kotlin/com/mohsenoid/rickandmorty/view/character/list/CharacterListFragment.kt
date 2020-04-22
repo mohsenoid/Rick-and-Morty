@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,16 +14,23 @@ import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
-import org.koin.android.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     CharacterListAdapter.ClickListener {
 
     private val args: CharacterListFragmentArgs by navArgs()
 
-    private val presenter: CharacterListContract.Presenter by currentScope.inject()
+    private val presenter: CharacterListContract.Presenter by viewModel()
 
     private val adapter: CharacterListAdapter = CharacterListAdapter(listener = this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadKoinModules(characterListFragmentModule)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +42,7 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
+        presenter.bind(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -43,16 +50,6 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
         val linearLayoutManager = LinearLayoutManager(context)
         characterList.layoutManager = linearLayoutManager
         characterList.adapter = adapter
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        presenter.bind(this)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
     }
 
     override fun onResume() {
@@ -103,5 +100,15 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
         launch {
             presenter.killCharacter(character)
         }
+    }
+
+    override fun onDestroyView() {
+        presenter.unbind()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(characterListFragmentModule)
+        super.onDestroy()
     }
 }

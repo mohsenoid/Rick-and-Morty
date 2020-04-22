@@ -5,9 +5,6 @@ import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.injection.appModule
 import com.mohsenoid.rickandmorty.injection.dataModule
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
-import com.mohsenoid.rickandmorty.view.character.details.characterDetailsFragmentModule
-import com.mohsenoid.rickandmorty.view.character.list.characterListFragmentModule
-import com.mohsenoid.rickandmorty.view.episode.list.episodeListFragmentModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.KoinComponent
@@ -34,7 +31,7 @@ class RickAndMortyApplication : Application(), KoinComponent {
             if (isDebug) androidLogger()
 
             androidContext(this@RickAndMortyApplication)
-            modules(appModule + dataModule + episodeListFragmentModule + characterListFragmentModule + characterDetailsFragmentModule)
+            modules(appModule + dataModule)
         }
     }
 

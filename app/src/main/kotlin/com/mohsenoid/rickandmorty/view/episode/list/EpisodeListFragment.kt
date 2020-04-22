@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,15 +16,16 @@ import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_episode_list.*
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.getKoin
-import org.koin.android.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
 class EpisodeListFragment : BaseFragment(),
     EpisodeListContract.View,
     EpisodeListAdapter.ClickListener,
     OnRefreshListener {
 
-    private val presenter: EpisodeListContract.Presenter by currentScope.inject()
+    private val presenter: EpisodeListContract.Presenter by viewModel()
 
     private val adapter: EpisodeListAdapter = EpisodeListAdapter(listener = this)
 
@@ -33,7 +33,7 @@ class EpisodeListFragment : BaseFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getKoin().setProperty("EpisodeListFragment", this)
+        loadKoinModules(episodeListFragmentModule)
     }
 
     override fun onCreateView(
@@ -46,6 +46,7 @@ class EpisodeListFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
+        presenter.bind(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -69,16 +70,6 @@ class EpisodeListFragment : BaseFragment(),
         }
 
         episodeList.adapter = adapter
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        presenter.bind(this)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
     }
 
     override fun onResume() {
@@ -139,6 +130,16 @@ class EpisodeListFragment : BaseFragment(),
         val action = EpisodeListFragmentDirections
             .actionEpisodeListFragmentToCharacterListFragment(episode.characterIds.toIntArray())
         view?.findNavController()?.navigate(action)
+    }
+
+    override fun onDestroyView() {
+        presenter.unbind()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(episodeListFragmentModule)
+        super.onDestroy()
     }
 
     companion object {

@@ -6,12 +6,12 @@ import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import org.koin.android.scope.currentScope
+import org.koin.android.ext.android.inject
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment : Fragment(), CoroutineScope {
 
-    private val dispatcherProvider: DispatcherProvider by currentScope.inject()
+    private val dispatcherProvider: DispatcherProvider by inject()
 
     private lateinit var job: Job
     override lateinit var coroutineContext: CoroutineContext
