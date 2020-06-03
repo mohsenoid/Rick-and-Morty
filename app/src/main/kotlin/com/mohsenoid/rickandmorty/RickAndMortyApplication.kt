@@ -10,7 +10,6 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.KoinComponent
 import org.koin.core.context.startKoin
 import timber.log.Timber
-import java.util.HashMap
 
 class RickAndMortyApplication : Application(), KoinComponent {
 
@@ -22,8 +21,7 @@ class RickAndMortyApplication : Application(), KoinComponent {
         if (isDebug) setupTimber()
 
         startKoin {
-            val appProperties: HashMap<String, Any> = hashMapOf(
-                QualifiersNames.IS_DEBUG to isDebug,
+            val appProperties: Map<String, String> = mapOf(
                 QualifiersNames.BASE_URL to NetworkConstants.BASE_URL
             )
             properties(appProperties)

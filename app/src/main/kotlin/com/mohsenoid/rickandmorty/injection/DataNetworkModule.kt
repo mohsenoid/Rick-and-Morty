@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.injection
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import kotlinx.serialization.json.Json
@@ -37,7 +38,7 @@ val dataNetworkModule = module {
 
     single {
         OkHttpClient.Builder().apply {
-            val isDebug: Boolean = getProperty(QualifiersNames.IS_DEBUG)
+            val isDebug: Boolean = BuildConfig.DEBUG
             if (isDebug) {
                 val interceptor: HttpLoggingInterceptor = get()
                 addInterceptor(interceptor)

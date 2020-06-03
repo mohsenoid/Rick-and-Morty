@@ -103,8 +103,8 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$KotlinCoroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KotlinCoroutinesAndroidVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$KotlinCoroutinesTestVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KotlinCoroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$KotlinCoroutinesVersion"
 
     // Test
     testImplementation "junit:junit:$junitVersion"

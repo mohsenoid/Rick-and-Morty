@@ -10,7 +10,6 @@ import org.koin.core.context.startKoin
 import org.koin.test.check.checkModules
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.util.HashMap
 
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
@@ -19,8 +18,7 @@ class DataModuleTest : ModuleTest() {
     @Test
     fun `check all definitions from dataModule`() {
         startKoin {
-            val appProperties: HashMap<String, Any> = hashMapOf(
-                QualifiersNames.IS_DEBUG to true,
+            val appProperties: Map<String, String> = mapOf(
                 QualifiersNames.BASE_URL to NetworkConstants.BASE_URL
             )
             properties(appProperties)

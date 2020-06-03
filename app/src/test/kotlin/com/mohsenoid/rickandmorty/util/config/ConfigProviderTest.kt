@@ -46,6 +46,7 @@ class ConfigProviderTest {
     @Test
     fun `test isOnline`() {
         // GIVEN
+        @Suppress("DEPRECATION")
         shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.CONNECTED)
 
         // WHEN
@@ -58,6 +59,7 @@ class ConfigProviderTest {
     @Test
     fun `test isOffline`() {
         // GIVEN
+        @Suppress("DEPRECATION")
         shadowOfActiveNetworkInfo.setConnectionStatus(NetworkInfo.State.DISCONNECTED)
 
         // WHEN
