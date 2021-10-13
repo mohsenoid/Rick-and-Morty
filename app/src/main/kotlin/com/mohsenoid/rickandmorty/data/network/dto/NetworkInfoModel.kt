@@ -13,8 +13,8 @@ data class NetworkInfoModel(
     val pages: Int,
 
     @SerialName(value = "next")
-    val next: String,
+    val next: String?,
 
     @SerialName(value = "prev")
-    val prev: String
+    val prev: String?
 )

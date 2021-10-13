@@ -38,7 +38,7 @@ class ConfigProviderImpl(private val context: Context) : ConfigProvider {
         } else {
             @Suppress("DEPRECATION")
             val networksInfo: Array<NetworkInfo> =
-                connectivityManager.allNetworkInfo ?: return false
+                connectivityManager.allNetworkInfo
 
             networksInfo.forEach { networkInfo ->
                 @Suppress("DEPRECATION")

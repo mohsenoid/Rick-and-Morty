@@ -4,8 +4,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
@@ -16,6 +16,7 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import java.net.UnknownHostException
 
+@OptIn(ExperimentalSerializationApi::class)
 val dataNetworkModule = module {
 
     single {
@@ -23,11 +24,9 @@ val dataNetworkModule = module {
         baseUrl.toHttpUrlOrNull() ?: throw UnknownHostException("Invalid host: $baseUrl")
     }
 
-    single { Json(JsonConfiguration.Stable) }
-
     single {
         val contentType = "application/json".toMediaType()
-        get<Json>().asConverterFactory(contentType)
+        Json.asConverterFactory(contentType)
     }
 
     single {

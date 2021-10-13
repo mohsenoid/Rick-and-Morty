@@ -7,7 +7,7 @@ import com.mohsenoid.rickandmorty.injection.dataModule
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
