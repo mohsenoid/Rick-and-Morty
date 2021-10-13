@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.injection.appModule
 import com.mohsenoid.rickandmorty.injection.dataModule
@@ -11,7 +11,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class RickAndMortyApplication : Application(), KoinComponent {
+class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
 
     private val isDebug: Boolean = BuildConfig.DEBUG
 

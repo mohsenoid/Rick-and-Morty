@@ -1,5 +1,7 @@
 package com.mohsenoid.rickandmorty.injection
 
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.mohsenoid.rickandmorty.BuildConfig
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
@@ -11,6 +13,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -36,12 +39,24 @@ val dataNetworkModule = module {
     }
 
     single {
+        ChuckerInterceptor.Builder(androidApplication())
+            .collector(ChuckerCollector(androidApplication()))
+            .maxContentLength(250000L)
+            .redactHeaders(emptySet())
+            .alwaysReadResponseBody(false)
+            .build()
+    }
+
+    single {
         OkHttpClient.Builder().apply {
             val isDebug: Boolean = BuildConfig.DEBUG
             if (isDebug) {
                 val interceptor: HttpLoggingInterceptor = get()
                 addInterceptor(interceptor)
             }
+
+            val chuckerInterceptor: ChuckerInterceptor = get()
+            addInterceptor(chuckerInterceptor)
         }.build()
     }
 
