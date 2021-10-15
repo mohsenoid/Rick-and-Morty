@@ -10,20 +10,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
+import com.mohsenoid.rickandmorty.databinding.FragmentEpisodeListBinding
 import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
-import kotlinx.android.synthetic.main.fragment_episode_list.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
-class EpisodeListFragment : BaseFragment(),
+@Suppress("TooManyFunctions")
+class EpisodeListFragment :
+    BaseFragment(),
     EpisodeListContract.View,
     EpisodeListAdapter.ClickListener,
     OnRefreshListener {
+
+    private var _binding: FragmentEpisodeListBinding? = null
+    private val binding get() = _binding!!
 
     private val presenter: EpisodeListContract.Presenter by viewModel()
 
@@ -40,18 +45,19 @@ class EpisodeListFragment : BaseFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_episode_list, container, false)
+    ): View {
+        _binding = FragmentEpisodeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
+        binding.initView()
         presenter.bind(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun initView() {
-        episodeListSwipeRefresh.setOnRefreshListener(this)
+    private fun FragmentEpisodeListBinding.initView() {
+        episodeListSwipeRefresh.setOnRefreshListener(this@EpisodeListFragment)
 
         val linearLayoutManager = LinearLayoutManager(context)
         episodeList.layoutManager = linearLayoutManager
@@ -94,36 +100,40 @@ class EpisodeListFragment : BaseFragment(),
     }
 
     override fun showLoading() {
-        if (!episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = true
+        with(binding) {
+            if (!episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = true
+        }
     }
 
     override fun hideLoading() {
-        if (episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = false
+        with(binding) {
+            if (episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = false
+        }
     }
 
     override fun showLoadingMore() {
-        episodeListProgress.visibility = View.VISIBLE
+        binding.episodeListProgress.visibility = View.VISIBLE
     }
 
     override fun hideLoadingMore() {
-        episodeListProgress.visibility = View.GONE
+        binding.episodeListProgress.visibility = View.GONE
     }
 
     override fun setEpisodes(episodes: List<EpisodeEntity>) {
-        episodeListSwipeRefresh.isRefreshing = false
+        binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.setEpisodes(episodes)
         endlessScrollListener?.resetState()
         adapter.notifyDataSetChanged()
     }
 
     override fun updateEpisodes(episodes: List<EpisodeEntity>) {
-        episodeListSwipeRefresh.isRefreshing = false
+        binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.addMoreEpisodes(episodes)
         adapter.notifyDataSetChanged()
     }
 
     override fun reachedEndOfList() {
-        episodeListProgress.visibility = View.GONE
+        binding.episodeListProgress.visibility = View.GONE
     }
 
     override fun onEpisodeRowClick(episode: EpisodeEntity) {
@@ -133,8 +143,9 @@ class EpisodeListFragment : BaseFragment(),
     }
 
     override fun onDestroyView() {
-        presenter.unbind()
         super.onDestroyView()
+        presenter.unbind()
+        _binding = null
     }
 
     override fun onDestroy() {

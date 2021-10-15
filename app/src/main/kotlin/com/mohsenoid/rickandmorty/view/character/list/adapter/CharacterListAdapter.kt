@@ -1,12 +1,10 @@
 package com.mohsenoid.rickandmorty.view.character.list.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mohsenoid.rickandmorty.R
+import com.mohsenoid.rickandmorty.databinding.ItemCharacterBinding
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import kotlinx.android.synthetic.main.item_character.view.*
 import java.util.ArrayList
 
 class CharacterListAdapter(
@@ -25,16 +23,20 @@ class CharacterListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_character, parent, false)
-        return CharacterViewHolder(view)
+        val binding =
+            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CharacterViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character: CharacterEntity = characters[position]
         holder.setCharacter(character)
-        holder.view.setOnClickListener { listener.onCharacterRowClick(character) }
-        holder.view.characterStatus.setOnClickListener { listener.onCharacterStatusClick(character) }
+        holder.binding.root.setOnClickListener { listener.onCharacterRowClick(character) }
+        holder.binding.characterStatus.setOnClickListener {
+            listener.onCharacterStatusClick(
+                character
+            )
+        }
     }
 
     override fun getItemCount(): Int {

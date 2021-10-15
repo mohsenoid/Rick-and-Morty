@@ -9,16 +9,20 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.navArgs
 import com.mohsenoid.rickandmorty.R
+import com.mohsenoid.rickandmorty.databinding.FragmentCharacterDetailsBinding
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_character_details.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
+@Suppress("TooManyFunctions")
 class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
+
+    private var _binding: FragmentCharacterDetailsBinding? = null
+    private val binding get() = _binding!!
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
 
@@ -33,8 +37,9 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_character_details, container, false)
+    ): View {
+        _binding = FragmentCharacterDetailsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,11 +67,11 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     }
 
     override fun showLoading() {
-        characterDetailsProgress.visibility = View.VISIBLE
+        binding.characterDetailsProgress.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        characterDetailsProgress.visibility = View.GONE
+        binding.characterDetailsProgress.visibility = View.GONE
     }
 
     override fun onNoOfflineData() {
@@ -80,29 +85,32 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
     }
 
     override fun setCharacter(character: CharacterEntity) {
-        Picasso.get()
-            .load(character.imageUrl)
-            .placeholder(R.drawable.ic_placeholder)
-            .into(characterImage)
+        with(binding) {
+            Picasso.get()
+                .load(character.imageUrl)
+                .placeholder(R.drawable.ic_placeholder)
+                .into(characterImage)
 
-        characterName.text = character.name
-        characterDetails.text =
-            getString(R.string.character_details_format, character.id, character.created)
-        if (character.killedByUser) {
-            characterKilledByUser.visibility = View.VISIBLE
-        } else {
-            characterKilledByUser.visibility = View.GONE
+            characterName.text = character.name
+            characterDetails.text =
+                getString(R.string.character_details_format, character.id, character.created)
+            if (character.killedByUser) {
+                characterKilledByUser.visibility = View.VISIBLE
+            } else {
+                characterKilledByUser.visibility = View.GONE
+            }
+            characterStatus.text = character.status
+            characterSpecies.text = character.species
+            characterGender.text = character.gender
+            characterOrigin.text = character.origin.name
+            characterLastLocation.text = character.location.name
         }
-        characterStatus.text = character.status
-        characterSpecies.text = character.species
-        characterGender.text = character.gender
-        characterOrigin.text = character.origin.name
-        characterLastLocation.text = character.location.name
     }
 
     override fun onDestroyView() {
-        presenter.unbind()
         super.onDestroyView()
+        presenter.unbind()
+        _binding = null
     }
 
     override fun onDestroy() {
