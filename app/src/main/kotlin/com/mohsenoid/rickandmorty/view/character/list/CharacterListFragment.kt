@@ -9,17 +9,23 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
+import com.mohsenoid.rickandmorty.databinding.FragmentCharacterListBinding
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
-import kotlinx.android.synthetic.main.fragment_character_list.*
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
-class CharacterListFragment : BaseFragment(), CharacterListContract.View,
+@Suppress("TooManyFunctions")
+class CharacterListFragment :
+    BaseFragment(),
+    CharacterListContract.View,
     CharacterListAdapter.ClickListener {
+
+    private var _binding: FragmentCharacterListBinding? = null
+    private val binding get() = _binding!!
 
     private val args: CharacterListFragmentArgs by navArgs()
 
@@ -36,17 +42,18 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_character_list, container, false)
+    ): View {
+        _binding = FragmentCharacterListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
+        binding.initView()
         presenter.bind(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun initView() {
+    private fun FragmentCharacterListBinding.initView() {
         val linearLayoutManager = LinearLayoutManager(context)
         characterList.layoutManager = linearLayoutManager
         characterList.adapter = adapter
@@ -68,11 +75,11 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     override fun showLoading() {
-        characterListProgress.visibility = View.VISIBLE
+        binding.characterListProgress.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        characterListProgress.visibility = View.GONE
+        binding.characterListProgress.visibility = View.GONE
     }
 
     override fun onNoOfflineData() {
@@ -103,8 +110,9 @@ class CharacterListFragment : BaseFragment(), CharacterListContract.View,
     }
 
     override fun onDestroyView() {
-        presenter.unbind()
         super.onDestroyView()
+        presenter.unbind()
+        _binding = null
     }
 
     override fun onDestroy() {

@@ -17,7 +17,8 @@ import android.os.Build
 class ConfigProviderImpl(private val context: Context) : ConfigProvider {
 
     /**
-     * This function uses [ConnectivityManager]  to check active Network Capabilities to know the Android phone network connectivity status.
+     * This function uses [ConnectivityManager]  to check active Network Capabilities to know
+     * the Android phone network connectivity status.
      *
      * @return is the phone connected to a network through cellular or WiFi.
      */

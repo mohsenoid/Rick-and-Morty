@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
+@Suppress("LongParameterList", "TooManyFunctions")
 class RepositoryImpl(
     private val characterDao: DbCharacterDao,
     private val episodeDao: DbEpisodeDao,
