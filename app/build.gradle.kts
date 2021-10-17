@@ -1,3 +1,5 @@
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -61,11 +63,6 @@ android {
         }
     }
 
-    // getTasksByName("dokka"){
-    //     outputFormat = "html"
-    //     outputDirectory = "$buildDir/dokka"
-    // }
-
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
         animationsDisabled = true
@@ -98,66 +95,23 @@ detekt {
     buildUponDefaultConfig = true
     reports {
         html { enabled = true }
-        xml { enabled = false }
+        xml { enabled = true }
         txt { enabled = false }
     }
 }
 
 // https://github.com/JLLeitschuh/ktlint-gradle#configuration
 ktlint {
+    reporters {
+        reporter(ReporterType.HTML)
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }
 
 // https://docs.gradle.org/current/userguide/jacoco_plugin.html
 jacoco {
     toolVersion = "0.8.7"
 }
-
-// tasks.jacocoTestReport {
-//     reports {
-//         xml.required.set(false)
-//         csv.required.set(false)
-//         html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
-//     }
-//
-//     tasks.create(name: "jacoco", type: JacocoReport, dependsOn: ["test", "testDebugUnitTest", "createDebugCoverageReport"]) {
-//     group = "Reporting"
-//     description = "Generate Jacoco coverage reports for build."
-//
-//     reports {
-//         html.enabled = true
-//         xml.enabled = true
-//     }
-//
-//     def excludes = [
-//         '**/*_Provide*/**',
-//         '**/*_Factory*/**',
-//         '**/*_MembersInjector.class',
-//         '**/*Dagger*',
-//         '**/R.class',
-//         '**/R$*.class',
-//         '**/BuildConfig.*',
-//         '**/Manifest*.*',
-//         '**/*Test*.*',
-//         'android/**/*.*'
-//     ]
-//     def javaClasses = fileTree(dir: "$project.buildDir/intermediates/javac/debug", excludes: excludes)
-//     def kotlinClasses = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: excludes)
-//     getClassDirectories().setFrom(files([javaClasses, kotlinClasses]))
-//
-//     getSourceDirectories().setFrom(files([
-//         "$project.projectDir/src/main/java",
-//         "$project.projectDir/src/debug/java",
-//         "$project.projectDir/src/main/kotlin",
-//         "$project.projectDir/src/debug/kotlin"
-//     ]))
-//
-//     def includes = [
-//         'jacoco/testDebugUnitTest.exec',
-//         'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'
-//     ]
-//     getExecutionData().setFrom(fileTree(dir: project.buildDir, includes: includes))
-//
-// }
 
 dependencies {
     // Android Jetpack
