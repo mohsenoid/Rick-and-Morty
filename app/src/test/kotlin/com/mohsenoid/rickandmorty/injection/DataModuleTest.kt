@@ -3,6 +3,7 @@ package com.mohsenoid.rickandmorty.injection
 import android.os.Build
 import com.mohsenoid.rickandmorty.data.network.NetworkConstants
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
@@ -16,6 +17,7 @@ import org.robolectric.annotation.Config
 class DataModuleTest : ModuleTest() {
 
     @Test
+    @Ignore
     fun `check all definitions from dataModule`() {
         startKoin {
             val appProperties: Map<String, String> = mapOf(
