@@ -18,7 +18,7 @@ interface NetworkClient {
     @GET(value = "${NetworkConstants.CHARACTER_ENDPOINT}{${NetworkConstants.PATH_KEY_CHARACTER_IDS}}")
     suspend fun fetchCharactersByIds(
         @Path(value = NetworkConstants.PATH_KEY_CHARACTER_IDS)
-        characterIds: List<Int>
+        characterIds: String
     ): Response<List<NetworkCharacterModel>>
 
     @GET(value = "${NetworkConstants.CHARACTER_ENDPOINT}{${NetworkConstants.PATH_KEY_CHARACTER_ID}}")
