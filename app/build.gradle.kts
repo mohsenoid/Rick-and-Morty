@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId = "com.mohsenoid.rickandmorty"
 
-        minSdk = 16
+        minSdk = 24
         targetSdk = 31
         multiDexEnabled = true
 
