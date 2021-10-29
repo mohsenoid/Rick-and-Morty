@@ -99,7 +99,7 @@ class RepositoryImpl(
 
     private suspend fun fetchNetworkCharactersByIds(characterIds: List<Int>): List<NetworkCharacterModel> {
         val networkCharactersResponse: Response<List<NetworkCharacterModel>> =
-            networkClient.fetchCharactersByIds(characterIds)
+            networkClient.fetchCharactersByIds(characterIds.joinToString(","))
 
         if (networkCharactersResponse.isSuccessful) {
             networkCharactersResponse.body()?.let { networkCharacters ->
