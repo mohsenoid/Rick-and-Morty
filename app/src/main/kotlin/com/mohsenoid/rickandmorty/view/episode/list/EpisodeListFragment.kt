@@ -32,7 +32,8 @@ class EpisodeListFragment :
 
     private val presenter: EpisodeListContract.Presenter by viewModel()
 
-    private val adapter: EpisodeListAdapter = EpisodeListAdapter(listener = this)
+    private var _adapter: EpisodeListAdapter? = null
+    private val adapter: EpisodeListAdapter get() = _adapter!!
 
     private var endlessScrollListener: EndlessRecyclerViewScrollListener? = null
 
@@ -74,7 +75,7 @@ class EpisodeListFragment :
         }.also {
             episodeList.addOnScrollListener(it)
         }
-
+        _adapter = EpisodeListAdapter(listener = this@EpisodeListFragment)
         episodeList.adapter = adapter
     }
 
@@ -145,6 +146,8 @@ class EpisodeListFragment :
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.unbind()
+        endlessScrollListener = null
+        _adapter = null
         _binding = null
     }
 
