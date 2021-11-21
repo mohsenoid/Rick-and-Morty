@@ -180,4 +180,7 @@ dependencies {
     val chuckerVersion = "3.5.2"
     debugImplementation("com.github.chuckerteam.chucker:library:$chuckerVersion")
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:$chuckerVersion")
+
+    // leakcanary
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
 }
