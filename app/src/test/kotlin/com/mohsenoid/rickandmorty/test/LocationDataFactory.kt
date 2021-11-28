@@ -1,15 +1,15 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
+import com.mohsenoid.rickandmorty.data.api.model.ApiLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
 import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 
 object LocationDataFactory {
 
     object Db {
 
-        fun makeLocation(): DbEntityLocation {
-            return DbEntityLocation(
+        fun makeLocation(): DbLocation {
+            return DbLocation(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
             )
@@ -18,8 +18,8 @@ object LocationDataFactory {
 
     object Network {
 
-        fun makeLocation(): NetworkLocationModel {
-            return NetworkLocationModel(
+        fun makeLocation(): ApiLocation {
+            return ApiLocation(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
             )

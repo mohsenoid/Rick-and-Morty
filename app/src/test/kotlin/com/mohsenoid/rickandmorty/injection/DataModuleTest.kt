@@ -1,7 +1,8 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.os.Build
-import com.mohsenoid.rickandmorty.data.network.NetworkConstants
+import com.mohsenoid.rickandmorty.data.api.NetworkConstants
+import com.mohsenoid.rickandmorty.data.dataModule
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import org.junit.Ignore
 import org.junit.Test

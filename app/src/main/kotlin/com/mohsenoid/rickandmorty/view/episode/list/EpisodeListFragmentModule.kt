@@ -8,7 +8,7 @@ val episodeListFragmentModule = module {
     viewModel<EpisodeListContract.Presenter> {
         EpisodeListPresenter(
             repository = get(),
-            configProvider = get()
+            statusProvider = get()
         )
     }
 }

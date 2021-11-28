@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
+import com.mohsenoid.rickandmorty.data.api.model.ApiCharacter
+import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 
 object CharacterDataFactory {
@@ -13,8 +13,8 @@ object CharacterDataFactory {
             status: String = DataFactory.randomString(),
             isAlive: Boolean = DataFactory.randomBoolean(),
             isKilledByUser: Boolean = false
-        ): DbEntityCharacter {
-            return DbEntityCharacter(
+        ): DbCharacter {
+            return DbCharacter(
                 id = characterId,
                 name = DataFactory.randomString(),
                 status = status,
@@ -32,10 +32,10 @@ object CharacterDataFactory {
             )
         }
 
-        fun makeCharacters(count: Int): List<DbEntityCharacter> {
-            val characters: MutableList<DbEntityCharacter> = ArrayList()
+        fun makeCharacters(count: Int): List<DbCharacter> {
+            val characters: MutableList<DbCharacter> = ArrayList()
             for (i in 0 until count) {
-                val character: DbEntityCharacter = makeCharacter()
+                val character: DbCharacter = makeCharacter()
                 characters.add(character)
             }
             return characters
@@ -44,8 +44,8 @@ object CharacterDataFactory {
 
     object Network {
 
-        fun makeCharacter(characterId: Int = DataFactory.randomInt()): NetworkCharacterModel {
-            return NetworkCharacterModel(
+        fun makeCharacter(characterId: Int = DataFactory.randomInt()): ApiCharacter {
+            return ApiCharacter(
                 id = characterId,
                 name = DataFactory.randomString(),
                 status = DataFactory.randomString(),
@@ -61,10 +61,10 @@ object CharacterDataFactory {
             )
         }
 
-        fun makeCharacters(count: Int): List<NetworkCharacterModel> {
-            val characters: MutableList<NetworkCharacterModel> = ArrayList()
+        fun makeCharacters(count: Int): List<ApiCharacter> {
+            val characters: MutableList<ApiCharacter> = ArrayList()
             for (i: Int in 0 until count) {
-                val character: NetworkCharacterModel = makeCharacter()
+                val character: ApiCharacter = makeCharacter()
                 characters.add(character)
             }
             return characters

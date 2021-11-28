@@ -6,20 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.navArgs
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentCharacterDetailsBinding
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
-import com.mohsenoid.rickandmorty.view.base.BaseFragment
+import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
 @Suppress("TooManyFunctions")
-class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
+class CharacterDetailsFragment : Fragment(), CharacterDetailsContract.View {
 
     private var _binding: FragmentCharacterDetailsBinding? = null
     private val binding get() = _binding!!
@@ -49,7 +49,7 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
 
     override fun onResume() {
         super.onResume()
-        launch {
+        lifecycle.launchWhileResumed {
             presenter.loadCharacter(args.characterId)
         }
     }

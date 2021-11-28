@@ -1,10 +1,10 @@
 package com.mohsenoid.rickandmorty.view
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.mohsenoid.rickandmorty.R
-import com.mohsenoid.rickandmorty.view.base.BaseActivity
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

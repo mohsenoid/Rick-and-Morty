@@ -1,11 +1,11 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkInfoModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
+import com.mohsenoid.rickandmorty.data.api.model.ApiCharacter
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisode
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisodes
+import com.mohsenoid.rickandmorty.data.api.model.ApiInfo
+import com.mohsenoid.rickandmorty.data.api.model.ApiLocation
+import com.mohsenoid.rickandmorty.data.api.model.ApiOrigin
 import retrofit2.Response
 
 object NetworkResponseFactory {
@@ -46,15 +46,15 @@ object NetworkResponseFactory {
   ]
 }"""
 
-        fun episodesResponse(): Response<NetworkEpisodesResponse> {
-            val info = NetworkInfoModel(
+        fun episodesResponse(): Response<ApiEpisodes> {
+            val info = ApiInfo(
                 count = VALUE_COUNT,
                 pages = VALUE_PAGE,
                 next = VALUE_NEXT,
                 prev = VALUE_PREV
             )
 
-            val episode = NetworkEpisodeModel(
+            val episode = ApiEpisode(
                 id = VALUE_ID,
                 name = VALUE_NAME,
                 airDate = VALUE_AIR_DATE,
@@ -65,7 +65,7 @@ object NetworkResponseFactory {
             )
 
             return Response.success(
-                NetworkEpisodesResponse(
+                ApiEpisodes(
                     info = info,
                     results = arrayListOf(episode)
                 )
@@ -77,8 +77,8 @@ object NetworkResponseFactory {
 
         const val CHARACTERS_JSON: String = "[\n  ${CharacterDetails.CHARACTER_DETAILS_JSON}\n]"
 
-        fun charactersResponse(): Response<List<NetworkCharacterModel>> {
-            val character: NetworkCharacterModel = CharacterDetails.character()
+        fun charactersResponse(): Response<List<ApiCharacter>> {
+            val character: ApiCharacter = CharacterDetails.character()
             return Response.success(arrayListOf(character))
         }
     }
@@ -124,18 +124,18 @@ object NetworkResponseFactory {
   "created": "$VALUE_CREATED"
 }"""
 
-        fun character(): NetworkCharacterModel {
-            val origin = NetworkOriginModel(
+        fun character(): ApiCharacter {
+            val origin = ApiOrigin(
                 name = VALUE_ORIGIN_NAME,
                 url = VALUE_ORIGIN_URL
             )
 
-            val location = NetworkLocationModel(
+            val location = ApiLocation(
                 name = VALUE_LOCATION_NAME,
                 url = VALUE_LOCATION_URL
             )
 
-            return NetworkCharacterModel(
+            return ApiCharacter(
                 id = VALUE_ID,
                 name = VALUE_NAME,
                 status = VALUE_STATUS,
@@ -151,7 +151,7 @@ object NetworkResponseFactory {
             )
         }
 
-        fun characterResponse(): Response<NetworkCharacterModel> {
+        fun characterResponse(): Response<ApiCharacter> {
             return Response.success(character())
         }
     }

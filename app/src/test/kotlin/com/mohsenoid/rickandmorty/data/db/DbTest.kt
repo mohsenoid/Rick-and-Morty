@@ -6,8 +6,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.mohsenoid.rickandmorty.data.db.dao.DbCharacterDao
 import com.mohsenoid.rickandmorty.data.db.dao.DbEpisodeDao
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
+import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
@@ -59,13 +59,13 @@ class DbTest {
     fun `test insertEpisode can inserts a new Episode`() {
         runBlocking {
             // GIVEN
-            val expectedEntityEpisode: DbEntityEpisode = EpisodeDataFactory.Db.makeEpisode()
+            val expectedEntityEpisode: DbEpisode = EpisodeDataFactory.Db.makeEpisode()
 
             // WHEN
             episodeDao.insertEpisode(expectedEntityEpisode)
 
             // THEN
-            val actualEntityEpisodes: List<DbEntityEpisode> = episodeDao.queryAllEpisodes()
+            val actualEntityEpisodes: List<DbEpisode> = episodeDao.queryAllEpisodes()
 
             actualEntityEpisodes
                 .shouldNotBeEmpty()
@@ -78,9 +78,9 @@ class DbTest {
         runBlocking {
             // GIVEN
             val episodeId: Int = DataFactory.randomInt()
-            val oldEntityEpisode: DbEntityEpisode =
+            val oldEntityEpisode: DbEpisode =
                 EpisodeDataFactory.Db.makeEpisode(episodeId = episodeId)
-            val updatedEntityEpisode: DbEntityEpisode =
+            val updatedEntityEpisode: DbEpisode =
                 EpisodeDataFactory.Db.makeEpisode(episodeId = episodeId)
 
             // WHEN
@@ -88,7 +88,7 @@ class DbTest {
             episodeDao.insertEpisode(updatedEntityEpisode)
 
             // THEN
-            val actualEntityEpisodes: List<DbEntityEpisode> = episodeDao.queryAllEpisodes()
+            val actualEntityEpisodes: List<DbEpisode> = episodeDao.queryAllEpisodes()
 
             actualEntityEpisodes
                 .shouldNotBeEmpty()
@@ -101,13 +101,13 @@ class DbTest {
     fun `test insertCharacter can inserts a new Character`() {
         runBlocking {
             // GIVEN
-            val expectedCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter()
+            val expectedCharacter: DbCharacter = CharacterDataFactory.Db.makeCharacter()
 
             // WHEN
             characterDao.insertOrUpdateCharacter(expectedCharacter)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? =
+            val actualCharacter: DbCharacter? =
                 characterDao.queryCharacter(expectedCharacter.id)
 
             actualCharacter
@@ -121,9 +121,9 @@ class DbTest {
         runBlocking {
             // GIVEN
             val characterId: Int = DataFactory.randomInt()
-            val oldCharacter: DbEntityCharacter =
+            val oldCharacter: DbCharacter =
                 CharacterDataFactory.Db.makeCharacter(characterId = characterId)
-            val updatedCharacter: DbEntityCharacter =
+            val updatedCharacter: DbCharacter =
                 CharacterDataFactory.Db.makeCharacter(characterId = characterId)
 
             // WHEN
@@ -131,7 +131,7 @@ class DbTest {
             characterDao.insertOrUpdateCharacter(updatedCharacter)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? = characterDao.queryCharacter(characterId)
+            val actualCharacter: DbCharacter? = characterDao.queryCharacter(characterId)
 
             actualCharacter
                 .shouldNotBeNull()
@@ -145,14 +145,14 @@ class DbTest {
         runBlocking {
             // GIVEN
             val characterId: Int = DataFactory.randomInt()
-            val expectedCharacter: DbEntityCharacter =
+            val expectedCharacter: DbCharacter =
                 CharacterDataFactory.Db.makeCharacter(characterId = characterId)
 
             // WHEN
             characterDao.insertOrUpdateCharacter(expectedCharacter)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? = characterDao.queryCharacter(characterId)
+            val actualCharacter: DbCharacter? = characterDao.queryCharacter(characterId)
 
             actualCharacter
                 .shouldNotBeNull()
@@ -164,8 +164,8 @@ class DbTest {
     fun `test queryCharactersByIds returns the Characters asked for`() {
         runBlocking {
             // GIVEN
-            val expected: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter()
-            val notExpected: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter()
+            val expected: DbCharacter = CharacterDataFactory.Db.makeCharacter()
+            val notExpected: DbCharacter = CharacterDataFactory.Db.makeCharacter()
             val expectedCharacterIds: List<Int> = listOf(expected.id)
 
             // WHEN
@@ -173,7 +173,7 @@ class DbTest {
             characterDao.insertOrUpdateCharacter(notExpected)
 
             // THEN
-            val characters: List<DbEntityCharacter> =
+            val characters: List<DbCharacter> =
                 characterDao.queryCharactersByIds(expectedCharacterIds)
 
             characters
@@ -188,7 +188,7 @@ class DbTest {
         runBlocking {
             // GIVEN
             val expectedCharacterId: Int = DataFactory.randomInt()
-            val expectedCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter(
+            val expectedCharacter: DbCharacter = CharacterDataFactory.Db.makeCharacter(
                 characterId = expectedCharacterId,
                 status = CharacterDbMapper.ALIVE,
                 isAlive = true,
@@ -199,7 +199,7 @@ class DbTest {
             characterDao.insertOrUpdateCharacter(expectedCharacter)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? =
+            val actualCharacter: DbCharacter? =
                 characterDao.queryCharacter(expectedCharacterId)
 
             actualCharacter.shouldNotBeNull()
@@ -214,7 +214,7 @@ class DbTest {
         runBlocking {
             // GIVEN
             val expectedCharacterId: Int = DataFactory.randomInt()
-            val expectedCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter(
+            val expectedCharacter: DbCharacter = CharacterDataFactory.Db.makeCharacter(
                 characterId = expectedCharacterId,
                 status = CharacterDbMapper.ALIVE,
                 isAlive = true,
@@ -226,7 +226,7 @@ class DbTest {
             characterDao.killCharacter(expectedCharacterId)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? =
+            val actualCharacter: DbCharacter? =
                 characterDao.queryCharacter(expectedCharacterId)
 
             actualCharacter.shouldNotBeNull()
@@ -241,7 +241,7 @@ class DbTest {
         runBlocking {
             // GIVEN
             val expectedCharacterId: Int = DataFactory.randomInt()
-            val expectedCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter(
+            val expectedCharacter: DbCharacter = CharacterDataFactory.Db.makeCharacter(
                 characterId = expectedCharacterId,
                 status = CharacterDbMapper.ALIVE,
                 isAlive = true,
@@ -254,7 +254,7 @@ class DbTest {
             characterDao.insertOrUpdateCharacter(expectedCharacter)
 
             // THEN
-            val actualCharacter: DbEntityCharacter? =
+            val actualCharacter: DbCharacter? =
                 characterDao.queryCharacter(expectedCharacterId)
 
             actualCharacter.shouldNotBeNull()

@@ -8,7 +8,7 @@ val characterDetailsFragmentModule = module {
     viewModel<CharacterDetailsContract.Presenter> {
         CharacterDetailsPresenter(
             repository = get(),
-            configProvider = get()
+            statusProvider = get()
         )
     }
 }

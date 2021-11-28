@@ -1,10 +1,10 @@
-package com.mohsenoid.rickandmorty.data.network.dto
+package com.mohsenoid.rickandmorty.data.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NetworkEpisodeModel(
+internal data class ApiEpisode(
 
     @SerialName(value = "id")
     val id: Int,

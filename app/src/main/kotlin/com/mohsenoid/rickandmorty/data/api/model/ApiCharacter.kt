@@ -1,10 +1,10 @@
-package com.mohsenoid.rickandmorty.data.network.dto
+package com.mohsenoid.rickandmorty.data.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NetworkCharacterModel(
+internal data class ApiCharacter(
 
     @SerialName(value = "id")
     val id: Int,
@@ -25,10 +25,10 @@ data class NetworkCharacterModel(
     val gender: String,
 
     @SerialName(value = "origin")
-    val origin: NetworkOriginModel,
+    val origin: ApiOrigin,
 
     @SerialName(value = "location")
-    val location: NetworkLocationModel,
+    val location: ApiLocation,
 
     @SerialName(value = "image")
     val image: String,

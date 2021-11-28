@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.db.converters
 
 import androidx.room.TypeConverter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbOrigin
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
@@ -10,23 +10,23 @@ import kotlinx.serialization.json.Json
 internal class DbTypeConverters {
 
     @TypeConverter
-    fun locationToJson(location: DbEntityLocation?): String? {
-        return location?.let { Json.encodeToString(DbEntityLocation.serializer(), it) }
+    fun locationToJson(location: DbLocation?): String? {
+        return location?.let { Json.encodeToString(DbLocation.serializer(), it) }
     }
 
     @TypeConverter
-    fun jsonToLocation(locationJson: String?): DbEntityLocation? {
-        return locationJson?.let { Json.decodeFromString(DbEntityLocation.serializer(), it) }
+    fun jsonToLocation(locationJson: String?): DbLocation? {
+        return locationJson?.let { Json.decodeFromString(DbLocation.serializer(), it) }
     }
 
     @TypeConverter
-    fun originToJson(origin: DbEntityOrigin?): String? {
-        return origin?.let { Json.encodeToString(DbEntityOrigin.serializer(), it) }
+    fun originToJson(origin: DbOrigin?): String? {
+        return origin?.let { Json.encodeToString(DbOrigin.serializer(), it) }
     }
 
     @TypeConverter
-    fun jsonToOrigin(originJson: String?): DbEntityOrigin? {
-        return originJson?.let { Json.decodeFromString(DbEntityOrigin.serializer(), it) }
+    fun jsonToOrigin(originJson: String?): DbOrigin? {
+        return originJson?.let { Json.decodeFromString(DbOrigin.serializer(), it) }
     }
 
     @TypeConverter

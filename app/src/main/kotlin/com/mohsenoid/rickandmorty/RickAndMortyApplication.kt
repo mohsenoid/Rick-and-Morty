@@ -1,9 +1,8 @@
 package com.mohsenoid.rickandmorty
 
 import androidx.multidex.MultiDexApplication
-import com.mohsenoid.rickandmorty.data.network.NetworkConstants
+import com.mohsenoid.rickandmorty.data.dataModule
 import com.mohsenoid.rickandmorty.injection.appModule
-import com.mohsenoid.rickandmorty.injection.dataModule
 import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,7 +21,7 @@ class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
 
         startKoin {
             val appProperties: Map<String, String> = mapOf(
-                QualifiersNames.BASE_URL to NetworkConstants.BASE_URL
+                QualifiersNames.BASE_URL to BuildConfig.BASE_URL
             )
             properties(appProperties)
 

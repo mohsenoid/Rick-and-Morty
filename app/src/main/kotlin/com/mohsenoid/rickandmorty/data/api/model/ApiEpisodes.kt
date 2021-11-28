@@ -1,14 +1,14 @@
-package com.mohsenoid.rickandmorty.data.network.dto
+package com.mohsenoid.rickandmorty.data.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NetworkEpisodesResponse(
+internal data class ApiEpisodes(
 
     @SerialName(value = "info")
-    val info: NetworkInfoModel,
+    val info: ApiInfo,
 
     @SerialName(value = "results")
-    val results: List<NetworkEpisodeModel>
+    val results: List<ApiEpisode>
 )

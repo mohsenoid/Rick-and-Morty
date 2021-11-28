@@ -2,11 +2,11 @@ package com.mohsenoid.rickandmorty.view.episode.list
 
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.PageQueryResult
-import com.mohsenoid.rickandmorty.util.config.ConfigProvider
+import com.mohsenoid.rickandmorty.util.StatusProvider
 
 class EpisodeListPresenter(
     private val repository: Repository,
-    private val configProvider: ConfigProvider
+    private val statusProvider: StatusProvider
 ) : EpisodeListContract.Presenter() {
 
     private var view: EpisodeListContract.View? = null
@@ -34,7 +34,7 @@ class EpisodeListPresenter(
     }
 
     private suspend fun getEpisodes() {
-        if (!configProvider.isOnline()) {
+        if (!statusProvider.isOnline()) {
             view?.showOfflineMessage(isCritical = false)
         }
 
@@ -47,6 +47,7 @@ class EpisodeListPresenter(
                 }
             }
             PageQueryResult.EndOfList -> view?.reachedEndOfList()
+            PageQueryResult.Error -> view?.showMessage("Error fetching episodes")
         }
 
         view?.hideLoading()

@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisode
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import org.amshove.kluent.shouldEqual
 import org.junit.Before
@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations
 
 class EpisodeDbMapperTest {
 
-    private lateinit var episodeDbEntityMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode>
+    private lateinit var episodeDbEntityMapper: Mapper<ApiEpisode, DbEpisode>
 
     @Before
     fun setUp() {
@@ -21,20 +21,20 @@ class EpisodeDbMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val networkEpisode: NetworkEpisodeModel = EpisodeDataFactory.Network.makeEpisode()
+        val apiEpisode: ApiEpisode = EpisodeDataFactory.Network.makeEpisode()
 
-        val expectedEpisode = DbEntityEpisode(
-            id = networkEpisode.id,
-            name = networkEpisode.name,
-            airDate = networkEpisode.airDate,
-            episode = networkEpisode.episode,
-            characterIds = EpisodeDbMapper.extractCharacterIds(networkEpisode.characters),
-            url = networkEpisode.url,
-            created = networkEpisode.created
+        val expectedEpisode = DbEpisode(
+            id = apiEpisode.id,
+            name = apiEpisode.name,
+            airDate = apiEpisode.airDate,
+            episode = apiEpisode.episode,
+            characterIds = EpisodeDbMapper.extractCharacterIds(apiEpisode.characters),
+            url = apiEpisode.url,
+            created = apiEpisode.created
         )
 
         // WHEN
-        val actualEntityEpisode: DbEntityEpisode = episodeDbEntityMapper.map(networkEpisode)
+        val actualEntityEpisode: DbEpisode = episodeDbEntityMapper.map(apiEpisode)
 
         // THEN
         expectedEpisode shouldEqual actualEntityEpisode

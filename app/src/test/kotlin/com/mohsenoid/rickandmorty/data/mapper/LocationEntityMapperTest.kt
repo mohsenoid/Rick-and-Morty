@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
 import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 import com.mohsenoid.rickandmorty.test.LocationDataFactory
 import org.amshove.kluent.shouldEqual
@@ -9,7 +9,7 @@ import org.junit.Test
 
 class LocationEntityMapperTest {
 
-    private lateinit var entityLocationMapper: Mapper<DbEntityLocation, ModelLocation>
+    private lateinit var entityLocationMapper: Mapper<DbLocation, ModelLocation>
 
     @Before
     fun setUp() {
@@ -19,7 +19,7 @@ class LocationEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbLocation: DbEntityLocation = LocationDataFactory.Db.makeLocation()
+        val dbLocation: DbLocation = LocationDataFactory.Db.makeLocation()
 
         val expectedLocation = ModelLocation(
             name = dbLocation.name,

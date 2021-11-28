@@ -1,32 +1,24 @@
 package com.mohsenoid.rickandmorty.data
 
+import com.mohsenoid.rickandmorty.data.api.ApiClient
+import com.mohsenoid.rickandmorty.data.api.model.ApiCharacter
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisode
+import com.mohsenoid.rickandmorty.data.api.model.ApiLocation
+import com.mohsenoid.rickandmorty.data.api.model.ApiOrigin
 import com.mohsenoid.rickandmorty.data.db.dao.DbCharacterDao
 import com.mohsenoid.rickandmorty.data.db.dao.DbEpisodeDao
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
-import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
-import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
-import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
-import com.mohsenoid.rickandmorty.data.mapper.EpisodeEntityMapper
-import com.mohsenoid.rickandmorty.data.mapper.LocationDbMapper
-import com.mohsenoid.rickandmorty.data.mapper.LocationEntityMapper
+import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbOrigin
 import com.mohsenoid.rickandmorty.data.mapper.Mapper
-import com.mohsenoid.rickandmorty.data.mapper.OriginDbMapper
-import com.mohsenoid.rickandmorty.data.mapper.OriginEntityMapper
-import com.mohsenoid.rickandmorty.data.network.NetworkClient
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
 import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
-import com.mohsenoid.rickandmorty.util.config.ConfigProvider
+import com.mohsenoid.rickandmorty.util.StatusProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
 import org.amshove.kluent.When
 import org.amshove.kluent.calling
@@ -44,30 +36,30 @@ abstract class RepositoryTest {
     lateinit var episodeDao: DbEpisodeDao
 
     @Mock
-    lateinit var networkClient: NetworkClient
+    lateinit var networkClient: ApiClient
 
     @Mock
-    private lateinit var configProvider: ConfigProvider
+    private lateinit var statusProvider: StatusProvider
 
     lateinit var repository: Repository
 
     private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
 
-    private val episodeDbEntityMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode> =
+    private val episodeDbEntityMapper: Mapper<ApiEpisode, DbEpisode> =
         EpisodeDbMapper()
-    private val entityEpisodeEntityMapper: Mapper<DbEntityEpisode, ModelEpisode> =
+    private val entityEpisodeEntityMapper: Mapper<DbEpisode, ModelEpisode> =
         EpisodeEntityMapper()
-    private val originDbMapperOrigin: Mapper<NetworkOriginModel, DbEntityOrigin> =
+    private val originDbMapperOrigin: Mapper<ApiOrigin, DbOrigin> =
         OriginDbMapper()
-    private val locationDbMapperLocation: Mapper<NetworkLocationModel, DbEntityLocation> =
+    private val locationDbMapperLocation: Mapper<ApiLocation, DbLocation> =
         LocationDbMapper()
-    private val characterDbMapperCharacter: Mapper<NetworkCharacterModel, DbEntityCharacter> =
+    private val characterDbMapperCharacter: Mapper<ApiCharacter, DbCharacter> =
         CharacterDbMapper(originDbMapperOrigin, locationDbMapperLocation)
-    private val entityOriginMapper: Mapper<DbEntityOrigin, ModelOrigin> =
+    private val entityOriginMapper: Mapper<DbOrigin, ModelOrigin> =
         OriginEntityMapper()
-    private val entityLocationMapper: Mapper<DbEntityLocation, ModelLocation> =
+    private val entityLocationMapper: Mapper<DbLocation, ModelLocation> =
         LocationEntityMapper()
-    private val entityCharacterMapper: Mapper<DbEntityCharacter, ModelCharacter> =
+    private val entityCharacterMapper: Mapper<DbCharacter, ModelCharacter> =
         CharacterEntityMapper(entityOriginMapper, entityLocationMapper)
 
     @Before
@@ -79,7 +71,7 @@ abstract class RepositoryTest {
             episodeDao = episodeDao,
             networkClient = networkClient,
             ioDispatcher = testDispatcherProvider.ioDispatcher,
-            configProvider = configProvider,
+            configProvider = statusProvider,
             episodeDbMapper = episodeDbEntityMapper,
             episodeEntityMapper = entityEpisodeEntityMapper,
             characterDbMapper = characterDbMapperCharacter,
@@ -88,6 +80,6 @@ abstract class RepositoryTest {
     }
 
     fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        When calling configProvider.isOnline() itReturns isOnline
+        When calling statusProvider.isOnline() itReturns isOnline
     }
 }

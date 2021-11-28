@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,17 +13,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentEpisodeListBinding
 import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
-import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
-import kotlinx.coroutines.launch
+import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
 @Suppress("TooManyFunctions")
 class EpisodeListFragment :
-    BaseFragment(),
+    Fragment(),
     EpisodeListContract.View,
     EpisodeListAdapter.ClickListener,
     OnRefreshListener {
@@ -68,7 +68,7 @@ class EpisodeListFragment :
                 totalItemsCount: Int,
                 view: RecyclerView
             ) {
-                launch {
+                lifecycle.launchWhileResumed {
                     presenter.loadMoreEpisodes(page = page + 1)
                 }
             }
@@ -81,13 +81,13 @@ class EpisodeListFragment :
 
     override fun onResume() {
         super.onResume()
-        launch {
+        lifecycle.launchWhileResumed {
             presenter.loadEpisodes()
         }
     }
 
     override fun onRefresh() {
-        launch {
+        lifecycle.launchWhileResumed {
             presenter.loadEpisodes()
         }
     }

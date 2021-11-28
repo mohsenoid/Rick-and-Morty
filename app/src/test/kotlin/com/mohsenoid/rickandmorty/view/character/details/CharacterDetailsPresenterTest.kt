@@ -5,7 +5,7 @@ import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
-import com.mohsenoid.rickandmorty.util.config.ConfigProvider
+import com.mohsenoid.rickandmorty.util.StatusProvider
 import com.nhaarman.mockitokotlin2.any
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.Verify
@@ -28,7 +28,7 @@ class CharacterDetailsPresenterTest {
     lateinit var repository: Repository
 
     @Mock
-    lateinit var configProvider: ConfigProvider
+    lateinit var statusProvider: StatusProvider
 
     @Mock
     lateinit var view: CharacterDetailsContract.View
@@ -39,7 +39,7 @@ class CharacterDetailsPresenterTest {
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         presenter =
-            CharacterDetailsPresenter(repository = repository, configProvider = configProvider)
+            CharacterDetailsPresenter(repository = repository, configProvider = statusProvider)
         presenter.bind(view)
     }
 
@@ -158,7 +158,7 @@ class CharacterDetailsPresenterTest {
     }
 
     private fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        When calling configProvider.isOnline() itReturns isOnline
+        When calling statusProvider.isOnline() itReturns isOnline
     }
 
     private suspend fun stubRepositoryGetCharacterDetailsOnSuccess(character: ModelCharacter) {
