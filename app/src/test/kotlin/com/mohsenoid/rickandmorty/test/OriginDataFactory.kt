@@ -6,33 +6,21 @@ import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
 
 object OriginDataFactory {
 
-    object Db {
+    internal fun makeDbOrigin(): DbOrigin =
+        DbOrigin(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-        fun makeOrigin(): DbOrigin {
-            return DbOrigin(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeApiOrigin(): ApiOrigin =
+        ApiOrigin(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-    object Network {
-
-        fun makeOrigin(): ApiOrigin {
-            return ApiOrigin(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
-
-    object Entity {
-
-        fun makeOrigin(): ModelOrigin {
-            return ModelOrigin(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeOrigin(): ModelOrigin =
+        ModelOrigin(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 }

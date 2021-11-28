@@ -1,291 +1,293 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
-import com.mohsenoid.rickandmorty.test.DataFactory
+import com.mohsenoid.rickandmorty.domain.model.PageQueryResult
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import com.mohsenoid.rickandmorty.util.StatusProvider
-import com.nhaarman.mockitokotlin2.any
-import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.Verify
-import org.amshove.kluent.When
-import org.amshove.kluent.called
-import org.amshove.kluent.calling
-import org.amshove.kluent.itAnswers
-import org.amshove.kluent.itReturns
-import org.amshove.kluent.on
-import org.amshove.kluent.that
-import org.amshove.kluent.was
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class EpisodeListPresenterTest {
 
-    @Mock
-    lateinit var repository: Repository
+    @MockK
+    private lateinit var repository: Repository
 
-    @Mock
-    lateinit var statusProvider: StatusProvider
+    @MockK
+    private lateinit var statusProvider: StatusProvider
 
-    @Mock
-    lateinit var view: EpisodeListContract.View
+    private val view: EpisodeListContract.View = mockk {
+        every { showLoading() } just runs
+        every { showLoadingMore() } just runs
+        every { hideLoading() } just runs
+        every { hideLoadingMore() } just runs
+        every { showMessage(any()) } just runs
+        every { showOfflineMessage(any()) } just runs
+        every { setEpisodes(any()) } just runs
+        every { updateEpisodes(any()) } just runs
+        every { reachedEndOfList() } just runs
+    }
 
     private lateinit var presenter: EpisodeListContract.Presenter
 
+    private fun stubConfigProviderIsOnline(isOnline: Boolean) {
+        every { statusProvider.isOnline() } returns isOnline
+    }
+
+    private fun stubRepositoryGetEpisodesOnSuccess(page: Int, episodes: List<ModelEpisode>) {
+        coEvery { repository.getEpisodes(page = page) } returns PageQueryResult.Successful(episodes)
+    }
+
+    private fun stubRepositoryGetEpisodesOnEndOfTheList(page: Int) {
+        coEvery { repository.getEpisodes(page = page) } returns PageQueryResult.EndOfList
+    }
+
+    private fun stubRepositoryGetEpisodesOnError(page: Int) {
+        coEvery { repository.getEpisodes(page = page) } returns PageQueryResult.Error
+    }
+
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        presenter = EpisodeListPresenter(repository = repository, configProvider = statusProvider)
+        MockKAnnotations.init(this)
+
+        presenter = EpisodeListPresenter(repository = repository, statusProvider = statusProvider)
         presenter.bind(view)
     }
 
     @Test
-    fun `test if loadEpisodes calls view showLoading`() {
-        runBlocking {
-            // GIVEN
+    fun `loading episodes shows loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = 1, episodes)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on view that view.showLoading() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.showLoading() }
     }
 
     @Test
-    fun `test if loadMoreEpisodes calls view showLoadingMore`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
+    fun `loading more episodes shows loading more`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val page = 2
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = page, episodes = episodes)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.showLoadingMore() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.showLoadingMore() }
     }
 
     @Test
-    fun `test if isOffline loadEpisodes calls view showOfflineMessage`() {
-        runBlocking {
+    fun `loading episodes if no network connection shows non-critical offline message`() =
+        runBlockingTest {
             // GIVEN
             stubConfigProviderIsOnline(false)
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+            stubRepositoryGetEpisodesOnSuccess(page = 1, episodes)
 
             // WHEN
             presenter.loadEpisodes()
 
             // THEN
-            Verify on view that view.showOfflineMessage(isCritical = false) was called
+            verify(exactly = 1) { view.showOfflineMessage(isCritical = false) }
         }
-    }
 
     @Test
-    fun `test if isOffline loadMoreEpisodes calls view showOfflineMessage`() {
-        runBlocking {
+    fun `loading more episodes if no network connection shows non-critical offline message`() =
+        runBlockingTest {
             // GIVEN
             stubConfigProviderIsOnline(false)
             val page = 2
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+            stubRepositoryGetEpisodesOnSuccess(page = page, episodes = episodes)
 
             // WHEN
             presenter.loadMoreEpisodes(page = page)
 
             // THEN
-            Verify on view that view.showOfflineMessage(isCritical = false) was called
+            verify(exactly = 1) { view.showOfflineMessage(isCritical = false) }
         }
+
+    @Test
+    fun `loading episodes successfully fetches correct result`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = 1, episodes)
+
+        // WHEN
+        presenter.loadEpisodes()
+
+        // THEN
+        verify(exactly = 1) { view.setEpisodes(episodes = episodes) }
     }
 
     @Test
-    fun `test loadEpisodes calls repository getEpisodes`() {
-        runBlocking {
-            // GIVEN
-            val page = 1
+    fun `loading episodes successfully hides loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = 1, episodes = episodes)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on repository that repository.getEpisodes(page = page) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 
     @Test
-    fun `test loadMoreEpisodes calls repository getEpisodes`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
+    fun `loading more episodes successfully fetches correct result`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val page = 2
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = page, episodes = episodes)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on repository that repository.getEpisodes(page = page) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.updateEpisodes(episodes = episodes) }
     }
 
     @Test
-    fun `test loadEpisodes calls view setEpisodes OnSuccess`() {
-        runBlocking {
-            // GIVEN
-            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
-            stubRepositoryGetEpisodesOnSuccess(episodes)
+    fun `loading more episodes successfully hides loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val page = 2
+        val episodes: List<ModelEpisode> = EpisodeDataFactory.makeEpisodes(5)
+        stubRepositoryGetEpisodesOnSuccess(page = page, episodes = episodes)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.setEpisodes(episodes = episodes) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 
     @Test
-    fun `test loadMoreEpisodes calls view updateEpisodes OnSuccess`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
-            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
-            stubRepositoryGetEpisodesOnSuccess(episodes)
+    fun `loading episodes on error shows error message`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnError(page = 1)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on view that view.updateEpisodes(episodes = episodes) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.showMessage(any()) }
     }
 
     @Test
-    fun `test loadEpisodes calls view showMessage OnError`() {
-        runBlocking {
-            // GIVEN
-            val errorMessage = DataFactory.randomString()
-            stubRepositoryGetEpisodesOnError(Exception(errorMessage))
+    fun `loading episodes on error hides loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnError(page = 1)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on view that view.showMessage(message = errorMessage) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 
     @Test
-    fun `test loadMoreEpisodes calls view showMessage OnError`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
-            val errorMessage = DataFactory.randomString()
-            stubRepositoryGetEpisodesOnError(Exception(errorMessage))
+    fun `loading more episodes on error shows error message`() = runBlockingTest {
+        // GIVEN
+        val page = 2
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnError(page = page)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.showMessage(message = errorMessage) was called
-        }
+        // THEN
+        verify(exactly = 1) { view.showMessage(any()) }
     }
 
     @Test
-    fun `test loadEpisodes calls view reachedEndOfList having EndOfListException OnError`() {
-        runBlocking {
-            // GIVEN
-            stubRepositoryGetEpisodesOnError(EndOfListException())
+    fun `loading more episodes on error hides loading`() = runBlockingTest {
+        // GIVEN
+        val page = 2
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnError(page = page)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.reachedEndOfList() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 
     @Test
-    fun `test loadMoreEpisodes calls view reachedEndOfList having EndOfListException OnError`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
-            stubRepositoryGetEpisodesOnError(EndOfListException())
+    fun `loading episodes on end of list reaches end of list`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnEndOfTheList(page = 1)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on view that view.reachedEndOfList() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.reachedEndOfList() }
     }
 
     @Test
-    fun `test loadEpisodes calls view hideLoading OnSuccess`() {
-        runBlocking {
-            // GIVEN
-            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
-            stubRepositoryGetEpisodesOnSuccess(episodes)
+    fun `loading episodes on end of list hides loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        stubRepositoryGetEpisodesOnEndOfTheList(page = 1)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadEpisodes()
 
-            // THEN
-            Verify on view that view.hideLoading() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 
     @Test
-    fun `test loadMoreEpisodes calls view hideLoadingMore OnSuccess`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
-            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
-            stubRepositoryGetEpisodesOnSuccess(episodes)
+    fun `loading more episodes on end of list reaches end of list`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val page = 2
+        stubRepositoryGetEpisodesOnEndOfTheList(page = page)
 
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.hideLoadingMore() was called
-        }
+        // THEN
+        verify(exactly = 1) { view.reachedEndOfList() }
     }
 
     @Test
-    fun `test loadEpisodes calls view hideLoading OnError`() {
-        runBlocking {
-            // GIVEN
-            stubRepositoryGetEpisodesOnError(Exception())
+    fun `loading more episodes on end of list hides loading`() = runBlockingTest {
+        // GIVEN
+        stubConfigProviderIsOnline(true)
+        val page = 2
+        stubRepositoryGetEpisodesOnError(page = page)
 
-            // WHEN
-            presenter.loadEpisodes()
+        // WHEN
+        presenter.loadMoreEpisodes(page = page)
 
-            // THEN
-            Verify on view that view.hideLoading() was called
-        }
-    }
-
-    @Test
-    fun `test loadMoreEpisodes calls view hideLoadingMore OnError`() {
-        runBlocking {
-            // GIVEN
-            val page = 2
-            stubRepositoryGetEpisodesOnError(Exception())
-
-            // WHEN
-            presenter.loadMoreEpisodes(page = page)
-
-            // THEN
-            Verify on view that view.hideLoadingMore() was called
-        }
-    }
-
-    private fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        When calling statusProvider.isOnline() itReturns isOnline
-    }
-
-    private suspend fun stubRepositoryGetEpisodesOnSuccess(episodes: List<ModelEpisode>) {
-        When calling repository.getEpisodes(any()) itReturns episodes
-    }
-
-    private suspend fun stubRepositoryGetEpisodesOnError(exception: Exception) {
-        When calling repository.getEpisodes(any()) itAnswers { throw exception }
+        // THEN
+        verify(exactly = 1) { view.hideLoading() }
     }
 }

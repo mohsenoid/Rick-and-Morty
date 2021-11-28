@@ -94,7 +94,7 @@ class CharacterDetailsFragment : Fragment(), CharacterDetailsContract.View {
             characterName.text = character.name
             characterDetails.text =
                 getString(R.string.character_details_format, character.id, character.created)
-            if (character.killedByUser) {
+            if (character.isKilledByUser) {
                 characterKilledByUser.visibility = View.VISIBLE
             } else {
                 characterKilledByUser.visibility = View.GONE

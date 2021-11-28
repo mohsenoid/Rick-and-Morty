@@ -149,10 +149,8 @@ dependencies {
 
     // Test
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.mockito:mockito-core:3.3.3")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("org.robolectric:robolectric:4.3.1")
-    testImplementation("org.amshove.kluent:kluent-android:1.68")
+    testImplementation("org.robolectric:robolectric:4.7.2")
+    testImplementation("io.mockk:mockk:1.12.1")
 
     // Koin
     val koinVersion = "3.1.2"

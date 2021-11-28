@@ -43,14 +43,14 @@ class CharacterEntityMapperTest {
         val expectedOrigin: ModelOrigin = OriginDataFactory.Entity.makeOrigin()
         stubOriginEntityMapper(expectedOrigin)
 
-        val expectedLocation: ModelLocation = LocationDataFactory.Entity.makeEntity()
+        val expectedLocation: ModelLocation = LocationDataFactory.Entity.makeLocation()
         stubLocationEntityMapper(expectedLocation)
 
         val expectedCharacter = ModelCharacter(
             id = dbCharacter.id,
             name = dbCharacter.name,
             status = dbCharacter.status,
-            statusAlive = dbCharacter.statusAlive,
+            isAlive = dbCharacter.statusAlive,
             species = dbCharacter.species,
             type = dbCharacter.type,
             gender = dbCharacter.gender,
@@ -60,7 +60,7 @@ class CharacterEntityMapperTest {
             episodeIds = dbCharacter.episodeIds,
             url = dbCharacter.url,
             created = dbCharacter.created,
-            killedByUser = false
+            isKilledByUser = false
         )
 
         // WHEN
