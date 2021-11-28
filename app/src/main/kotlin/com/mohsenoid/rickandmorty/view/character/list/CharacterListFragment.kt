@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -88,11 +89,13 @@ class CharacterListFragment :
         activity?.onBackPressed()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun setCharacters(characters: List<ModelCharacter>) {
         adapter.setCharacters(characters)
         adapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun updateCharacter(character: ModelCharacter) {
         adapter.updateCharacter(character)
         adapter.notifyDataSetChanged()

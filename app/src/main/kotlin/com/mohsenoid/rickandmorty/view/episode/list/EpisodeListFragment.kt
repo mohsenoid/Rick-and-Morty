@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -120,6 +121,7 @@ class EpisodeListFragment :
         binding.episodeListProgress.visibility = View.GONE
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun setEpisodes(episodes: List<ModelEpisode>) {
         binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.setEpisodes(episodes)
@@ -127,6 +129,7 @@ class EpisodeListFragment :
         adapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun updateEpisodes(episodes: List<ModelEpisode>) {
         binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.addMoreEpisodes(episodes)
