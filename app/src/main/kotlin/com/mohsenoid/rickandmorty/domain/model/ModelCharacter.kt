@@ -4,7 +4,7 @@ data class ModelCharacter(
     val id: Int,
     val name: String,
     val status: String,
-    val statusAlive: Boolean,
+    val isAlive: Boolean,
     val species: String,
     val type: String,
     val gender: String,
@@ -14,9 +14,9 @@ data class ModelCharacter(
     val episodeIds: List<Int>,
     val url: String,
     val created: String,
-    val killedByUser: Boolean
+    val isKilledByUser: Boolean
 ) {
 
-    val isAlive: Boolean
-        get() = statusAlive && !killedByUser
+    val isAliveAndNotKilledByUser: Boolean
+        get() = isAlive && !isKilledByUser
 }

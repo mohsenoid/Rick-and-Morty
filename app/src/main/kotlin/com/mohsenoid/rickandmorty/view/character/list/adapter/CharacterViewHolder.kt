@@ -19,7 +19,7 @@ class CharacterViewHolder internal constructor(
 
             characterName.text = character.name
 
-            if (character.isAlive) {
+            if (character.isAliveAndNotKilledByUser) {
                 characterStatus.setImageResource(R.drawable.ic_alive)
             } else {
                 characterStatus.setImageResource(R.drawable.ic_dead)

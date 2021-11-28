@@ -40,7 +40,11 @@ class CharacterListPresenter(
     }
 
     override suspend fun killCharacter(character: ModelCharacter) {
-        if (!character.isAlive) return
+        if (!character.isAliveAndNotKilledByUser) return
+
+        if (!statusProvider.isOnline()) {
+            view?.showOfflineMessage(isCritical = false)
+        }
 
         when (val result = repository.killCharacter(character.id)) {
             is QueryResult.Successful -> view?.updateCharacter(result.data)

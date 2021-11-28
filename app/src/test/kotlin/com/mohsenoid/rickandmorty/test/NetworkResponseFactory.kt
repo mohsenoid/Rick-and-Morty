@@ -46,7 +46,7 @@ object NetworkResponseFactory {
   ]
 }"""
 
-        fun episodesResponse(): Response<ApiEpisodes> {
+        internal fun episodesResponse(): Response<ApiEpisodes> {
             val info = ApiInfo(
                 count = VALUE_COUNT,
                 pages = VALUE_PAGE,
@@ -74,17 +74,15 @@ object NetworkResponseFactory {
     }
 
     object Characters {
-
         const val CHARACTERS_JSON: String = "[\n  ${CharacterDetails.CHARACTER_DETAILS_JSON}\n]"
 
-        fun charactersResponse(): Response<List<ApiCharacter>> {
+        internal fun charactersResponse(): Response<List<ApiCharacter>> {
             val character: ApiCharacter = CharacterDetails.character()
             return Response.success(arrayListOf(character))
         }
     }
 
     object CharacterDetails {
-
         private const val VALUE_ID: Int = 1
         private const val VALUE_NAME: String = "Rick Sanchez"
         private const val VALUE_STATUS: String = "Alive"
@@ -124,7 +122,7 @@ object NetworkResponseFactory {
   "created": "$VALUE_CREATED"
 }"""
 
-        fun character(): ApiCharacter {
+        internal fun character(): ApiCharacter {
             val origin = ApiOrigin(
                 name = VALUE_ORIGIN_NAME,
                 url = VALUE_ORIGIN_URL
@@ -151,7 +149,7 @@ object NetworkResponseFactory {
             )
         }
 
-        fun characterResponse(): Response<ApiCharacter> {
+        internal fun characterResponse(): Response<ApiCharacter> {
             return Response.success(character())
         }
     }

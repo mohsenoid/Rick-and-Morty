@@ -39,7 +39,7 @@ class CharacterDbMapperTest {
     fun map() {
         // GIVEN
         val apiCharacter: ApiCharacter =
-            CharacterDataFactory.Network.makeCharacter()
+            CharacterDataFactory.Api.makeCharacter()
 
         val expectedOrigin: DbOrigin = OriginDataFactory.Db.makeOrigin()
         stubOriginDbMapper(expectedOrigin)

@@ -10,7 +10,7 @@ import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
 
-private const val ALIVE: String = "alive"
+private const val DEAD: String = "dead"
 
 private const val SEPARATOR: Char = '/'
 
@@ -23,7 +23,7 @@ internal fun ApiCharacter.toDbCharacter() =
         id = id,
         name = name,
         status = status,
-        statusAlive = status.equals(ALIVE, ignoreCase = true),
+        statusAlive = !status.equals(DEAD, ignoreCase = true),
         species = species,
         type = type,
         gender = gender,
@@ -53,7 +53,7 @@ internal fun DbCharacter.toModelCharacter() =
         id = id,
         name = name,
         status = status,
-        statusAlive = statusAlive,
+        isAlive = statusAlive,
         species = species,
         type = type,
         gender = gender,
@@ -63,7 +63,7 @@ internal fun DbCharacter.toModelCharacter() =
         episodeIds = episodeIds,
         url = url,
         created = created,
-        killedByUser = killedByUser
+        isKilledByUser = killedByUser
     )
 
 private fun DbOrigin.toModelOrigin() =

@@ -6,33 +6,21 @@ import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 
 object LocationDataFactory {
 
-    object Db {
+    internal fun makeDbLocation(): DbLocation =
+        DbLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-        fun makeLocation(): DbLocation {
-            return DbLocation(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeApiLocation(): ApiLocation =
+        ApiLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-    object Network {
-
-        fun makeLocation(): ApiLocation {
-            return ApiLocation(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
-
-    object Entity {
-
-        fun makeEntity(): ModelLocation {
-            return ModelLocation(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeLocation(): ModelLocation =
+        ModelLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 }
