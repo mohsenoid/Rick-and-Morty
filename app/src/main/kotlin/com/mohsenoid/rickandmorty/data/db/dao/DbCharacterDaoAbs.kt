@@ -11,7 +11,7 @@ internal abstract class DbCharacterDaoAbs : DbCharacterDao {
 
         insertCharacter(
             character = if (oldCharacter != null) {
-                character.copy(killedByUser = oldCharacter.killedByUser)
+                character.copy(isKilledByUser = oldCharacter.isKilledByUser)
             } else {
                 character
             }

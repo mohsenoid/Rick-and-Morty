@@ -16,7 +16,7 @@ internal interface DbCharacterDao {
     @Query(value = "SELECT * FROM characters WHERE _id = :characterId LIMIT 1")
     suspend fun queryCharacter(characterId: Int): DbCharacter?
 
-    @Query(value = "UPDATE characters SET killedByUser = 1 WHERE _id = :characterId")
+    @Query(value = "UPDATE characters SET is_killed_by_user = 1 WHERE _id = :characterId")
     suspend fun killCharacter(characterId: Int)
 
     suspend fun insertOrUpdateCharacter(character: DbCharacter)

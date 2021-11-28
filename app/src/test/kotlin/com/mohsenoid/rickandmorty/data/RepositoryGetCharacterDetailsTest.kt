@@ -1,73 +1,68 @@
 package com.mohsenoid.rickandmorty.data
 
 import com.mohsenoid.rickandmorty.data.api.model.ApiCharacter
+import com.mohsenoid.rickandmorty.data.api.model.ApiResult
 import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
+import com.mohsenoid.rickandmorty.test.ApiFactory
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
-import com.mohsenoid.rickandmorty.test.NetworkResponseFactory
-import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.Verify
-import org.amshove.kluent.VerifyNoFurtherInteractions
-import org.amshove.kluent.VerifyNoInteractions
-import org.amshove.kluent.When
-import org.amshove.kluent.any
-import org.amshove.kluent.called
-import org.amshove.kluent.calling
-import org.amshove.kluent.itReturns
-import org.amshove.kluent.on
-import org.amshove.kluent.that
-import org.amshove.kluent.was
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
+import io.mockk.runs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import retrofit2.Response
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RepositoryGetCharacterDetailsTest : RepositoryTest() {
 
     @Test
-    fun `test if getCharacterDetails calls networkClient when isOnline`() {
-        runBlocking {
-            // GIVEN
-            val characterId: Int = DataFactory.randomInt()
-            stubConfigProviderIsOnline(isOnline = true)
-            stubNetworkClientFetchCharacterDetails(NetworkResponseFactory.CharacterDetails.characterResponse())
-            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeCharacter(characterId = characterId))
+    fun `test if getCharacterDetails calls networkClient when isOnline`() = runBlockingTest {
+        // GIVEN
+        val characterId: Int = DataFactory.randomInt()
+        stubStatusProviderIsOnline(isOnline = true)
+        stubApiFetchCharacterDetails(ApiFactory.CharacterDetails.makeCharacter())
+        stubSbQueryCharacter(
+            character = CharacterDataFactory.makeDbCharacter(characterId = characterId),
+        )
+        stubDbInsertOrUpdateCharacter()
 
-            // WHEN
-            repository.getCharacterDetails(characterId = characterId)
+        // WHEN
+        repository.getCharacterDetails(characterId = characterId)
 
-            // THEN
-            Verify on networkClient that networkClient.fetchCharacterDetails(characterId = any()) was called
-            VerifyNoFurtherInteractions on networkClient
+        // THEN
+        coVerify(exactly = 1) { api.fetchCharacterDetails(characterId = any()) }
 
-            Verify on characterDao that characterDao.insertOrUpdateCharacter(character = any()) was called
-            Verify on characterDao that characterDao.queryCharacter(characterId = any()) was called
-            VerifyNoFurtherInteractions on characterDao
-        }
+        coVerify(exactly = 1) { db.insertOrUpdateCharacter(character = any()) }
+        coVerify(exactly = 1) { db.queryCharacter(characterId = any()) }
     }
 
     @Test
-    fun `test if getCharacterDetails calls db only when isOffline`() {
-        runBlocking {
-            // GIVEN
-            val characterId: Int = DataFactory.randomInt()
-            stubConfigProviderIsOnline(isOnline = false)
-            stubCharacterDaoQueryCharacter(CharacterDataFactory.Db.makeCharacter(characterId = characterId))
+    fun `test if getCharacterDetails calls db only when isOffline`() = runBlockingTest {
+        // GIVEN
+        val characterId: Int = DataFactory.randomInt()
+        stubStatusProviderIsOnline(isOnline = false)
+        stubSbQueryCharacter(CharacterDataFactory.makeDbCharacter(characterId = characterId))
 
-            // WHEN
-            repository.getCharacterDetails(characterId = characterId)
+        // WHEN
+        repository.getCharacterDetails(characterId = characterId)
 
-            // THEN
-            VerifyNoInteractions on networkClient
-
-            Verify on characterDao that characterDao.queryCharacter(characterId = any()) was called
-            VerifyNoFurtherInteractions on characterDao
-        }
+        // THEN
+        coVerify(exactly = 0) { api.fetchCharacterDetails(characterId = any()) }
+        coVerify(exactly = 1) { db.queryCharacter(characterId = any()) }
     }
 
-    private suspend fun stubNetworkClientFetchCharacterDetails(character: Response<ApiCharacter>) {
-        When calling networkClient.fetchCharacterDetails(characterId = any()) itReturns character
+    private suspend fun stubApiFetchCharacterDetails(character: ApiCharacter) {
+        coEvery { api.fetchCharacterDetails(characterId = any()) } returns
+            ApiResult.Success(character)
     }
 
-    private suspend fun stubCharacterDaoQueryCharacter(character: DbCharacter?) {
-        When calling characterDao.queryCharacter(characterId = any()) itReturns character
+    private fun stubDbInsertOrUpdateCharacter() {
+        coEvery { db.insertOrUpdateCharacter(any()) } just runs
+    }
+
+    private fun stubSbQueryCharacter(character: DbCharacter?) {
+        coEvery { db.queryCharacter(characterId = any()) } returns character
     }
 }

@@ -16,7 +16,7 @@ object CharacterDataFactory {
             id = characterId,
             name = DataFactory.randomString(),
             status = status,
-            statusAlive = isAlive,
+            isAlive = isAlive,
             species = DataFactory.randomString(),
             type = DataFactory.randomString(),
             gender = DataFactory.randomString(),
@@ -26,7 +26,7 @@ object CharacterDataFactory {
             episodeIds = DataFactory.randomIntList(count = 5),
             url = DataFactory.randomString(),
             created = DataFactory.randomString(),
-            killedByUser = isKilledByUser,
+            isKilledByUser = isKilledByUser,
         )
 
     internal fun makeDbCharacters(count: Int): List<DbCharacter> {

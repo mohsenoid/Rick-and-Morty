@@ -6,9 +6,8 @@ import com.mohsenoid.rickandmorty.data.api.model.ApiEpisodes
 import com.mohsenoid.rickandmorty.data.api.model.ApiInfo
 import com.mohsenoid.rickandmorty.data.api.model.ApiLocation
 import com.mohsenoid.rickandmorty.data.api.model.ApiOrigin
-import retrofit2.Response
 
-object NetworkResponseFactory {
+object ApiFactory {
 
     object Episode {
         private const val VALUE_COUNT: Int = 1
@@ -46,7 +45,7 @@ object NetworkResponseFactory {
   ]
 }"""
 
-        internal fun episodesResponse(): Response<ApiEpisodes> {
+        internal fun makeApiEpisodes(): ApiEpisodes {
             val info = ApiInfo(
                 count = VALUE_COUNT,
                 pages = VALUE_PAGE,
@@ -64,11 +63,9 @@ object NetworkResponseFactory {
                 created = VALUE_CREATED
             )
 
-            return Response.success(
-                ApiEpisodes(
-                    info = info,
-                    results = arrayListOf(episode)
-                )
+            return ApiEpisodes(
+                info = info,
+                results = arrayListOf(episode)
             )
         }
     }
@@ -76,9 +73,9 @@ object NetworkResponseFactory {
     object Characters {
         const val CHARACTERS_JSON: String = "[\n  ${CharacterDetails.CHARACTER_DETAILS_JSON}\n]"
 
-        internal fun charactersResponse(): Response<List<ApiCharacter>> {
-            val character: ApiCharacter = CharacterDetails.character()
-            return Response.success(arrayListOf(character))
+        internal fun makeCharacters(): List<ApiCharacter> {
+            val character: ApiCharacter = CharacterDetails.makeCharacter()
+            return arrayListOf(character)
         }
     }
 
@@ -122,7 +119,7 @@ object NetworkResponseFactory {
   "created": "$VALUE_CREATED"
 }"""
 
-        internal fun character(): ApiCharacter {
+        internal fun makeCharacter(): ApiCharacter {
             val origin = ApiOrigin(
                 name = VALUE_ORIGIN_NAME,
                 url = VALUE_ORIGIN_URL
@@ -147,10 +144,6 @@ object NetworkResponseFactory {
                 url = VALUE_URL,
                 created = VALUE_CREATED
             )
-        }
-
-        internal fun characterResponse(): Response<ApiCharacter> {
-            return Response.success(character())
         }
     }
 }

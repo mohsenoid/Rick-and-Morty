@@ -23,7 +23,7 @@ internal fun ApiCharacter.toDbCharacter() =
         id = id,
         name = name,
         status = status,
-        statusAlive = !status.equals(DEAD, ignoreCase = true),
+        isAlive = !status.equals(DEAD, ignoreCase = true),
         species = species,
         type = type,
         gender = gender,
@@ -33,7 +33,7 @@ internal fun ApiCharacter.toDbCharacter() =
         episodeIds = extractEpisodeIds(episodes),
         url = url,
         created = created,
-        killedByUser = false
+        isKilledByUser = false
     )
 
 private fun ApiOrigin.toDbOrigin() =
@@ -53,7 +53,7 @@ internal fun DbCharacter.toModelCharacter() =
         id = id,
         name = name,
         status = status,
-        isAlive = statusAlive,
+        isAlive = isAlive,
         species = species,
         type = type,
         gender = gender,
@@ -63,7 +63,7 @@ internal fun DbCharacter.toModelCharacter() =
         episodeIds = episodeIds,
         url = url,
         created = created,
-        isKilledByUser = killedByUser
+        isKilledByUser = isKilledByUser
     )
 
 private fun DbOrigin.toModelOrigin() =
