@@ -1,12 +1,12 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 
-class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEpisodeModel> {
+class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEntityEpisode> {
 
-    override fun map(input: NetworkEpisodeModel): DbEpisodeModel {
-        return DbEpisodeModel(
+    override fun map(input: NetworkEpisodeModel): DbEntityEpisode {
+        return DbEntityEpisode(
             id = input.id,
             name = input.name,
             airDate = input.airDate,

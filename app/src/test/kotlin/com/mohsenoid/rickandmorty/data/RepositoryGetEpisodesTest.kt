@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import com.mohsenoid.rickandmorty.test.NetworkResponseFactory
@@ -36,7 +36,7 @@ class RepositoryGetEpisodesTest : RepositoryTest() {
             Verify on networkClient that networkClient.fetchEpisodes(page = any()) was called
             VerifyNoFurtherInteractions on networkClient
 
-            Verify on episodeDao that episodeDao.insertEpisode(episode = any()) was called
+            Verify on episodeDao that episodeDao.insertEpisode(entityEpisode = any()) was called
             Verify on episodeDao that episodeDao.queryAllEpisodesByPage(
                 page = any(),
                 pageSize = any()
@@ -70,10 +70,10 @@ class RepositoryGetEpisodesTest : RepositoryTest() {
         When calling networkClient.fetchEpisodes(page = any()) itReturns episodesResponse
     }
 
-    private suspend fun stubEpisodeDaoQueryAllEpisodesByPage(episodes: List<DbEpisodeModel>) {
+    private suspend fun stubEpisodeDaoQueryAllEpisodesByPage(entityEpisodes: List<DbEntityEpisode>) {
         When calling episodeDao.queryAllEpisodesByPage(
             page = any(),
             pageSize = any()
-        ) itReturns episodes
+        ) itReturns entityEpisodes
     }
 }

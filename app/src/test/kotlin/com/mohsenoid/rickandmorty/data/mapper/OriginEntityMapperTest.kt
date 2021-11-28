@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
 import com.mohsenoid.rickandmorty.test.OriginDataFactory
 import org.amshove.kluent.shouldEqual
@@ -9,17 +9,17 @@ import org.junit.Test
 
 class OriginEntityMapperTest {
 
-    private lateinit var originEntityMapper: Mapper<DbOriginModel, OriginEntity>
+    private lateinit var entityOriginMapper: Mapper<DbEntityOrigin, OriginEntity>
 
     @Before
     fun setUp() {
-        originEntityMapper = OriginEntityMapper()
+        entityOriginMapper = OriginEntityMapper()
     }
 
     @Test
     fun map() {
         // GIVEN
-        val dbOrigin: DbOriginModel = OriginDataFactory.Db.makeOrigin()
+        val dbOrigin: DbEntityOrigin = OriginDataFactory.Db.makeOrigin()
 
         val expectedOrigin = OriginEntity(
             name = dbOrigin.name,
@@ -27,7 +27,7 @@ class OriginEntityMapperTest {
         )
 
         // WHEN
-        val actualOrigin: OriginEntity = originEntityMapper.map(dbOrigin)
+        val actualOrigin: OriginEntity = entityOriginMapper.map(dbOrigin)
 
         // THEN
         expectedOrigin shouldEqual actualOrigin

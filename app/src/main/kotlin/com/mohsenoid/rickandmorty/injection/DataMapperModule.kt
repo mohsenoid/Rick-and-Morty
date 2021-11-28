@@ -1,9 +1,9 @@
 package com.mohsenoid.rickandmorty.injection
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
 import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
@@ -26,26 +26,26 @@ import org.koin.dsl.module
 
 val dataMapperModule = module {
 
-    single<Mapper<NetworkEpisodeModel, DbEpisodeModel>>(named<EpisodeDbMapper>()) { EpisodeDbMapper() }
+    single<Mapper<NetworkEpisodeModel, DbEntityEpisode>>(named<EpisodeDbMapper>()) { EpisodeDbMapper() }
 
-    single<Mapper<DbEpisodeModel, EpisodeEntity>>(named<EpisodeEntityMapper>()) { EpisodeEntityMapper() }
+    single<Mapper<DbEntityEpisode, EpisodeEntity>>(named<EpisodeEntityMapper>()) { EpisodeEntityMapper() }
 
-    single<Mapper<NetworkOriginModel, DbOriginModel>>(named<OriginDbMapper>()) { OriginDbMapper() }
+    single<Mapper<NetworkOriginModel, DbEntityOrigin>>(named<OriginDbMapper>()) { OriginDbMapper() }
 
-    single<Mapper<DbOriginModel, OriginEntity>>(named<OriginEntityMapper>()) { OriginEntityMapper() }
+    single<Mapper<DbEntityOrigin, OriginEntity>>(named<OriginEntityMapper>()) { OriginEntityMapper() }
 
-    single<Mapper<NetworkLocationModel, DbLocationModel>>(named<LocationDbMapper>()) { LocationDbMapper() }
+    single<Mapper<NetworkLocationModel, DbEntityLocation>>(named<LocationDbMapper>()) { LocationDbMapper() }
 
-    single<Mapper<DbLocationModel, LocationEntity>>(named<LocationEntityMapper>()) { LocationEntityMapper() }
+    single<Mapper<DbEntityLocation, LocationEntity>>(named<LocationEntityMapper>()) { LocationEntityMapper() }
 
-    single<Mapper<NetworkCharacterModel, DbCharacterModel>>(named<CharacterDbMapper>()) {
+    single<Mapper<NetworkCharacterModel, DbEntityCharacter>>(named<CharacterDbMapper>()) {
         CharacterDbMapper(
             originDbMapper = get(named<OriginDbMapper>()),
             locationDbMapper = get(named<LocationDbMapper>())
         )
     }
 
-    single<Mapper<DbCharacterModel, CharacterEntity>>(named<CharacterEntityMapper>()) {
+    single<Mapper<DbEntityCharacter, CharacterEntity>>(named<CharacterEntityMapper>()) {
         CharacterEntityMapper(
             originEntityMapper = get(named<OriginEntityMapper>()),
             locationEntityMapper = get(named<LocationEntityMapper>())

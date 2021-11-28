@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import org.amshove.kluent.shouldEqual
@@ -10,12 +10,12 @@ import org.mockito.MockitoAnnotations
 
 class EpisodeDbMapperTest {
 
-    private lateinit var episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel>
+    private lateinit var episodeDbEntityMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode>
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        episodeDbMapper = EpisodeDbMapper()
+        episodeDbEntityMapper = EpisodeDbMapper()
     }
 
     @Test
@@ -23,7 +23,7 @@ class EpisodeDbMapperTest {
         // GIVEN
         val networkEpisode: NetworkEpisodeModel = EpisodeDataFactory.Network.makeEpisode()
 
-        val expectedEpisode = DbEpisodeModel(
+        val expectedEpisode = DbEntityEpisode(
             id = networkEpisode.id,
             name = networkEpisode.name,
             airDate = networkEpisode.airDate,
@@ -34,9 +34,9 @@ class EpisodeDbMapperTest {
         )
 
         // WHEN
-        val actualEpisode: DbEpisodeModel = episodeDbMapper.map(networkEpisode)
+        val actualEntityEpisode: DbEntityEpisode = episodeDbEntityMapper.map(networkEpisode)
 
         // THEN
-        expectedEpisode shouldEqual actualEpisode
+        expectedEpisode shouldEqual actualEntityEpisode
     }
 }

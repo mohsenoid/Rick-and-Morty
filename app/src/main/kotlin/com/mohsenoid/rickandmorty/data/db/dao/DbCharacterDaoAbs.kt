@@ -1,13 +1,13 @@
-package com.mohsenoid.rickandmorty.data.db
+package com.mohsenoid.rickandmorty.data.db.dao
 
 import androidx.room.Dao
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
 
 @Dao
 abstract class DbCharacterDaoAbs : DbCharacterDao {
 
-    override suspend fun insertOrUpdateCharacter(character: DbCharacterModel) {
-        val oldCharacter: DbCharacterModel? = queryCharacter(characterId = character.id)
+    override suspend fun insertOrUpdateCharacter(character: DbEntityCharacter) {
+        val oldCharacter: DbEntityCharacter? = queryCharacter(characterId = character.id)
 
         insertCharacter(
             character = if (oldCharacter != null) {

@@ -1,12 +1,12 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 
-class OriginDbMapper : Mapper<NetworkOriginModel, DbOriginModel> {
+class OriginDbMapper : Mapper<NetworkOriginModel, DbEntityOrigin> {
 
-    override fun map(input: NetworkOriginModel): DbOriginModel {
-        return DbOriginModel(
+    override fun map(input: NetworkOriginModel): DbEntityOrigin {
+        return DbEntityOrigin(
             name = input.name,
             url = input.url
         )

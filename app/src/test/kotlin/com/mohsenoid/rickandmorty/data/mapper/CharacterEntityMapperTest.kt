@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
 import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
@@ -22,23 +22,23 @@ import org.mockito.MockitoAnnotations
 class CharacterEntityMapperTest {
 
     @Mock
-    private lateinit var originEntityMapper: Mapper<DbOriginModel, OriginEntity>
+    private lateinit var entityOriginMapper: Mapper<DbEntityOrigin, OriginEntity>
 
     @Mock
-    private lateinit var locationEntityMapper: Mapper<DbLocationModel, LocationEntity>
+    private lateinit var entityLocationMapper: Mapper<DbEntityLocation, LocationEntity>
 
-    private lateinit var characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
+    private lateinit var entityCharacterMapper: Mapper<DbEntityCharacter, CharacterEntity>
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        characterEntityMapper = CharacterEntityMapper(originEntityMapper, locationEntityMapper)
+        entityCharacterMapper = CharacterEntityMapper(entityOriginMapper, entityLocationMapper)
     }
 
     @Test
     fun map() {
         // GIVEN
-        val dbCharacter: DbCharacterModel = CharacterDataFactory.Db.makeCharacter()
+        val dbCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter()
 
         val expectedOrigin: OriginEntity = OriginDataFactory.Entity.makeOrigin()
         stubOriginEntityMapper(expectedOrigin)
@@ -64,17 +64,17 @@ class CharacterEntityMapperTest {
         )
 
         // WHEN
-        val actualCharacter: CharacterEntity = characterEntityMapper.map(dbCharacter)
+        val actualCharacter: CharacterEntity = entityCharacterMapper.map(dbCharacter)
 
         // THEN
         expectedCharacter shouldEqual actualCharacter
     }
 
     private fun stubOriginEntityMapper(origin: OriginEntity) {
-        When calling originEntityMapper.map(any()) itReturns origin
+        When calling entityOriginMapper.map(any()) itReturns origin
     }
 
     private fun stubLocationEntityMapper(location: LocationEntity) {
-        When calling locationEntityMapper.map(any()) itReturns location
+        When calling entityLocationMapper.map(any()) itReturns location
     }
 }
