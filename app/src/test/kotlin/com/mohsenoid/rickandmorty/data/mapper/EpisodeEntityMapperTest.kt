@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
 import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import org.amshove.kluent.shouldEqual
@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations
 
 class EpisodeEntityMapperTest {
 
-    private lateinit var entityEpisodeEntityMapper: Mapper<DbEntityEpisode, ModelEpisode>
+    private lateinit var entityEpisodeEntityMapper: Mapper<DbEpisode, ModelEpisode>
 
     @Before
     fun setUp() {
@@ -21,7 +21,7 @@ class EpisodeEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbEntityEpisode: DbEntityEpisode = EpisodeDataFactory.Db.makeEpisode()
+        val dbEntityEpisode: DbEpisode = EpisodeDataFactory.Db.makeEpisode()
 
         val expectedEpisode = ModelEpisode(
             id = dbEntityEpisode.id,

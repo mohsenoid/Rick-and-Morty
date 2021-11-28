@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
+import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbOrigin
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
@@ -22,12 +22,12 @@ import org.mockito.MockitoAnnotations
 class CharacterEntityMapperTest {
 
     @Mock
-    private lateinit var entityOriginMapper: Mapper<DbEntityOrigin, ModelOrigin>
+    private lateinit var entityOriginMapper: Mapper<DbOrigin, ModelOrigin>
 
     @Mock
-    private lateinit var entityLocationMapper: Mapper<DbEntityLocation, ModelLocation>
+    private lateinit var entityLocationMapper: Mapper<DbLocation, ModelLocation>
 
-    private lateinit var entityCharacterMapper: Mapper<DbEntityCharacter, ModelCharacter>
+    private lateinit var entityCharacterMapper: Mapper<DbCharacter, ModelCharacter>
 
     @Before
     fun setUp() {
@@ -38,7 +38,7 @@ class CharacterEntityMapperTest {
     @Test
     fun map() {
         // GIVEN
-        val dbCharacter: DbEntityCharacter = CharacterDataFactory.Db.makeCharacter()
+        val dbCharacter: DbCharacter = CharacterDataFactory.Db.makeCharacter()
 
         val expectedOrigin: ModelOrigin = OriginDataFactory.Entity.makeOrigin()
         stubOriginEntityMapper(expectedOrigin)

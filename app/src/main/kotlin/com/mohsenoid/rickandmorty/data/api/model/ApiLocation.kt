@@ -1,10 +1,10 @@
-package com.mohsenoid.rickandmorty.data.network.dto
+package com.mohsenoid.rickandmorty.data.api.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NetworkOriginModel(
+internal data class ApiLocation(
 
     @SerialName(value = "name")
     val name: String,

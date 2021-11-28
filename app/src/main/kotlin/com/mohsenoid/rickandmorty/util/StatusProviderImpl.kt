@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.util.config
+package com.mohsenoid.rickandmorty.util
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -7,12 +7,12 @@ import android.net.NetworkCapabilities
 
 /**
  *
- * This class implements [ConfigProvider] and provides configurations required on runtime.
+ * This class implements [StatusProvider] and provides configurations required on runtime.
  *
  * @constructor Creates a ConfigProvider using the Android Application context.
  * @param context the Android Application context.
  */
-class ConfigProviderImpl(private val context: Context) : ConfigProvider {
+class StatusProviderImpl(private val context: Context) : StatusProvider {
 
     /**
      * This function uses [ConnectivityManager]  to check active Network Capabilities to know
@@ -20,6 +20,7 @@ class ConfigProviderImpl(private val context: Context) : ConfigProvider {
      *
      * @return is the phone connected to a network through cellular or WiFi.
      */
+    @Suppress("ReturnCount")
     override fun isOnline(): Boolean {
         val connectivityManager: ConnectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager

@@ -2,11 +2,11 @@ package com.mohsenoid.rickandmorty.view.character.details
 
 import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.QueryResult
-import com.mohsenoid.rickandmorty.util.config.ConfigProvider
+import com.mohsenoid.rickandmorty.util.StatusProvider
 
 class CharacterDetailsPresenter(
     private val repository: Repository,
-    private val configProvider: ConfigProvider
+    private val statusProvider: StatusProvider
 ) : CharacterDetailsContract.Presenter() {
 
     private var view: CharacterDetailsContract.View? = null
@@ -25,13 +25,14 @@ class CharacterDetailsPresenter(
     }
 
     private suspend fun queryCharacter(characterId: Int) {
-        if (!configProvider.isOnline()) {
+        if (!statusProvider.isOnline()) {
             view?.showOfflineMessage(isCritical = false)
         }
 
         when (val result = repository.getCharacterDetails(characterId)) {
             is QueryResult.Successful -> view?.setCharacter(result.data)
             QueryResult.NoCache -> view?.onNoOfflineData()
+            QueryResult.Error -> view?.showMessage("Error fetching character details")
         }
 
         view?.hideLoading()

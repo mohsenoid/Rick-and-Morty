@@ -5,22 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentCharacterListBinding
 import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
-import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
-import kotlinx.coroutines.launch
+import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
 @Suppress("TooManyFunctions")
 class CharacterListFragment :
-    BaseFragment(),
+    Fragment(),
     CharacterListContract.View,
     CharacterListAdapter.ClickListener {
 
@@ -61,7 +61,8 @@ class CharacterListFragment :
 
     override fun onResume() {
         super.onResume()
-        launch {
+
+        lifecycle.launchWhileResumed {
             presenter.loadCharacters(args.characterIds.toList())
         }
     }
@@ -104,7 +105,7 @@ class CharacterListFragment :
     }
 
     override fun onCharacterStatusClick(character: ModelCharacter) {
-        launch {
+        lifecycle.launchWhileResumed {
             presenter.killCharacter(character)
         }
     }

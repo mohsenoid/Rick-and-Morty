@@ -31,6 +31,10 @@ android {
     }
 
     buildTypes {
+        defaultConfig {
+            buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
+        }
+
         debug {
             isMinifyEnabled = false
             isTestCoverageEnabled = true
@@ -98,7 +102,6 @@ detekt {
     allRules = true
     source = files("src/main/kotlin/")
     baseline = file("detekt-baseline.xml")
-    config = files("config/detekt/detekt.yml")
     buildUponDefaultConfig = true
     reports {
         html { enabled = true }

@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisodes
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import com.mohsenoid.rickandmorty.test.NetworkResponseFactory
 import kotlinx.coroutines.runBlocking
@@ -66,11 +66,11 @@ class RepositoryGetEpisodesTest : RepositoryTest() {
         }
     }
 
-    private suspend fun stubNetworkClientFetchEpisodes(episodesResponse: Response<NetworkEpisodesResponse>) {
-        When calling networkClient.fetchEpisodes(page = any()) itReturns episodesResponse
+    private suspend fun stubNetworkClientFetchEpisodes(apiEpisodes: Response<ApiEpisodes>) {
+        When calling networkClient.fetchEpisodes(page = any()) itReturns apiEpisodes
     }
 
-    private suspend fun stubEpisodeDaoQueryAllEpisodesByPage(entityEpisodes: List<DbEntityEpisode>) {
+    private suspend fun stubEpisodeDaoQueryAllEpisodesByPage(entityEpisodes: List<DbEpisode>) {
         When calling episodeDao.queryAllEpisodesByPage(
             page = any(),
             pageSize = any()

@@ -5,7 +5,7 @@ import com.mohsenoid.rickandmorty.domain.Repository
 import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
-import com.mohsenoid.rickandmorty.util.config.ConfigProvider
+import com.mohsenoid.rickandmorty.util.StatusProvider
 import com.nhaarman.mockitokotlin2.any
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.Verify
@@ -28,7 +28,7 @@ class EpisodeListPresenterTest {
     lateinit var repository: Repository
 
     @Mock
-    lateinit var configProvider: ConfigProvider
+    lateinit var statusProvider: StatusProvider
 
     @Mock
     lateinit var view: EpisodeListContract.View
@@ -38,7 +38,7 @@ class EpisodeListPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = EpisodeListPresenter(repository = repository, configProvider = configProvider)
+        presenter = EpisodeListPresenter(repository = repository, configProvider = statusProvider)
         presenter.bind(view)
     }
 
@@ -278,7 +278,7 @@ class EpisodeListPresenterTest {
     }
 
     private fun stubConfigProviderIsOnline(isOnline: Boolean) {
-        When calling configProvider.isOnline() itReturns isOnline
+        When calling statusProvider.isOnline() itReturns isOnline
     }
 
     private suspend fun stubRepositoryGetEpisodesOnSuccess(episodes: List<ModelEpisode>) {
