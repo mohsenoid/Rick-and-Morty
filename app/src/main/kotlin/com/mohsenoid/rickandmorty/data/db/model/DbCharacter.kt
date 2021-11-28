@@ -19,8 +19,8 @@ internal data class DbCharacter(
     @ColumnInfo(name = "status")
     val status: String,
 
-    @ColumnInfo(name = "is_status_alive")
-    val statusAlive: Boolean,
+    @ColumnInfo(name = "is_alive")
+    val isAlive: Boolean,
 
     @ColumnInfo(name = "species")
     val species: String,
@@ -49,6 +49,6 @@ internal data class DbCharacter(
     @ColumnInfo(name = "created")
     val created: String,
 
-    @ColumnInfo(name = "killedByUser", defaultValue = "0")
-    val killedByUser: Boolean
+    @ColumnInfo(name = "is_killed_by_user", defaultValue = "0")
+    val isKilledByUser: Boolean
 )
