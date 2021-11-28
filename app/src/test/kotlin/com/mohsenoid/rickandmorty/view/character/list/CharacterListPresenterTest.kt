@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.view.character.list
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
@@ -94,7 +94,7 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view setCharacters OnSuccess`() {
         runBlocking {
             // GIVEN
-            val characters: List<CharacterEntity> =
+            val characters: List<ModelCharacter> =
                 CharacterDataFactory.Entity.makeCharacters(count = 5)
             stubRepositoryGetCharactersByIdsOnSuccess(characters)
 
@@ -139,7 +139,7 @@ class CharacterListPresenterTest {
     fun `test loadCharacters calls view hideLoading OnSuccess`() {
         runBlocking {
             // GIVEN
-            val characters: List<CharacterEntity> =
+            val characters: List<ModelCharacter> =
                 CharacterDataFactory.Entity.makeCharacters(count = 5)
             stubRepositoryGetCharactersByIdsOnSuccess(characters)
 
@@ -170,7 +170,7 @@ class CharacterListPresenterTest {
         runBlocking {
             // GIVEN
             val characterId = DataFactory.randomInt()
-            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
+            val character: ModelCharacter = CharacterDataFactory.Entity.makeCharacter(
                 characterId = characterId,
                 status = CharacterDbMapper.ALIVE,
                 isAlive = true,
@@ -193,7 +193,7 @@ class CharacterListPresenterTest {
         runBlocking {
             // GIVEN
             val characterId = DataFactory.randomInt()
-            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter(
+            val character: ModelCharacter = CharacterDataFactory.Entity.makeCharacter(
                 characterId = characterId,
                 status = CharacterDbMapper.ALIVE,
                 isAlive = true,
@@ -212,7 +212,7 @@ class CharacterListPresenterTest {
         When calling configProvider.isOnline() itReturns isOnline
     }
 
-    private suspend fun stubRepositoryGetCharactersByIdsOnSuccess(characters: List<CharacterEntity>) {
+    private suspend fun stubRepositoryGetCharactersByIdsOnSuccess(characters: List<ModelCharacter>) {
         When calling repository.getCharactersByIds(any()) itReturns characters
     }
 

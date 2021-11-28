@@ -4,20 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.databinding.ItemCharacterBinding
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import java.util.ArrayList
 
 class CharacterListAdapter(
     private val listener: ClickListener
 ) : RecyclerView.Adapter<CharacterViewHolder>() {
 
-    private var characters: MutableList<CharacterEntity> = ArrayList()
+    private var characters: MutableList<ModelCharacter> = ArrayList()
 
-    fun setCharacters(characters: List<CharacterEntity>) {
+    fun setCharacters(characters: List<ModelCharacter>) {
         this.characters = characters.toMutableList()
     }
 
-    fun updateCharacter(character: CharacterEntity) {
+    fun updateCharacter(character: ModelCharacter) {
         val index: Int = characters.indexOfFirst { it.id == character.id }
         characters[index] = character
     }
@@ -29,7 +29,7 @@ class CharacterListAdapter(
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        val character: CharacterEntity = characters[position]
+        val character: ModelCharacter = characters[position]
         holder.setCharacter(character)
         holder.binding.root.setOnClickListener { listener.onCharacterRowClick(character) }
         holder.binding.characterStatus.setOnClickListener {
@@ -45,8 +45,8 @@ class CharacterListAdapter(
 
     interface ClickListener {
 
-        fun onCharacterRowClick(character: CharacterEntity)
+        fun onCharacterRowClick(character: ModelCharacter)
 
-        fun onCharacterStatusClick(character: CharacterEntity)
+        fun onCharacterStatusClick(character: ModelCharacter)
     }
 }

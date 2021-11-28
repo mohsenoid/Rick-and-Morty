@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.test
 
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
-import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
 
 object OriginDataFactory {
 
@@ -28,8 +28,8 @@ object OriginDataFactory {
 
     object Entity {
 
-        fun makeOrigin(): OriginEntity {
-            return OriginEntity(
+        fun makeOrigin(): ModelOrigin {
+            return ModelOrigin(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
             )

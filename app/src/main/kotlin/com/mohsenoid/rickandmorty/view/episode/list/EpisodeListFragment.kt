@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentEpisodeListBinding
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
@@ -120,14 +120,14 @@ class EpisodeListFragment :
         binding.episodeListProgress.visibility = View.GONE
     }
 
-    override fun setEpisodes(episodes: List<EpisodeEntity>) {
+    override fun setEpisodes(episodes: List<ModelEpisode>) {
         binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.setEpisodes(episodes)
         endlessScrollListener?.resetState()
         adapter.notifyDataSetChanged()
     }
 
-    override fun updateEpisodes(episodes: List<EpisodeEntity>) {
+    override fun updateEpisodes(episodes: List<ModelEpisode>) {
         binding.episodeListSwipeRefresh.isRefreshing = false
         adapter.addMoreEpisodes(episodes)
         adapter.notifyDataSetChanged()
@@ -137,7 +137,7 @@ class EpisodeListFragment :
         binding.episodeListProgress.visibility = View.GONE
     }
 
-    override fun onEpisodeRowClick(episode: EpisodeEntity) {
+    override fun onEpisodeRowClick(episode: ModelEpisode) {
         val action = EpisodeListFragmentDirections
             .actionEpisodeListFragmentToCharacterListFragment(episode.characterIds.toIntArray())
         view?.findNavController()?.navigate(action)

@@ -21,10 +21,10 @@ import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
-import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
+import com.mohsenoid.rickandmorty.domain.model.ModelLocation
+import com.mohsenoid.rickandmorty.domain.model.ModelOrigin
 import com.mohsenoid.rickandmorty.test.TestDispatcherProvider
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 import com.mohsenoid.rickandmorty.util.dispatcher.DispatcherProvider
@@ -55,7 +55,7 @@ abstract class RepositoryTest {
 
     private val episodeDbEntityMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode> =
         EpisodeDbMapper()
-    private val entityEpisodeEntityMapper: Mapper<DbEntityEpisode, EpisodeEntity> =
+    private val entityEpisodeEntityMapper: Mapper<DbEntityEpisode, ModelEpisode> =
         EpisodeEntityMapper()
     private val originDbMapperOrigin: Mapper<NetworkOriginModel, DbEntityOrigin> =
         OriginDbMapper()
@@ -63,11 +63,11 @@ abstract class RepositoryTest {
         LocationDbMapper()
     private val characterDbMapperCharacter: Mapper<NetworkCharacterModel, DbEntityCharacter> =
         CharacterDbMapper(originDbMapperOrigin, locationDbMapperLocation)
-    private val entityOriginMapper: Mapper<DbEntityOrigin, OriginEntity> =
+    private val entityOriginMapper: Mapper<DbEntityOrigin, ModelOrigin> =
         OriginEntityMapper()
-    private val entityLocationMapper: Mapper<DbEntityLocation, LocationEntity> =
+    private val entityLocationMapper: Mapper<DbEntityLocation, ModelLocation> =
         LocationEntityMapper()
-    private val entityCharacterMapper: Mapper<DbEntityCharacter, CharacterEntity> =
+    private val entityCharacterMapper: Mapper<DbEntityCharacter, ModelCharacter> =
         CharacterEntityMapper(entityOriginMapper, entityLocationMapper)
 
     @Before

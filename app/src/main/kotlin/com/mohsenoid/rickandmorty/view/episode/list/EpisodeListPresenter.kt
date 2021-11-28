@@ -1,8 +1,7 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.PageQueryResult
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 
 class EpisodeListPresenter(
@@ -39,22 +38,18 @@ class EpisodeListPresenter(
             view?.showOfflineMessage(isCritical = false)
         }
 
-        try {
-            val result: List<EpisodeEntity> = repository.getEpisodes(page)
-            if (page == 1) {
-                view?.setEpisodes(result)
-            } else {
-                view?.updateEpisodes(result)
+        when (val result = repository.getEpisodes(page)) {
+            is PageQueryResult.Successful -> {
+                if (page == 1) {
+                    view?.setEpisodes(result.data)
+                } else {
+                    view?.updateEpisodes(result.data)
+                }
             }
-        } catch (e: Exception) {
-            if (e is EndOfListException) {
-                view?.reachedEndOfList()
-            } else {
-                view?.showMessage(e.message ?: e.toString())
-            }
-        } finally {
-            view?.hideLoading()
-            view?.hideLoadingMore()
+            PageQueryResult.EndOfList -> view?.reachedEndOfList()
         }
+
+        view?.hideLoading()
+        view?.hideLoadingMore()
     }
 }

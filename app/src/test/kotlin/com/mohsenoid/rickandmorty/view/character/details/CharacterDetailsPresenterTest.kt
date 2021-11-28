@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.view.character.details
 
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
@@ -88,7 +88,7 @@ class CharacterDetailsPresenterTest {
     fun `test loadCharacter calls view setCharacter OnSuccess`() {
         runBlocking {
             // GIVEN
-            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter()
+            val character: ModelCharacter = CharacterDataFactory.Entity.makeCharacter()
             stubRepositoryGetCharacterDetailsOnSuccess(character)
 
             // WHEN
@@ -132,7 +132,7 @@ class CharacterDetailsPresenterTest {
     fun `test loadCharacter calls view hideLoading OnSuccess`() {
         runBlocking {
             // GIVEN
-            val character: CharacterEntity = CharacterDataFactory.Entity.makeCharacter()
+            val character: ModelCharacter = CharacterDataFactory.Entity.makeCharacter()
             stubRepositoryGetCharacterDetailsOnSuccess(character)
 
             // WHEN
@@ -161,7 +161,7 @@ class CharacterDetailsPresenterTest {
         When calling configProvider.isOnline() itReturns isOnline
     }
 
-    private suspend fun stubRepositoryGetCharacterDetailsOnSuccess(character: CharacterEntity) {
+    private suspend fun stubRepositoryGetCharacterDetailsOnSuccess(character: ModelCharacter) {
         When calling repository.getCharacterDetails(any()) itReturns character
     }
 

@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.navArgs
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentCharacterDetailsBinding
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
@@ -84,7 +84,7 @@ class CharacterDetailsFragment : BaseFragment(), CharacterDetailsContract.View {
         parentActivity?.onBackPressed()
     }
 
-    override fun setCharacter(character: CharacterEntity) {
+    override fun setCharacter(character: ModelCharacter) {
         with(binding) {
             Picasso.get()
                 .load(character.imageUrl)

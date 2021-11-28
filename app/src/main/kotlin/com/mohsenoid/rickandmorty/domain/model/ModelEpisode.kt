@@ -1,6 +1,6 @@
-package com.mohsenoid.rickandmorty.domain.entity
+package com.mohsenoid.rickandmorty.domain.model
 
-data class EpisodeEntity(
+data class ModelEpisode(
     val id: Int,
     val name: String,
     val airDate: String,

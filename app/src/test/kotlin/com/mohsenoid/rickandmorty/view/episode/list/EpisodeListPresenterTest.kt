@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.view.episode.list
 
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.test.DataFactory
 import com.mohsenoid.rickandmorty.test.EpisodeDataFactory
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
@@ -130,7 +130,7 @@ class EpisodeListPresenterTest {
     fun `test loadEpisodes calls view setEpisodes OnSuccess`() {
         runBlocking {
             // GIVEN
-            val episodes: List<EpisodeEntity> = EpisodeDataFactory.Entity.makeEpisodes(5)
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
@@ -146,7 +146,7 @@ class EpisodeListPresenterTest {
         runBlocking {
             // GIVEN
             val page = 2
-            val episodes: List<EpisodeEntity> = EpisodeDataFactory.Entity.makeEpisodes(5)
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
@@ -221,7 +221,7 @@ class EpisodeListPresenterTest {
     fun `test loadEpisodes calls view hideLoading OnSuccess`() {
         runBlocking {
             // GIVEN
-            val episodes: List<EpisodeEntity> = EpisodeDataFactory.Entity.makeEpisodes(5)
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
@@ -237,7 +237,7 @@ class EpisodeListPresenterTest {
         runBlocking {
             // GIVEN
             val page = 2
-            val episodes: List<EpisodeEntity> = EpisodeDataFactory.Entity.makeEpisodes(5)
+            val episodes: List<ModelEpisode> = EpisodeDataFactory.Entity.makeEpisodes(5)
             stubRepositoryGetEpisodesOnSuccess(episodes)
 
             // WHEN
@@ -281,7 +281,7 @@ class EpisodeListPresenterTest {
         When calling configProvider.isOnline() itReturns isOnline
     }
 
-    private suspend fun stubRepositoryGetEpisodesOnSuccess(episodes: List<EpisodeEntity>) {
+    private suspend fun stubRepositoryGetEpisodesOnSuccess(episodes: List<ModelEpisode>) {
         When calling repository.getEpisodes(any()) itReturns episodes
     }
 
