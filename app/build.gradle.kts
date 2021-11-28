@@ -115,8 +115,8 @@ jacoco {
 
 dependencies {
     // Android Jetpack
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -129,7 +129,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.5.31"))
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.5.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
@@ -142,7 +142,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.robolectric:robolectric:4.3.1")
-    testImplementation("org.amshove.kluent:kluent-android:1.64")
+    testImplementation("org.amshove.kluent:kluent-android:1.68")
 
     // Koin
     val koinVersion = "3.1.2"
