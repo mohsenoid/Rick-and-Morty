@@ -1,20 +1,20 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
 import androidx.annotation.VisibleForTesting
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 
 class CharacterDbMapper(
-    private val originDbMapper: Mapper<NetworkOriginModel, DbOriginModel>,
-    private val locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel>
-) : Mapper<NetworkCharacterModel, DbCharacterModel> {
+    private val originDbMapper: Mapper<NetworkOriginModel, DbEntityOrigin>,
+    private val locationDbMapper: Mapper<NetworkLocationModel, DbEntityLocation>
+) : Mapper<NetworkCharacterModel, DbEntityCharacter> {
 
-    override fun map(input: NetworkCharacterModel): DbCharacterModel {
-        return DbCharacterModel(
+    override fun map(input: NetworkCharacterModel): DbEntityCharacter {
+        return DbEntityCharacter(
             id = input.id,
             name = input.name,
             status = input.status,

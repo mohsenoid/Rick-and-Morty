@@ -1,11 +1,11 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
-import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.dao.DbCharacterDao
+import com.mohsenoid.rickandmorty.data.db.dao.DbEpisodeDao
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
 import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
 import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
@@ -53,22 +53,22 @@ abstract class RepositoryTest {
 
     private val testDispatcherProvider: DispatcherProvider = TestDispatcherProvider()
 
-    private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel> =
+    private val episodeDbEntityMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode> =
         EpisodeDbMapper()
-    private val episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity> =
+    private val entityEpisodeEntityMapper: Mapper<DbEntityEpisode, EpisodeEntity> =
         EpisodeEntityMapper()
-    private val originDbMapper: Mapper<NetworkOriginModel, DbOriginModel> =
+    private val originDbMapperOrigin: Mapper<NetworkOriginModel, DbEntityOrigin> =
         OriginDbMapper()
-    private val locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel> =
+    private val locationDbMapperLocation: Mapper<NetworkLocationModel, DbEntityLocation> =
         LocationDbMapper()
-    private val characterDbMapper: Mapper<NetworkCharacterModel, DbCharacterModel> =
-        CharacterDbMapper(originDbMapper, locationDbMapper)
-    private val originEntityMapper: Mapper<DbOriginModel, OriginEntity> =
+    private val characterDbMapperCharacter: Mapper<NetworkCharacterModel, DbEntityCharacter> =
+        CharacterDbMapper(originDbMapperOrigin, locationDbMapperLocation)
+    private val entityOriginMapper: Mapper<DbEntityOrigin, OriginEntity> =
         OriginEntityMapper()
-    private val locationEntityMapper: Mapper<DbLocationModel, LocationEntity> =
+    private val entityLocationMapper: Mapper<DbEntityLocation, LocationEntity> =
         LocationEntityMapper()
-    private val characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity> =
-        CharacterEntityMapper(originEntityMapper, locationEntityMapper)
+    private val entityCharacterMapper: Mapper<DbEntityCharacter, CharacterEntity> =
+        CharacterEntityMapper(entityOriginMapper, entityLocationMapper)
 
     @Before
     fun setUp() {
@@ -80,10 +80,10 @@ abstract class RepositoryTest {
             networkClient = networkClient,
             ioDispatcher = testDispatcherProvider.ioDispatcher,
             configProvider = configProvider,
-            episodeDbMapper = episodeDbMapper,
-            episodeEntityMapper = episodeEntityMapper,
-            characterDbMapper = characterDbMapper,
-            characterEntityMapper = characterEntityMapper
+            episodeDbMapper = episodeDbEntityMapper,
+            episodeEntityMapper = entityEpisodeEntityMapper,
+            characterDbMapper = characterDbMapperCharacter,
+            characterEntityMapper = entityCharacterMapper
         )
     }
 

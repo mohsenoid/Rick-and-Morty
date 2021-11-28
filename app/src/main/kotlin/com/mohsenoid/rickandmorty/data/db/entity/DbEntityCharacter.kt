@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.data.db.dto
+package com.mohsenoid.rickandmorty.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "characters")
-data class DbCharacterModel(
+data class DbEntityCharacter(
 
     @PrimaryKey
     @ColumnInfo(name = "_id")
@@ -32,10 +32,10 @@ data class DbCharacterModel(
     val gender: String,
 
     @ColumnInfo(name = "origin")
-    val origin: DbOriginModel,
+    val origin: DbEntityOrigin,
 
     @ColumnInfo(name = "location")
-    val location: DbLocationModel,
+    val location: DbEntityLocation,
 
     @ColumnInfo(name = "image")
     val image: String,

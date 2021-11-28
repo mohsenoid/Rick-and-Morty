@@ -1,9 +1,8 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.DbCharacterDao
-import com.mohsenoid.rickandmorty.data.db.DbEpisodeDao
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
+import com.mohsenoid.rickandmorty.data.db.DbRickAndMorty
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.exception.EndOfListException
 import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.data.exception.ServerException
@@ -21,16 +20,15 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 @Suppress("LongParameterList", "TooManyFunctions")
-class RepositoryImpl(
-    private val characterDao: DbCharacterDao,
-    private val episodeDao: DbEpisodeDao,
+class RepositoryImpl internal constructor(
+    private val db: DbRickAndMorty,
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
     private val configProvider: ConfigProvider,
-    private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEpisodeModel>,
-    private val episodeEntityMapper: Mapper<DbEpisodeModel, EpisodeEntity>,
-    private val characterDbMapper: Mapper<NetworkCharacterModel, DbCharacterModel>,
-    private val characterEntityMapper: Mapper<DbCharacterModel, CharacterEntity>
+    private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode>,
+    private val episodeEntityMapper: Mapper<DbEntityEpisode, EpisodeEntity>,
+    private val characterDbMapper: Mapper<NetworkCharacterModel, DbEntityCharacter>,
+    private val characterEntityMapper: Mapper<DbEntityCharacter, CharacterEntity>
 ) : Repository {
 
     override suspend fun getEpisodes(page: Int): List<EpisodeEntity> {
@@ -69,12 +67,12 @@ class RepositoryImpl(
 
     private suspend fun cacheNetworkEpisodes(episodes: List<NetworkEpisodeModel>) {
         episodes.map(episodeDbMapper::map)
-            .forEach { episodeDao.insertEpisode(it) }
+            .forEach { db.insertEpisode(it) }
     }
 
     private suspend fun queryDbEpisodes(page: Int, pageSize: Int): List<EpisodeEntity> {
-        val dbEpisodes: List<DbEpisodeModel> = episodeDao.queryAllEpisodesByPage(page, pageSize)
-        val episodes: List<EpisodeEntity> = dbEpisodes.map(episodeEntityMapper::map)
+        val dbEntityEpisodes: List<DbEntityEpisode> = db.queryAllEpisodesByPage(page, pageSize)
+        val episodes: List<EpisodeEntity> = dbEntityEpisodes.map(episodeEntityMapper::map)
 
         if (episodes.isEmpty()) throw EndOfListException()
 
@@ -118,13 +116,13 @@ class RepositoryImpl(
 
     private suspend fun cacheNetworkCharacters(characters: List<NetworkCharacterModel>) {
         characters.map(characterDbMapper::map)
-            .forEach { characterDao.insertOrUpdateCharacter(it) }
+            .forEach { db.insertOrUpdateCharacter(it) }
     }
 
     private suspend fun queryDbCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
         return withContext(ioDispatcher) {
-            val dbCharacters: List<DbCharacterModel> =
-                characterDao.queryCharactersByIds(characterIds)
+            val dbCharacters: List<DbEntityCharacter> =
+                db.queryCharactersByIds(characterIds)
 
             val characters: List<CharacterEntity> = dbCharacters.map(characterEntityMapper::map)
 
@@ -168,13 +166,13 @@ class RepositoryImpl(
     }
 
     private suspend fun cacheNetworkCharacter(character: NetworkCharacterModel) {
-        characterDao.insertOrUpdateCharacter(characterDbMapper.map(character))
+        db.insertOrUpdateCharacter(characterDbMapper.map(character))
     }
 
     private suspend fun queryDbCharacterDetails(characterId: Int): CharacterEntity {
         return withContext(ioDispatcher) {
-            val dbCharacter: DbCharacterModel =
-                characterDao.queryCharacter(characterId) ?: throw NoOfflineDataException()
+            val dbCharacter: DbEntityCharacter =
+                db.queryCharacter(characterId) ?: throw NoOfflineDataException()
 
             return@withContext characterEntityMapper.map(dbCharacter)
         }
@@ -182,7 +180,7 @@ class RepositoryImpl(
 
     override suspend fun killCharacter(characterId: Int): CharacterEntity {
         return withContext(ioDispatcher) {
-            characterDao.killCharacter(characterId)
+            db.killCharacter(characterId)
             return@withContext getCharacterDetails(characterId)
         }
     }

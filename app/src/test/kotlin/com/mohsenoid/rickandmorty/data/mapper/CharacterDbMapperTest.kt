@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.db.dto.DbOriginModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
@@ -22,17 +22,17 @@ import org.mockito.MockitoAnnotations
 class CharacterDbMapperTest {
 
     @Mock
-    private lateinit var originDbMapper: Mapper<NetworkOriginModel, DbOriginModel>
+    private lateinit var originDbMapperOrigin: Mapper<NetworkOriginModel, DbEntityOrigin>
 
     @Mock
-    private lateinit var locationDbMapper: Mapper<NetworkLocationModel, DbLocationModel>
+    private lateinit var locationDbMapperLocation: Mapper<NetworkLocationModel, DbEntityLocation>
 
-    private lateinit var characterDbMapper: Mapper<NetworkCharacterModel, DbCharacterModel>
+    private lateinit var characterDbMapperCharacter: Mapper<NetworkCharacterModel, DbEntityCharacter>
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        characterDbMapper = CharacterDbMapper(originDbMapper, locationDbMapper)
+        characterDbMapperCharacter = CharacterDbMapper(originDbMapperOrigin, locationDbMapperLocation)
     }
 
     @Test
@@ -41,13 +41,13 @@ class CharacterDbMapperTest {
         val networkCharacter: NetworkCharacterModel =
             CharacterDataFactory.Network.makeCharacter()
 
-        val expectedOrigin: DbOriginModel = OriginDataFactory.Db.makeOrigin()
+        val expectedOrigin: DbEntityOrigin = OriginDataFactory.Db.makeOrigin()
         stubOriginDbMapper(expectedOrigin)
 
-        val expectedLocation: DbLocationModel = LocationDataFactory.Db.makeLocation()
+        val expectedLocation: DbEntityLocation = LocationDataFactory.Db.makeLocation()
         stubLocationDbMapper(expectedLocation)
 
-        val expectedCharacter = DbCharacterModel(
+        val expectedCharacter = DbEntityCharacter(
             id = networkCharacter.id,
             name = networkCharacter.name,
             status = networkCharacter.status,
@@ -68,17 +68,17 @@ class CharacterDbMapperTest {
         )
 
         // WHEN
-        val actualCharacter: DbCharacterModel = characterDbMapper.map(networkCharacter)
+        val actualCharacter: DbEntityCharacter = characterDbMapperCharacter.map(networkCharacter)
 
         // THEN
         expectedCharacter shouldEqual actualCharacter
     }
 
-    private fun stubOriginDbMapper(origin: DbOriginModel) {
-        When calling originDbMapper.map(any()) itReturns origin
+    private fun stubOriginDbMapper(origin: DbEntityOrigin) {
+        When calling originDbMapperOrigin.map(any()) itReturns origin
     }
 
-    private fun stubLocationDbMapper(location: DbLocationModel) {
-        When calling locationDbMapper.map(any()) itReturns location
+    private fun stubLocationDbMapper(location: DbEntityLocation) {
+        When calling locationDbMapperLocation.map(any()) itReturns location
     }
 }

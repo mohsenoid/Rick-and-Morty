@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.test.CharacterDataFactory
 import com.mohsenoid.rickandmorty.test.DataFactory
@@ -67,7 +67,7 @@ class RepositoryGetCharacterDetailsTest : RepositoryTest() {
         When calling networkClient.fetchCharacterDetails(characterId = any()) itReturns character
     }
 
-    private suspend fun stubCharacterDaoQueryCharacter(character: DbCharacterModel?) {
+    private suspend fun stubCharacterDaoQueryCharacter(character: DbEntityCharacter?) {
         When calling characterDao.queryCharacter(characterId = any()) itReturns character
     }
 }

@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.data.db.dto
+package com.mohsenoid.rickandmorty.data.db.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @Entity(tableName = "episodes")
-data class DbEpisodeModel(
+data class DbEntityEpisode(
 
     @PrimaryKey
     @ColumnInfo(name = "_id")

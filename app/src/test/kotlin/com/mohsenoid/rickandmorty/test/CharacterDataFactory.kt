@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
+import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
 
@@ -13,8 +13,8 @@ object CharacterDataFactory {
             status: String = DataFactory.randomString(),
             isAlive: Boolean = DataFactory.randomBoolean(),
             isKilledByUser: Boolean = false
-        ): DbCharacterModel {
-            return DbCharacterModel(
+        ): DbEntityCharacter {
+            return DbEntityCharacter(
                 id = characterId,
                 name = DataFactory.randomString(),
                 status = status,
@@ -32,10 +32,10 @@ object CharacterDataFactory {
             )
         }
 
-        fun makeCharacters(count: Int): List<DbCharacterModel> {
-            val characters: MutableList<DbCharacterModel> = ArrayList()
+        fun makeCharacters(count: Int): List<DbEntityCharacter> {
+            val characters: MutableList<DbEntityCharacter> = ArrayList()
             for (i in 0 until count) {
-                val character: DbCharacterModel = makeCharacter()
+                val character: DbEntityCharacter = makeCharacter()
                 characters.add(character)
             }
             return characters
