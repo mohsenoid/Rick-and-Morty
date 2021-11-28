@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentCharacterListBinding
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.view.base.BaseFragment
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
 import kotlinx.coroutines.launch
@@ -87,23 +87,23 @@ class CharacterListFragment :
         activity?.onBackPressed()
     }
 
-    override fun setCharacters(characters: List<CharacterEntity>) {
+    override fun setCharacters(characters: List<ModelCharacter>) {
         adapter.setCharacters(characters)
         adapter.notifyDataSetChanged()
     }
 
-    override fun updateCharacter(character: CharacterEntity) {
+    override fun updateCharacter(character: ModelCharacter) {
         adapter.updateCharacter(character)
         adapter.notifyDataSetChanged()
     }
 
-    override fun onCharacterRowClick(character: CharacterEntity) {
+    override fun onCharacterRowClick(character: ModelCharacter) {
         val action = CharacterListFragmentDirections
             .actionCharacterListFragmentToCharacterDetailsFragment(character.id)
         view?.findNavController()?.navigate(action)
     }
 
-    override fun onCharacterStatusClick(character: CharacterEntity) {
+    override fun onCharacterStatusClick(character: ModelCharacter) {
         launch {
             presenter.killCharacter(character)
         }

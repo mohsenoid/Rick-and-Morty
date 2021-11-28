@@ -3,47 +3,41 @@ package com.mohsenoid.rickandmorty.data
 import com.mohsenoid.rickandmorty.data.db.DbRickAndMorty
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
-import com.mohsenoid.rickandmorty.data.exception.EndOfListException
-import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.data.exception.ServerException
-import com.mohsenoid.rickandmorty.data.mapper.Mapper
+import com.mohsenoid.rickandmorty.data.mapper.CharacterDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.CharacterEntityMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeDbMapper
+import com.mohsenoid.rickandmorty.data.mapper.EpisodeEntityMapper
 import com.mohsenoid.rickandmorty.data.network.NetworkClient
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodesResponse
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
+import com.mohsenoid.rickandmorty.domain.model.PageQueryResult
+import com.mohsenoid.rickandmorty.domain.model.QueryResult
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 @Suppress("LongParameterList", "TooManyFunctions")
 class RepositoryImpl internal constructor(
     private val db: DbRickAndMorty,
     private val networkClient: NetworkClient,
-    private val ioDispatcher: CoroutineDispatcher,
     private val configProvider: ConfigProvider,
-    private val episodeDbMapper: Mapper<NetworkEpisodeModel, DbEntityEpisode>,
-    private val episodeEntityMapper: Mapper<DbEntityEpisode, EpisodeEntity>,
-    private val characterDbMapper: Mapper<NetworkCharacterModel, DbEntityCharacter>,
-    private val characterEntityMapper: Mapper<DbEntityCharacter, CharacterEntity>
 ) : Repository {
 
-    override suspend fun getEpisodes(page: Int): List<EpisodeEntity> {
-        return withContext(ioDispatcher) {
-            if (configProvider.isOnline()) {
-                try {
-                    val episodes: List<NetworkEpisodeModel> = fetchNetworkEpisodes(page)
-                    cacheNetworkEpisodes(episodes)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+    override suspend fun getEpisodes(page: Int): PageQueryResult<List<ModelEpisode>> {
+        if (configProvider.isOnline()) {
+            try {
+                val episodes: List<NetworkEpisodeModel> = fetchNetworkEpisodes(page)
+                cacheNetworkEpisodes(episodes)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-            queryDbEpisodes(page, PAGE_SIZE)
         }
+
+        return queryDbEpisodes(page, PAGE_SIZE)
     }
 
     private suspend fun fetchNetworkEpisodes(page: Int): List<NetworkEpisodeModel> {
@@ -66,33 +60,34 @@ class RepositoryImpl internal constructor(
     }
 
     private suspend fun cacheNetworkEpisodes(episodes: List<NetworkEpisodeModel>) {
-        episodes.map(episodeDbMapper::map)
+        episodes.map(EpisodeDbMapper::map)
             .forEach { db.insertEpisode(it) }
     }
 
-    private suspend fun queryDbEpisodes(page: Int, pageSize: Int): List<EpisodeEntity> {
+    private suspend fun queryDbEpisodes(
+        page: Int,
+        pageSize: Int
+    ): PageQueryResult<List<ModelEpisode>> {
         val dbEntityEpisodes: List<DbEntityEpisode> = db.queryAllEpisodesByPage(page, pageSize)
-        val episodes: List<EpisodeEntity> = dbEntityEpisodes.map(episodeEntityMapper::map)
+        val episodes: List<ModelEpisode> = dbEntityEpisodes.map(EpisodeEntityMapper::map)
 
-        if (episodes.isEmpty()) throw EndOfListException()
+        if (episodes.isEmpty()) return PageQueryResult.EndOfList
 
-        return episodes
+        return PageQueryResult.Successful(episodes)
     }
 
-    override suspend fun getCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
-        return withContext(ioDispatcher) {
-            if (configProvider.isOnline()) {
-                try {
-                    val characters: List<NetworkCharacterModel> =
-                        fetchNetworkCharactersByIds(characterIds)
-                    cacheNetworkCharacters(characters)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+    override suspend fun getCharactersByIds(characterIds: List<Int>): QueryResult<List<ModelCharacter>> {
+        if (configProvider.isOnline()) {
+            try {
+                val characters: List<NetworkCharacterModel> =
+                    fetchNetworkCharactersByIds(characterIds)
+                cacheNetworkCharacters(characters)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-            return@withContext queryDbCharactersByIds(characterIds)
         }
+
+        return queryDbCharactersByIds(characterIds)
     }
 
     private suspend fun fetchNetworkCharactersByIds(characterIds: List<Int>): List<NetworkCharacterModel> {
@@ -115,36 +110,32 @@ class RepositoryImpl internal constructor(
     }
 
     private suspend fun cacheNetworkCharacters(characters: List<NetworkCharacterModel>) {
-        characters.map(characterDbMapper::map)
+        characters.map(CharacterDbMapper::map)
             .forEach { db.insertOrUpdateCharacter(it) }
     }
 
-    private suspend fun queryDbCharactersByIds(characterIds: List<Int>): List<CharacterEntity> {
-        return withContext(ioDispatcher) {
-            val dbCharacters: List<DbEntityCharacter> =
-                db.queryCharactersByIds(characterIds)
+    private suspend fun queryDbCharactersByIds(characterIds: List<Int>): QueryResult<List<ModelCharacter>> {
+        val dbCharacters: List<DbEntityCharacter> =
+            db.queryCharactersByIds(characterIds)
 
-            val characters: List<CharacterEntity> = dbCharacters.map(characterEntityMapper::map)
+        val characters: List<ModelCharacter> = dbCharacters.map(CharacterEntityMapper::map)
 
-            if (characters.isEmpty()) throw NoOfflineDataException()
+        if (characters.isEmpty()) QueryResult.NoCache
 
-            return@withContext characters
-        }
+        return QueryResult.Successful(characters)
     }
 
-    override suspend fun getCharacterDetails(characterId: Int): CharacterEntity {
-        return withContext(ioDispatcher) {
-            if (configProvider.isOnline()) {
-                try {
-                    val character: NetworkCharacterModel = fetchNetworkCharacterDetails(characterId)
-                    cacheNetworkCharacter(character)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+    override suspend fun getCharacterDetails(characterId: Int): QueryResult<ModelCharacter> {
+        if (configProvider.isOnline()) {
+            try {
+                val character: NetworkCharacterModel = fetchNetworkCharacterDetails(characterId)
+                cacheNetworkCharacter(character)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-            return@withContext queryDbCharacterDetails(characterId)
         }
+
+        return queryDbCharacterDetails(characterId)
     }
 
     private suspend fun fetchNetworkCharacterDetails(characterId: Int): NetworkCharacterModel {
@@ -166,23 +157,19 @@ class RepositoryImpl internal constructor(
     }
 
     private suspend fun cacheNetworkCharacter(character: NetworkCharacterModel) {
-        db.insertOrUpdateCharacter(characterDbMapper.map(character))
+        db.insertOrUpdateCharacter(CharacterDbMapper.map(character))
     }
 
-    private suspend fun queryDbCharacterDetails(characterId: Int): CharacterEntity {
-        return withContext(ioDispatcher) {
-            val dbCharacter: DbEntityCharacter =
-                db.queryCharacter(characterId) ?: throw NoOfflineDataException()
+    private suspend fun queryDbCharacterDetails(characterId: Int): QueryResult<ModelCharacter> {
+        val dbCharacter: DbEntityCharacter =
+            db.queryCharacter(characterId) ?: return QueryResult.NoCache
 
-            return@withContext characterEntityMapper.map(dbCharacter)
-        }
+        return QueryResult.Successful(CharacterEntityMapper.map(dbCharacter))
     }
 
-    override suspend fun killCharacter(characterId: Int): CharacterEntity {
-        return withContext(ioDispatcher) {
-            db.killCharacter(characterId)
-            return@withContext getCharacterDetails(characterId)
-        }
+    override suspend fun killCharacter(characterId: Int): QueryResult<ModelCharacter> {
+        db.killCharacter(characterId)
+        return getCharacterDetails(characterId)
     }
 
     companion object {

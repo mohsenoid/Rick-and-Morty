@@ -1,17 +1,17 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
-import androidx.annotation.VisibleForTesting
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkOriginModel
 
-class CharacterDbMapper(
-    private val originDbMapper: Mapper<NetworkOriginModel, DbEntityOrigin>,
-    private val locationDbMapper: Mapper<NetworkLocationModel, DbEntityLocation>
-) : Mapper<NetworkCharacterModel, DbEntityCharacter> {
+object CharacterDbMapper : Mapper<NetworkCharacterModel, DbEntityCharacter> {
+
+    const val ALIVE: String = "alive"
+
+    private const val SEPARATOR: Char = '/'
+
+    fun extractEpisodeIds(episodes: List<String>): List<Int> {
+        return episodes.map { it.split(SEPARATOR).last().toInt() }
+    }
 
     override fun map(input: NetworkCharacterModel): DbEntityCharacter {
         return DbEntityCharacter(
@@ -22,24 +22,13 @@ class CharacterDbMapper(
             species = input.species,
             type = input.type,
             gender = input.gender,
-            origin = originDbMapper.map(input.origin),
-            location = locationDbMapper.map(input.location),
+            origin = OriginDbMapper.map(input.origin),
+            location = LocationDbMapper.map(input.location),
             image = input.image,
             episodeIds = extractEpisodeIds(input.episodes),
             url = input.url,
             created = input.created,
             killedByUser = false
         )
-    }
-
-    companion object {
-        @VisibleForTesting
-        const val ALIVE: String = "alive"
-
-        private const val SEPARATOR: Char = '/'
-
-        fun extractEpisodeIds(episodes: List<String>): List<Int> {
-            return episodes.map { it.split(SEPARATOR).last().toInt() }
-        }
     }
 }

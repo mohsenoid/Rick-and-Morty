@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.view.character.details
 
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.view.base.BasePresenter
 import com.mohsenoid.rickandmorty.view.base.BaseView
 
@@ -10,7 +10,7 @@ interface CharacterDetailsContract {
 
         fun onNoOfflineData()
 
-        fun setCharacter(character: CharacterEntity)
+        fun setCharacter(character: ModelCharacter)
     }
 
     abstract class Presenter : BasePresenter<View>() {

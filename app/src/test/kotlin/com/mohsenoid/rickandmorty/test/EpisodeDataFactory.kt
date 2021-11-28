@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.test
 
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 
 object EpisodeDataFactory {
 
@@ -56,8 +56,8 @@ object EpisodeDataFactory {
 
     object Entity {
 
-        fun makeEpisode(episodeId: Int = DataFactory.randomInt()): EpisodeEntity {
-            return EpisodeEntity(
+        fun makeEpisode(episodeId: Int = DataFactory.randomInt()): ModelEpisode {
+            return ModelEpisode(
                 id = episodeId,
                 name = DataFactory.randomString(),
                 airDate = DataFactory.randomString(),
@@ -68,10 +68,10 @@ object EpisodeDataFactory {
             )
         }
 
-        fun makeEpisodes(count: Int): List<EpisodeEntity> {
-            val episodes: MutableList<EpisodeEntity> = ArrayList()
+        fun makeEpisodes(count: Int): List<ModelEpisode> {
+            val episodes: MutableList<ModelEpisode> = ArrayList()
             for (i in 0 until count) {
-                val episode: EpisodeEntity = makeEpisode()
+                val episode: ModelEpisode = makeEpisode()
                 episodes.add(episode)
             }
             return episodes

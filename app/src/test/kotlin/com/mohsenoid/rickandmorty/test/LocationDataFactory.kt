@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.test
 
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
-import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 
 object LocationDataFactory {
 
@@ -28,8 +28,8 @@ object LocationDataFactory {
 
     object Entity {
 
-        fun makeEntity(): LocationEntity {
-            return LocationEntity(
+        fun makeEntity(): ModelLocation {
+            return ModelLocation(
                 name = DataFactory.randomString(),
                 url = DataFactory.randomString()
             )

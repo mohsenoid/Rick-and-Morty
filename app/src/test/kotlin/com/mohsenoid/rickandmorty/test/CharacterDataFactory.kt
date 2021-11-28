@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.test
 
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 
 object CharacterDataFactory {
 
@@ -78,8 +78,8 @@ object CharacterDataFactory {
             status: String = DataFactory.randomString(),
             isAlive: Boolean = DataFactory.randomBoolean(),
             isKilledByUser: Boolean = false
-        ): CharacterEntity {
-            return CharacterEntity(
+        ): ModelCharacter {
+            return ModelCharacter(
                 id = characterId,
                 name = DataFactory.randomString(),
                 status = status,
@@ -97,10 +97,10 @@ object CharacterDataFactory {
             )
         }
 
-        fun makeCharacters(count: Int): List<CharacterEntity> {
-            val characters: MutableList<CharacterEntity> = ArrayList()
+        fun makeCharacters(count: Int): List<ModelCharacter> {
+            val characters: MutableList<ModelCharacter> = ArrayList()
             for (i: Int in 0 until count) {
-                val character: CharacterEntity = makeCharacter()
+                val character: ModelCharacter = makeCharacter()
                 characters.add(character)
             }
             return characters

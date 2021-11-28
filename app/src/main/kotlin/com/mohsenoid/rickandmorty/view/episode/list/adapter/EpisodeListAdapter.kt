@@ -4,19 +4,19 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mohsenoid.rickandmorty.databinding.ItemEpisodeBinding
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import java.util.ArrayList
 
 class EpisodeListAdapter(private val listener: ClickListener) :
     RecyclerView.Adapter<EpisodeViewHolder>() {
 
-    private var episodes: MutableList<EpisodeEntity> = ArrayList()
+    private var episodes: MutableList<ModelEpisode> = ArrayList()
 
-    fun setEpisodes(episodes: List<EpisodeEntity>) {
+    fun setEpisodes(episodes: List<ModelEpisode>) {
         this.episodes = episodes.toMutableList()
     }
 
-    fun addMoreEpisodes(episodes: List<EpisodeEntity>) {
+    fun addMoreEpisodes(episodes: List<ModelEpisode>) {
         this.episodes.addAll(episodes)
     }
 
@@ -26,7 +26,7 @@ class EpisodeListAdapter(private val listener: ClickListener) :
     }
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        val episode: EpisodeEntity = episodes[position]
+        val episode: ModelEpisode = episodes[position]
         holder.setEpisode(episode)
         holder.binding.root.setOnClickListener { listener.onEpisodeRowClick(episode) }
     }
@@ -36,6 +36,6 @@ class EpisodeListAdapter(private val listener: ClickListener) :
     }
 
     interface ClickListener {
-        fun onEpisodeRowClick(episode: EpisodeEntity)
+        fun onEpisodeRowClick(episode: ModelEpisode)
     }
 }

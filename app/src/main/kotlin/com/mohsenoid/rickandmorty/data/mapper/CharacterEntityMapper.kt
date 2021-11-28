@@ -1,19 +1,12 @@
 package com.mohsenoid.rickandmorty.data.mapper
 
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityCharacter
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityLocation
-import com.mohsenoid.rickandmorty.data.db.entity.DbEntityOrigin
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
-import com.mohsenoid.rickandmorty.domain.entity.OriginEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 
-class CharacterEntityMapper(
-    private val originEntityMapper: Mapper<DbEntityOrigin, OriginEntity>,
-    private val locationEntityMapper: Mapper<DbEntityLocation, LocationEntity>
-) : Mapper<DbEntityCharacter, CharacterEntity> {
+object CharacterEntityMapper : Mapper<DbEntityCharacter, ModelCharacter> {
 
-    override fun map(input: DbEntityCharacter): CharacterEntity {
-        return CharacterEntity(
+    override fun map(input: DbEntityCharacter): ModelCharacter {
+        return ModelCharacter(
             id = input.id,
             name = input.name,
             status = input.status,
@@ -21,8 +14,8 @@ class CharacterEntityMapper(
             species = input.species,
             type = input.type,
             gender = input.gender,
-            origin = originEntityMapper.map(input.origin),
-            location = locationEntityMapper.map(input.location),
+            origin = OriginEntityMapper.map(input.origin),
+            location = LocationEntityMapper.map(input.location),
             imageUrl = input.image,
             episodeIds = input.episodeIds,
             url = input.url,

@@ -1,6 +1,6 @@
-package com.mohsenoid.rickandmorty.domain.entity
+package com.mohsenoid.rickandmorty.domain.model
 
-data class CharacterEntity(
+data class ModelCharacter(
     val id: Int,
     val name: String,
     val status: String,
@@ -8,8 +8,8 @@ data class CharacterEntity(
     val species: String,
     val type: String,
     val gender: String,
-    val origin: OriginEntity,
-    val location: LocationEntity,
+    val origin: ModelOrigin,
+    val location: ModelLocation,
     val imageUrl: String,
     val episodeIds: List<Int>,
     val url: String,

@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.view.base.BasePresenter
 import com.mohsenoid.rickandmorty.view.base.BaseView
 
@@ -12,9 +12,9 @@ interface EpisodeListContract {
 
         fun hideLoadingMore()
 
-        fun setEpisodes(episodes: List<EpisodeEntity>)
+        fun setEpisodes(episodes: List<ModelEpisode>)
 
-        fun updateEpisodes(episodes: List<EpisodeEntity>)
+        fun updateEpisodes(episodes: List<ModelEpisode>)
 
         fun reachedEndOfList()
     }

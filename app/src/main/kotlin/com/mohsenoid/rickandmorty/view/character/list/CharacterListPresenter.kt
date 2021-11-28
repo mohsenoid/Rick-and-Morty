@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
-import com.mohsenoid.rickandmorty.data.exception.NoOfflineDataException
 import com.mohsenoid.rickandmorty.domain.Repository
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
+import com.mohsenoid.rickandmorty.domain.model.QueryResult
 import com.mohsenoid.rickandmorty.util.config.ConfigProvider
 
 class CharacterListPresenter(
@@ -30,28 +30,20 @@ class CharacterListPresenter(
             view?.showOfflineMessage(isCritical = false)
         }
 
-        try {
-            val result: List<CharacterEntity> = repository.getCharactersByIds(characterIds)
-            view?.setCharacters(result)
-        } catch (e: Exception) {
-            if (e is NoOfflineDataException) {
-                view?.onNoOfflineData()
-            } else {
-                view?.showMessage(e.message ?: e.toString())
-            }
-        } finally {
-            view?.hideLoading()
+        when (val result = repository.getCharactersByIds(characterIds)) {
+            is QueryResult.Successful -> view?.setCharacters(result.data)
+            QueryResult.NoCache -> view?.onNoOfflineData()
         }
+
+        view?.hideLoading()
     }
 
-    override suspend fun killCharacter(character: CharacterEntity) {
+    override suspend fun killCharacter(character: ModelCharacter) {
         if (!character.isAlive) return
 
-        try {
-            val result: CharacterEntity = repository.killCharacter(character.id)
-            view?.updateCharacter(result)
-        } catch (e: Exception) {
-            view?.showMessage(e.message ?: e.toString())
+        when (val result = repository.killCharacter(character.id)) {
+            is QueryResult.Successful -> view?.updateCharacter(result.data)
+            QueryResult.NoCache -> view?.onNoOfflineData()
         }
     }
 }

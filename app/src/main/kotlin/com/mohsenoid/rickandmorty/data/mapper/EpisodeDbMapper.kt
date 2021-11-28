@@ -3,7 +3,13 @@ package com.mohsenoid.rickandmorty.data.mapper
 import com.mohsenoid.rickandmorty.data.db.entity.DbEntityEpisode
 import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
 
-class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEntityEpisode> {
+object EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEntityEpisode> {
+
+    private const val SEPARATOR: Char = '/'
+
+    fun extractCharacterIds(characters: List<String>): List<Int> {
+        return characters.map { it.split(SEPARATOR).last().toInt() }
+    }
 
     override fun map(input: NetworkEpisodeModel): DbEntityEpisode {
         return DbEntityEpisode(
@@ -15,13 +21,5 @@ class EpisodeDbMapper : Mapper<NetworkEpisodeModel, DbEntityEpisode> {
             url = input.url,
             created = input.created
         )
-    }
-
-    companion object {
-        private const val SEPARATOR: Char = '/'
-
-        fun extractCharacterIds(characters: List<String>): List<Int> {
-            return characters.map { it.split(SEPARATOR).last().toInt() }
-        }
     }
 }
