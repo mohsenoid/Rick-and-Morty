@@ -82,7 +82,14 @@ android {
     }
 
     kotlinOptions {
+        allWarningsAsErrors = true
         jvmTarget = JavaVersion.VERSION_11.toString()
+        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
+
+    lint {
+        isIgnoreWarnings = false
+        isWarningsAsErrors = true
     }
 }
 

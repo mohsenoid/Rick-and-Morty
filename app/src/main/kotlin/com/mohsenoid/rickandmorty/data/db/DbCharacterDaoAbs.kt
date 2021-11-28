@@ -10,10 +10,11 @@ abstract class DbCharacterDaoAbs : DbCharacterDao {
         val oldCharacter: DbCharacterModel? = queryCharacter(characterId = character.id)
 
         insertCharacter(
-            character = if (oldCharacter != null)
+            character = if (oldCharacter != null) {
                 character.copy(killedByUser = oldCharacter.killedByUser)
-            else
+            } else {
                 character
+            }
         )
     }
 }
