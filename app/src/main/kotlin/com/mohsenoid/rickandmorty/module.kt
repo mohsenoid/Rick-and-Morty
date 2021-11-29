@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.injection
+package com.mohsenoid.rickandmorty
 
 import com.mohsenoid.rickandmorty.util.StatusProvider
 import com.mohsenoid.rickandmorty.util.StatusProviderImpl

@@ -1,8 +1,9 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.os.Build
+import com.mohsenoid.rickandmorty.appModule
 import com.mohsenoid.rickandmorty.data.dataModule
-import com.mohsenoid.rickandmorty.injection.qualifier.QualifiersNames
+import com.mohsenoid.rickandmorty.util.KoinQualifiersNames
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +20,7 @@ class DataModuleTest : ModuleTest() {
     fun `check all definitions from dataModule`() {
         startKoin {
             val appProperties: Map<String, String> = mapOf(
-                QualifiersNames.BASE_URL to BASE_URL
+                KoinQualifiersNames.BASE_URL to BASE_URL
             )
             properties(appProperties)
 

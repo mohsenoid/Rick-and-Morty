@@ -5,6 +5,5 @@
     <enableFormatting>true</enableFormatting>
     <buildUponDefaultConfig>true</buildUponDefaultConfig>
     <treatAsError>true</treatAsError>
-    <baselinePath>/app/detekt-baseline.xml</baselinePath>
   </component>
 </project>
