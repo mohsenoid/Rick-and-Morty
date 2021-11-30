@@ -5,10 +5,5 @@ import org.koin.dsl.module
 
 val episodeListFragmentModule = module {
 
-    viewModel<EpisodeListContract.Presenter> {
-        EpisodeListPresenter(
-            repository = get(),
-            statusProvider = get()
-        )
-    }
+    viewModel<EpisodeListViewModel>()
 }

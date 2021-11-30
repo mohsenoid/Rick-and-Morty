@@ -14,7 +14,7 @@ data class ModelCharacter(
     val episodeIds: List<Int>,
     val url: String,
     val created: String,
-    val isKilledByUser: Boolean
+    val isKilledByUser: Boolean,
 ) {
 
     val isAliveAndNotKilledByUser: Boolean

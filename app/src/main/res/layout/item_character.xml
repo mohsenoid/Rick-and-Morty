@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/keyLine1">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+
+        <variable
+            name="character"
+            type="com.mohsenoid.rickandmorty.view.model.ViewCharacterItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/keyLine1"
+        android:onClick="@{() -> character.onClick()}">
 
-        <com.mohsenoid.rickandmorty.view.util.SquareImageView
-            android:id="@+id/characterImage"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            tools:src="@drawable/ic_placeholder" />
-
-        <TextView
-            android:id="@+id/characterName"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:textAppearance="@style/textAppearanceListItemTitle"
-            tools:text="Character Name" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/characterStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@color/characterListStatusBackground"
-            android:contentDescription="@string/character_status"
-            android:padding="8dp"
-            android:src="@drawable/ic_dead" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            <com.mohsenoid.rickandmorty.view.util.SquareImageView
+                imageUrl="@{character.imageUrl}"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/ic_placeholder" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="@{character.name}"
+                android:textAppearance="@style/textAppearanceListItemTitle"
+                tools:text="Character Name" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@color/characterListStatusBackground"
+                android:contentDescription="@string/character_status"
+                android:onClick="@{() -> character.onKill()}"
+                android:padding="8dp"
+                android:src="@{character.aliveAndNotKilledByUser ?  @drawable/ic_alive :  @drawable/ic_dead}" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

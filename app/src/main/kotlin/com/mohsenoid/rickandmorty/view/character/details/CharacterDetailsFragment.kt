@@ -7,26 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.navArgs
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.databinding.FragmentCharacterDetailsBinding
-import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
-import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
+import org.koin.core.parameter.parametersOf
 
 @Suppress("TooManyFunctions")
-class CharacterDetailsFragment : Fragment(), CharacterDetailsContract.View {
+class CharacterDetailsFragment : Fragment() {
 
     private var _binding: FragmentCharacterDetailsBinding? = null
     private val binding get() = _binding!!
 
     private val args: CharacterDetailsFragmentArgs by navArgs()
 
-    private val presenter: CharacterDetailsContract.Presenter by viewModel()
+    private val viewModel: CharacterDetailsViewModel by viewModel {
+        parametersOf(args.characterId)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,42 +40,42 @@ class CharacterDetailsFragment : Fragment(), CharacterDetailsContract.View {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCharacterDetailsBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.bind(this)
-    }
 
-    override fun onResume() {
-        super.onResume()
         lifecycle.launchWhileResumed {
-            presenter.loadCharacter(args.characterId)
+            viewModel.onError.collectLatest {
+                if (it) showErrorMessage()
+            }
+        }
+
+        lifecycle.launchWhileResumed {
+            viewModel.isOffline.collectLatest {
+                if (it) showOfflineMessage()
+            }
+        }
+
+        lifecycle.launchWhileResumed {
+            viewModel.isNoCache.collectLatest {
+                if (it) onNoOfflineData()
+            }
         }
     }
 
-    override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    private fun showErrorMessage() {
+        Toast.makeText(context, R.string.error_message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showOfflineMessage(isCritical: Boolean) {
+    private fun showOfflineMessage() {
         Toast.makeText(context, R.string.offline_app, Toast.LENGTH_LONG).show()
-        if (isCritical) {
-            val activity: FragmentActivity? = activity
-            if (activity != null && !activity.isFinishing) activity.finish()
-        }
     }
 
-    override fun showLoading() {
-        binding.characterDetailsProgress.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        binding.characterDetailsProgress.visibility = View.GONE
-    }
-
-    override fun onNoOfflineData() {
+    private fun onNoOfflineData() {
         Toast.makeText(context, R.string.no_offline_data, Toast.LENGTH_LONG).show()
         parentActivityOnBackPressed()
     }
@@ -84,32 +85,8 @@ class CharacterDetailsFragment : Fragment(), CharacterDetailsContract.View {
         parentActivity?.onBackPressed()
     }
 
-    override fun setCharacter(character: ModelCharacter) {
-        with(binding) {
-            Picasso.get()
-                .load(character.imageUrl)
-                .placeholder(R.drawable.ic_placeholder)
-                .into(characterImage)
-
-            characterName.text = character.name
-            characterDetails.text =
-                getString(R.string.character_details_format, character.id, character.created)
-            if (character.isKilledByUser) {
-                characterKilledByUser.visibility = View.VISIBLE
-            } else {
-                characterKilledByUser.visibility = View.GONE
-            }
-            characterStatus.text = character.status
-            characterSpecies.text = character.species
-            characterGender.text = character.gender
-            characterOrigin.text = character.origin.name
-            characterLastLocation.text = character.location.name
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        presenter.unbind()
         _binding = null
     }
 
