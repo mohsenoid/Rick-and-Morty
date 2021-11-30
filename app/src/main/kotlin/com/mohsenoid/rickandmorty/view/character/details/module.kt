@@ -5,8 +5,9 @@ import org.koin.dsl.module
 
 val characterDetailsFragmentModule = module {
 
-    viewModel<CharacterDetailsContract.Presenter> {
-        CharacterDetailsPresenter(
+    viewModel { (characterId: Int) ->
+        CharacterDetailsViewModel(
+            characterId = characterId,
             repository = get(),
             statusProvider = get()
         )

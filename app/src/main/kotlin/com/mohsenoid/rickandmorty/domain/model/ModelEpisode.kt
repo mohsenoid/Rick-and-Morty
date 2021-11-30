@@ -7,5 +7,5 @@ data class ModelEpisode(
     val episode: String,
     val characterIds: List<Int>,
     val url: String,
-    val created: String
+    val created: String,
 )

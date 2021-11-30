@@ -2,6 +2,7 @@
     <string name="app_name">Rick and Morty</string>
 
     <string name="offline_app">No network connections</string>
+    <string name="error_message">Something went wrong!</string>
 
     <string name="character_status">STATUS</string>
     <string name="character_species">SPECIES</string>
