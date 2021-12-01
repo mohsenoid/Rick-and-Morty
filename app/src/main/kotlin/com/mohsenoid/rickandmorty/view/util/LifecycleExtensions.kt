@@ -15,7 +15,7 @@ fun Lifecycle.launchWhileResumed(block: suspend CoroutineScope.() -> Unit): Job 
                 job.cancel()
                 removeObserver(this)
             }
-        }
+        },
     )
     return job
 }

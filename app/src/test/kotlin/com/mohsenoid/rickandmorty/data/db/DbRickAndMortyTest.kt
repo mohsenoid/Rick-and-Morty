@@ -179,7 +179,7 @@ class DbRickAndMortyTest {
             characterId = expectedCharacterId,
             status = ALIVE,
             isAlive = true,
-            isKilledByUser = false
+            isKilledByUser = false,
         )
 
         // WHEN
@@ -203,7 +203,7 @@ class DbRickAndMortyTest {
             characterId = expectedCharacterId,
             status = ALIVE,
             isAlive = true,
-            isKilledByUser = false
+            isKilledByUser = false,
         )
 
         // WHEN
@@ -229,7 +229,7 @@ class DbRickAndMortyTest {
                 characterId = expectedCharacterId,
                 status = ALIVE,
                 isAlive = true,
-                isKilledByUser = false
+                isKilledByUser = false,
             )
 
             // WHEN

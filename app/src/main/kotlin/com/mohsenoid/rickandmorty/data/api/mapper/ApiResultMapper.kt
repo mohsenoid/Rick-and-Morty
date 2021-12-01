@@ -26,7 +26,7 @@ object ApiResultMapper {
 
         when (throwable) {
             is UnknownHostException -> ApiResult.Error.ServerError(
-                ApiResult.Error.ServerError.Reason.SERVER_UNREACHABLE
+                ApiResult.Error.ServerError.Reason.SERVER_UNREACHABLE,
             )
             else -> ApiResult.Error.UnknownError(throwable)
         }

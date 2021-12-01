@@ -48,7 +48,7 @@ internal class DbRickAndMorty(context: Context) {
             DbLocation::class,
             DbOrigin::class,
         ],
-        version = DATABASE_VERSION
+        version = DATABASE_VERSION,
     )
     @TypeConverters(DbTypeConverters::class)
     internal abstract class Db : RoomDatabase() {
@@ -60,8 +60,9 @@ internal class DbRickAndMorty(context: Context) {
         companion object {
             fun create(context: Context): Db {
                 return Room.databaseBuilder(
-                    context, Db::class.java,
-                    DATABASE_NAME
+                    context,
+                    Db::class.java,
+                    DATABASE_NAME,
                 )
                     .fallbackToDestructiveMigration()
                     .build()

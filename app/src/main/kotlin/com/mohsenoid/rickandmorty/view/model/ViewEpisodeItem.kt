@@ -4,7 +4,7 @@ data class ViewEpisodeItem(
     val name: String,
     val airDate: String,
     val episode: String,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
 ) {
     fun onClick() = onClick.invoke()
 }

@@ -14,5 +14,5 @@ internal data class DbLocation(
     val name: String,
 
     @ColumnInfo(name = "url")
-    val url: String
+    val url: String,
 )

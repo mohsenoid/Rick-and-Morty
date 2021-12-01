@@ -40,5 +40,5 @@ internal data class ApiCharacter(
     val url: String,
 
     @SerialName(value = "created")
-    val created: String
+    val created: String,
 )

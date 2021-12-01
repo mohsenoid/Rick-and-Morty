@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 class CharacterDetailsViewModel(
     private val characterId: Int,
     private val repository: Repository,
-    private val statusProvider: StatusProvider
+    private val statusProvider: StatusProvider,
 ) : ViewModel() {
 
     private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.None)

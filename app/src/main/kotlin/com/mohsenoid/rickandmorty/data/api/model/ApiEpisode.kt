@@ -25,5 +25,5 @@ internal data class ApiEpisode(
     val url: String,
 
     @SerialName(value = "created")
-    val created: String
+    val created: String,
 )

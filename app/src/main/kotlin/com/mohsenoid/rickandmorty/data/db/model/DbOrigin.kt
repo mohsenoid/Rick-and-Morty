@@ -14,5 +14,5 @@ internal data class DbOrigin(
     val name: String,
 
     @ColumnInfo(name = "url")
-    val url: String
+    val url: String,
 )

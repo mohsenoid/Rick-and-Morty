@@ -38,7 +38,8 @@ class RepositoryImpl internal constructor(
         when (val result = api.fetchEpisodes(page)) {
             is ApiResult.Success -> PageQueryResult.Successful(result.data.results)
             is ApiResult.Error.ServerError,
-            is ApiResult.Error.UnknownError -> PageQueryResult.Error
+            is ApiResult.Error.UnknownError,
+            -> PageQueryResult.Error
         }
 
     private suspend fun cacheNetworkEpisodes(episodes: List<ApiEpisode>) {
@@ -75,7 +76,8 @@ class RepositoryImpl internal constructor(
         when (val result = api.fetchCharactersByIds(characterIds.joinToString(","))) {
             is ApiResult.Success -> QueryResult.Successful(result.data)
             is ApiResult.Error.ServerError,
-            is ApiResult.Error.UnknownError -> QueryResult.Error
+            is ApiResult.Error.UnknownError,
+            -> QueryResult.Error
         }
 
     private suspend fun cacheNetworkCharacters(characters: List<ApiCharacter>) {
@@ -108,7 +110,8 @@ class RepositoryImpl internal constructor(
         when (val result = api.fetchCharacterDetails(characterId)) {
             is ApiResult.Success -> QueryResult.Successful(result.data)
             is ApiResult.Error.ServerError,
-            is ApiResult.Error.UnknownError -> QueryResult.Error
+            is ApiResult.Error.UnknownError,
+            -> QueryResult.Error
         }
 
     private suspend fun cacheNetworkCharacter(character: ApiCharacter) {

@@ -37,7 +37,7 @@ class CharacterDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentCharacterDetailsBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner

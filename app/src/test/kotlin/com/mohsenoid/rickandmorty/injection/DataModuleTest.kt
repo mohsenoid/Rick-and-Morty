@@ -20,7 +20,7 @@ class DataModuleTest : ModuleTest() {
     fun `check all definitions from dataModule`() {
         startKoin {
             val appProperties: Map<String, String> = mapOf(
-                KoinQualifiersNames.BASE_URL to BASE_URL
+                KoinQualifiersNames.BASE_URL to BASE_URL,
             )
             properties(appProperties)
 

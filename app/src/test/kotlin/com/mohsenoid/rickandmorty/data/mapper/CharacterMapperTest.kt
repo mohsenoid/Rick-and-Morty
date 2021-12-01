@@ -46,7 +46,7 @@ class CharacterMapperTest {
             episodeIds = CHARACTER_EPISODE_IDS,
             url = CHARACTER_URL,
             created = CHARACTER_CREATED,
-            isKilledByUser = false
+            isKilledByUser = false,
         )
 
         // WHEN

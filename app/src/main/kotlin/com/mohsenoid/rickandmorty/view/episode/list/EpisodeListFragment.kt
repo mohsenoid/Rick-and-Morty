@@ -36,7 +36,7 @@ class EpisodeListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEpisodeListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner

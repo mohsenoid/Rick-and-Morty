@@ -50,7 +50,7 @@ object ApiFactory {
                 count = VALUE_COUNT,
                 pages = VALUE_PAGE,
                 next = VALUE_NEXT,
-                prev = VALUE_PREV
+                prev = VALUE_PREV,
             )
 
             val episode = ApiEpisode(
@@ -60,12 +60,12 @@ object ApiFactory {
                 episode = VALUE_EPISODE,
                 characters = arrayListOf(VALUE_CHARACTER),
                 url = VALUE_URL,
-                created = VALUE_CREATED
+                created = VALUE_CREATED,
             )
 
             return ApiEpisodes(
                 info = info,
-                results = arrayListOf(episode)
+                results = arrayListOf(episode),
             )
         }
     }
@@ -122,12 +122,12 @@ object ApiFactory {
         internal fun makeCharacter(): ApiCharacter {
             val origin = ApiOrigin(
                 name = VALUE_ORIGIN_NAME,
-                url = VALUE_ORIGIN_URL
+                url = VALUE_ORIGIN_URL,
             )
 
             val location = ApiLocation(
                 name = VALUE_LOCATION_NAME,
-                url = VALUE_LOCATION_URL
+                url = VALUE_LOCATION_URL,
             )
 
             return ApiCharacter(
@@ -142,7 +142,7 @@ object ApiFactory {
                 image = VALUE_IMAGE,
                 episodes = arrayListOf(VALUE_EPISODE),
                 url = VALUE_URL,
-                created = VALUE_CREATED
+                created = VALUE_CREATED,
             )
         }
     }

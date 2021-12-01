@@ -47,19 +47,19 @@ internal class ApiRickAndMorty(applicationContext: Context, baseUrl: String) {
         @GET(value = EPISODE_ENDPOINT)
         suspend fun fetchEpisodes(
             @Query(value = PARAM_KEY_PAGE)
-            page: Int
+            page: Int,
         ): Response<ApiEpisodes>
 
         @GET(value = "$CHARACTER_ENDPOINT{$PATH_KEY_CHARACTER_IDS}")
         suspend fun fetchCharactersByIds(
             @Path(value = PATH_KEY_CHARACTER_IDS)
-            characterIds: String
+            characterIds: String,
         ): Response<List<ApiCharacter>>
 
         @GET(value = "$CHARACTER_ENDPOINT{$PATH_KEY_CHARACTER_ID}")
         suspend fun fetchCharacterDetails(
             @Path(value = PATH_KEY_CHARACTER_ID)
-            characterId: Int
+            characterId: Int,
         ): Response<ApiCharacter>
 
         companion object {

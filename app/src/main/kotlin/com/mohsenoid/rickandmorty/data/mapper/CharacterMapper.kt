@@ -33,19 +33,19 @@ internal fun ApiCharacter.toDbCharacter() =
         episodeIds = extractEpisodeIds(episodes),
         url = url,
         created = created,
-        isKilledByUser = false
+        isKilledByUser = false,
     )
 
 private fun ApiOrigin.toDbOrigin() =
     DbOrigin(
         name = name,
-        url = url
+        url = url,
     )
 
 private fun ApiLocation.toDbLocation() =
     DbLocation(
         name = name,
-        url = url
+        url = url,
     )
 
 internal fun DbCharacter.toModelCharacter() =
@@ -63,17 +63,17 @@ internal fun DbCharacter.toModelCharacter() =
         episodeIds = episodeIds,
         url = url,
         created = created,
-        isKilledByUser = isKilledByUser
+        isKilledByUser = isKilledByUser,
     )
 
 private fun DbOrigin.toModelOrigin() =
     ModelOrigin(
         name = name,
-        url = url
+        url = url,
     )
 
 private fun DbLocation.toModelLocation() =
     ModelLocation(
         name = name,
-        url = url
+        url = url,
     )

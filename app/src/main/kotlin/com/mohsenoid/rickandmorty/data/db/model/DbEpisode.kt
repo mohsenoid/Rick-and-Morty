@@ -29,5 +29,5 @@ internal data class DbEpisode(
     val url: String,
 
     @ColumnInfo(name = "created")
-    val created: String
+    val created: String,
 )

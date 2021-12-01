@@ -10,5 +10,5 @@ internal data class ApiOrigin(
     val name: String,
 
     @SerialName(value = "url")
-    val url: String
+    val url: String,
 )

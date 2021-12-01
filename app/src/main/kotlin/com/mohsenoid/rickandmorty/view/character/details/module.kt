@@ -9,7 +9,7 @@ val characterDetailsFragmentModule = module {
         CharacterDetailsViewModel(
             characterId = characterId,
             repository = get(),
-            statusProvider = get()
+            statusProvider = get(),
         )
     }
 }

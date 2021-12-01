@@ -14,7 +14,7 @@ internal abstract class DbCharacterDaoAbs : DbCharacterDao {
                 character.copy(isKilledByUser = oldCharacter.isKilledByUser)
             } else {
                 character
-            }
+            },
         )
     }
 }

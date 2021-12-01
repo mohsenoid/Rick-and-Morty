@@ -10,5 +10,5 @@ internal data class ApiEpisodes(
     val info: ApiInfo,
 
     @SerialName(value = "results")
-    val results: List<ApiEpisode>
+    val results: List<ApiEpisode>,
 )

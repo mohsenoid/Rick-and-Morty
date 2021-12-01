@@ -50,5 +50,5 @@ internal data class DbCharacter(
     val created: String,
 
     @ColumnInfo(name = "is_killed_by_user", defaultValue = "0")
-    val isKilledByUser: Boolean
+    val isKilledByUser: Boolean,
 )

@@ -14,5 +14,5 @@ data class ApiErrorResponse(
     val orgMessage: String? = null,
 
     @SerialName(value = "httpStatus")
-    val httpStatus: Int? = null
+    val httpStatus: Int? = null,
 )

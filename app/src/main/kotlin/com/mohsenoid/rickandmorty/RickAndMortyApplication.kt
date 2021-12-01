@@ -20,7 +20,7 @@ class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
 
         startKoin {
             val appProperties: Map<String, String> = mapOf(
-                KoinQualifiersNames.BASE_URL to BuildConfig.BASE_URL
+                KoinQualifiersNames.BASE_URL to BuildConfig.BASE_URL,
             )
             properties(appProperties)
 
@@ -32,11 +32,13 @@ class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
     }
 
     private fun setupTimber() {
-        Timber.plant(object : Timber.DebugTree() {
-            override fun createStackElementTag(element: StackTraceElement): String {
-                // adding file name and line number link to logs
-                return "${super.createStackElementTag(element)}(${element.fileName}:${element.lineNumber})"
-            }
-        })
+        Timber.plant(
+            object : Timber.DebugTree() {
+                override fun createStackElementTag(element: StackTraceElement): String {
+                    // adding file name and line number link to logs
+                    return "${super.createStackElementTag(element)}(${element.fileName}:${element.lineNumber})"
+                }
+            },
+        )
     }
 }

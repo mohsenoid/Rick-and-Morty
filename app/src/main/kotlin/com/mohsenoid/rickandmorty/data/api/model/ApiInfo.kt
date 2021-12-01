@@ -16,5 +16,5 @@ internal data class ApiInfo(
     val next: String?,
 
     @SerialName(value = "prev")
-    val prev: String?
+    val prev: String?,
 )

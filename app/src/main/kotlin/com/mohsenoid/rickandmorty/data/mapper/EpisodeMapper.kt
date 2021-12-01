@@ -18,7 +18,7 @@ internal fun ApiEpisode.toDbEpisode() =
         episode = episode,
         characterIds = extractCharacterIds(characters),
         url = url,
-        created = created
+        created = created,
     )
 
 internal fun DbEpisode.toModelEpisode() =
@@ -29,5 +29,5 @@ internal fun DbEpisode.toModelEpisode() =
         episode = episode,
         characterIds = characterIds,
         url = url,
-        created = created
+        created = created,
     )
