@@ -154,7 +154,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.12.1")
 
     // Koin
-    val koinVersion = "3.1.2"
+    val koinVersion = "3.1.4"
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-android-compat:$koinVersion")
     testImplementation("io.insert-koin:koin-test:$koinVersion")
