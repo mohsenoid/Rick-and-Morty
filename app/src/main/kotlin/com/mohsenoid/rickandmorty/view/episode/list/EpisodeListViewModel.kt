@@ -1,5 +1,7 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohsenoid.rickandmorty.domain.Repository
@@ -7,12 +9,9 @@ import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 import com.mohsenoid.rickandmorty.domain.model.PageQueryResult
 import com.mohsenoid.rickandmorty.util.StatusProvider
 import com.mohsenoid.rickandmorty.view.mapper.toViewEpisodeItem
-import com.mohsenoid.rickandmorty.view.model.LoadingState
 import com.mohsenoid.rickandmorty.view.model.ViewEpisodeItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -21,20 +20,7 @@ class EpisodeListViewModel(
     private val statusProvider: StatusProvider,
 ) : ViewModel() {
 
-    private val _loadingState: MutableStateFlow<LoadingState> = MutableStateFlow(LoadingState.None)
-    val loadingState: StateFlow<LoadingState> = _loadingState
-
-    private val _isOffline: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isOffline: StateFlow<Boolean> = _isOffline
-
-    private val _isEndOfList: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isEndOfList: StateFlow<Boolean> = _isEndOfList
-
-    private val _onError: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val onError: StateFlow<Boolean> = _onError
-
-    private val _episodes: MutableStateFlow<List<ViewEpisodeItem>> = MutableStateFlow(emptyList())
-    val episodes: StateFlow<List<ViewEpisodeItem>> = _episodes
+    val uiState: MutableState<EpisodeListUiState> = mutableStateOf(EpisodeListUiState())
 
     private val _selectedEpisodeCharacterIds: Channel<IntArray> = Channel()
     val selectedEpisodeCharacterIds: Flow<IntArray> = _selectedEpisodeCharacterIds.receiveAsFlow()
@@ -46,40 +32,40 @@ class EpisodeListViewModel(
     }
 
     fun loadEpisodes() {
-        _loadingState.value = LoadingState.Loading
-        _isEndOfList.value = false
-        _onError.value = false
-        _isOffline.value = false
+        uiState.value = EpisodeListUiState(loading = true)
+
         page = 1
         getEpisodes()
     }
 
     fun loadMoreEpisodes(page: Int) {
-        _loadingState.value = LoadingState.LoadingMore
+        uiState.value = uiState.value.copy(loadingMore = true)
         this.page = page
         getEpisodes()
     }
 
     private fun getEpisodes() {
         if (!statusProvider.isOnline()) {
-            _isOffline.value = true
+            uiState.value = uiState.value.copy(isOffline = true)
         }
 
         viewModelScope.launch {
             when (val result = repository.getEpisodes(page)) {
                 is PageQueryResult.Successful -> {
                     if (page == 1) {
-                        _episodes.value =
-                            result.data.toViewEpisodeItems()
+                        uiState.value =
+                            uiState.value.copy(episodes = result.data.toViewEpisodeItems())
                     } else {
-                        _episodes.value = _episodes.value + result.data.toViewEpisodeItems()
+                        val episodes = uiState.value.episodes + result.data.toViewEpisodeItems()
+                        uiState.value = uiState.value.copy(episodes = episodes)
                     }
                 }
-                PageQueryResult.EndOfList -> _isEndOfList.value = true
-                PageQueryResult.Error -> _onError.value = true
+                PageQueryResult.EndOfList -> uiState.value =
+                    uiState.value.copy(isEndOfList = true)
+                PageQueryResult.Error -> uiState.value = uiState.value.copy(error = true)
             }
 
-            _loadingState.value = LoadingState.None
+            uiState.value = uiState.value.copy(loading = false, loadingMore = false)
         }
     }
 

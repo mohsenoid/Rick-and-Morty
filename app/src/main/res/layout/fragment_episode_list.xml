@@ -17,7 +17,6 @@
         tools:context=".view.episode.list.EpisodeListFragment">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            isRefreshing="@{viewModel.loadingState}"
             onRefreshListener="@{viewModel.loadEpisodes}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -26,7 +25,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/episodeList"
-                episodes="@{viewModel.episodes}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
@@ -39,7 +37,6 @@
 
         <ProgressBar
             android:id="@+id/episodeListProgress"
-            isLoadingMore="@{viewModel.loadingState}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"

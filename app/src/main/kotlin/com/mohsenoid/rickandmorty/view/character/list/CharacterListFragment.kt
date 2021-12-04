@@ -86,7 +86,7 @@ class CharacterListFragment : Fragment() {
         activity?.onBackPressed()
     }
 
-    fun onCharacterRowClick(characterId: Int) {
+    private fun onCharacterRowClick(characterId: Int) {
         val action = CharacterListFragmentDirections
             .actionCharacterListFragmentToCharacterDetailsFragment(characterId)
         view?.findNavController()?.navigate(action)

@@ -43,7 +43,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -78,17 +78,22 @@ android {
 
     buildFeatures {
         dataBinding = true
+        compose = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
         allWarningsAsErrors = true
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.5"
     }
 
     lint {
@@ -195,4 +200,13 @@ dependencies {
 
     // Startup
     implementation("androidx.startup:startup-runtime:1.1.0")
+
+    // compose
+    implementation("androidx.compose.ui:ui:1.0.5")
+    // Tooling support (Previews, etc.)
+    implementation("androidx.compose.ui:ui-tooling:1.0.5")
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation("androidx.compose.foundation:foundation:1.0.5")
+    // Material Design
+    implementation("androidx.compose.material:material:1.0.5")
 }
