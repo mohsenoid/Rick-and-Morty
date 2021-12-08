@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DetektProjectConfiguration">
+    <enableDetekt>true</enableDetekt>
     <enableFormatting>true</enableFormatting>
     <buildUponDefaultConfig>true</buildUponDefaultConfig>
     <treatAsError>true</treatAsError>
+    <configPaths>app/detekt_config.yml</configPaths>
+    <baselinePath>app/detekt-baseline.xml</baselinePath>
   </component>
 </project>

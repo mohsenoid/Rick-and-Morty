@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,8 @@ class EpisodeListViewModel(
     private val statusProvider: StatusProvider,
 ) : ViewModel() {
 
-    val uiState: MutableState<EpisodeListUiState> = mutableStateOf(EpisodeListUiState())
+    private val _uiState: MutableState<EpisodeListUiState> = mutableStateOf(EpisodeListUiState())
+    val uiState: State<EpisodeListUiState> = _uiState
 
     private val _selectedEpisodeCharacterIds: Channel<IntArray> = Channel()
     val selectedEpisodeCharacterIds: Flow<IntArray> = _selectedEpisodeCharacterIds.receiveAsFlow()
@@ -32,40 +34,43 @@ class EpisodeListViewModel(
     }
 
     fun loadEpisodes() {
-        uiState.value = EpisodeListUiState(loading = true)
+        _uiState.value = EpisodeListUiState(isRefreshing = true)
 
         page = 1
         getEpisodes()
     }
 
-    fun loadMoreEpisodes(page: Int) {
-        uiState.value = uiState.value.copy(loadingMore = true)
-        this.page = page
+    fun loadMoreEpisodes() {
+        _uiState.value = _uiState.value.copy(loadingMore = true)
+        this.page++
         getEpisodes()
     }
 
     private fun getEpisodes() {
         if (!statusProvider.isOnline()) {
-            uiState.value = uiState.value.copy(isOffline = true)
+            _uiState.value = _uiState.value.copy(isOffline = true)
         }
 
         viewModelScope.launch {
             when (val result = repository.getEpisodes(page)) {
                 is PageQueryResult.Successful -> {
                     if (page == 1) {
-                        uiState.value =
-                            uiState.value.copy(episodes = result.data.toViewEpisodeItems())
+                        _uiState.value =
+                            _uiState.value.copy(episodes = result.data.toViewEpisodeItems())
                     } else {
-                        val episodes = uiState.value.episodes + result.data.toViewEpisodeItems()
-                        uiState.value = uiState.value.copy(episodes = episodes)
+                        val episodes = _uiState.value.episodes + result.data.toViewEpisodeItems()
+                        _uiState.value = _uiState.value.copy(episodes = episodes)
                     }
                 }
-                PageQueryResult.EndOfList -> uiState.value =
-                    uiState.value.copy(isEndOfList = true)
-                PageQueryResult.Error -> uiState.value = uiState.value.copy(error = true)
+                PageQueryResult.EndOfList -> {
+                    _uiState.value = _uiState.value.copy(isEndOfList = true)
+                }
+                PageQueryResult.Error -> {
+                    _uiState.value = _uiState.value.copy(error = true)
+                }
             }
 
-            uiState.value = uiState.value.copy(loading = false, loadingMore = false)
+            _uiState.value = _uiState.value.copy(isRefreshing = false, loadingMore = false)
         }
     }
 

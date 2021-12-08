@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
-import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
 import com.mohsenoid.rickandmorty.view.model.LoadingState
 import com.mohsenoid.rickandmorty.view.model.ViewCharacterItem
-import com.mohsenoid.rickandmorty.view.model.ViewEpisodeItem
 import com.squareup.picasso.Picasso
 
 @BindingAdapter("visibility")
@@ -37,22 +35,6 @@ fun ProgressBar.setIsLoading(loadingState: LoadingState?) {
 @BindingAdapter("isLoadingMore")
 fun ProgressBar.setIsLoadingMore(loadingState: LoadingState?) {
     visibility = if (loadingState == LoadingState.LoadingMore) View.VISIBLE else View.GONE
-}
-
-@BindingAdapter("episodes")
-fun RecyclerView.setEpisodes(itemViewModels: List<ViewEpisodeItem>?) {
-    val adapter = getOrCreateEpisodeListAdapter()
-    adapter.setEpisodes(itemViewModels ?: emptyList())
-}
-
-private fun RecyclerView.getOrCreateEpisodeListAdapter(): EpisodeListAdapter {
-    return if (adapter != null && adapter is EpisodeListAdapter) {
-        adapter as EpisodeListAdapter
-    } else {
-        val newAdapter = EpisodeListAdapter()
-        adapter = newAdapter
-        newAdapter
-    }
 }
 
 @BindingAdapter("characters")

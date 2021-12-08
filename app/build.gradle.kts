@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber", "SpellCheckingInspection")
+
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
@@ -209,4 +211,6 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.0.5")
     // Material Design
     implementation("androidx.compose.material:material:1.0.5")
+    // Swipe Refresh
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.21.3-beta")
 }
