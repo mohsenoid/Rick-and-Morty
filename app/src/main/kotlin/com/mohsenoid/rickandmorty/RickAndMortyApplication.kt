@@ -7,7 +7,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
-import timber.log.Timber
 
 class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
 
@@ -15,8 +14,6 @@ class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
 
     override fun onCreate() {
         super.onCreate()
-
-        if (isDebug) setupTimber()
 
         startKoin {
             val appProperties: Map<String, String> = mapOf(
@@ -29,16 +26,5 @@ class RickAndMortyApplication : MultiDexApplication(), KoinComponent {
             androidContext(this@RickAndMortyApplication)
             modules(appModule + dataModule)
         }
-    }
-
-    private fun setupTimber() {
-        Timber.plant(
-            object : Timber.DebugTree() {
-                override fun createStackElementTag(element: StackTraceElement): String {
-                    // adding file name and line number link to logs
-                    return "${super.createStackElementTag(element)}(${element.fileName}:${element.lineNumber})"
-                }
-            },
-        )
     }
 }
