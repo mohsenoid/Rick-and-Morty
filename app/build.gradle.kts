@@ -192,4 +192,7 @@ dependencies {
 
     // leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
+
+    // Startup
+    implementation("androidx.startup:startup-runtime:1.1.0")
 }

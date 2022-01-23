@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mohsenoid.rickandmorty">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,6 +29,16 @@
         </activity-alias>
 
         <activity android:name=".view.MainActivity" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.mohsenoid.rickandmorty.startup.TimberInitializer"
+                android:value="androidx.startup" />
+        </provider>
     </application>
 
 </manifest>
