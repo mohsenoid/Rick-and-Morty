@@ -1,0 +1,8 @@
+naming:
+  FunctionNaming:
+    ignoreAnnotated:
+      - 'Composable'
+
+style:
+  UnusedPrivateMember:
+    allowedNames: '(_|ignored|expected|serialVersionUID|Preview\w*)'

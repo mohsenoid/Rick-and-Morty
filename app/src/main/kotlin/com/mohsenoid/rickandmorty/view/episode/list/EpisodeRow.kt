@@ -16,9 +16,9 @@ import com.mohsenoid.rickandmorty.view.model.ViewEpisodeItem
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EpisodeRow(item: ViewEpisodeItem) {
+fun EpisodeRow(item: ViewEpisodeItem, onClick: () -> Unit) {
     Card(
-        onClick = item.onClick,
+        onClick = onClick,
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
@@ -36,17 +36,17 @@ fun EpisodeRow(item: ViewEpisodeItem) {
 }
 
 private val previewEpisode = ViewEpisodeItem(
+    characterIds = listOf(1, 2),
     name = "Pilot",
     airDate = "December 2, 2013",
     episode = "S01E01",
-    onClick = {},
 )
 
 @Preview
 @Composable
 private fun PreviewDarkEpisodeRow() {
     RickAndMortyTheme(darkTheme = true) {
-        EpisodeRow(previewEpisode)
+        EpisodeRow(previewEpisode) {}
     }
 }
 
@@ -54,6 +54,6 @@ private fun PreviewDarkEpisodeRow() {
 @Composable
 private fun PreviewLightEpisodeRow() {
     RickAndMortyTheme(darkTheme = false) {
-        EpisodeRow(previewEpisode)
+        EpisodeRow(previewEpisode) {}
     }
 }
