@@ -38,6 +38,9 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
 
+            implementation(libs.koin.core)
+            implementation(libs.koin.android)
+
             implementation(libs.ktor.client.okhttp)
         }
 
@@ -57,6 +60,8 @@ kotlin {
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
+            implementation(libs.koin.core)
+
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
@@ -68,6 +73,7 @@ kotlin {
         }
 
         commonTest.dependencies {
+            implementation(libs.koin.test)
         }
     }
 }

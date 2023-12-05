@@ -24,12 +24,21 @@ import episodes.data.EpisodesRepositoryImpl
 import episodes.domain.Episode
 import episodes.presentation.EpisodesUiState
 import episodes.presentation.EpisodesViewModel
+import org.koin.core.Koin
+import org.koin.core.context.startKoin
+import org.koin.dsl.koinApplication
 import theme.Theme
 
 @Composable
 fun App() {
     Theme(darkTheme = true) {
         Scaffold {
+            LaunchedEffect(Unit) {
+                startKoin {
+                    modules(appModules)
+                }
+            }
+
             val episodesViewModel =
                 getViewModel(
                     key = Unit,
