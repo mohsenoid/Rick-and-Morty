@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber", "SpellCheckingInspection")
+
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
@@ -43,7 +45,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -125,7 +127,7 @@ jacoco {
 
 dependencies {
     // Android Jetpack
-    implementation("androidx.appcompat:appcompat:1.4.0")
+    implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
@@ -140,21 +142,21 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.5.31"))
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.5.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.5.30")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
 
     // Test
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.7.2")
-    testImplementation("io.mockk:mockk:1.12.1")
+    testImplementation("org.robolectric:robolectric:4.7.3")
+    testImplementation("io.mockk:mockk:1.12.2")
 
     // Koin
-    val koinVersion = "3.1.4"
+    val koinVersion = "3.1.5"
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-android-compat:$koinVersion")
     testImplementation("io.insert-koin:koin-test:$koinVersion")
@@ -167,13 +169,13 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 
     // Room
-    val roomVersion = "2.3.0"
+    val roomVersion = "2.4.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // Navigation component
-    val navigationComponentVersion = "2.3.5"
+    val navigationComponentVersion = "2.4.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationComponentVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationComponentVersion")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$navigationComponentVersion")
@@ -191,7 +193,7 @@ dependencies {
     releaseImplementation("com.github.chuckerteam.chucker:library-no-op:$chuckerVersion")
 
     // leakcanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
     // Startup
     implementation("androidx.startup:startup-runtime:1.1.0")
