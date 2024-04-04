@@ -68,6 +68,7 @@ Code is covered by unit tests implemented using **Mockito** and **Kluent**. Also
 - **Koin** dependency injector library made by [InsertKoinIO](https://github.com/InsertKoinIO/koin)
 - **Kluent** assertions library made by [MarkusAmshove](https://github.com/MarkusAmshove/Kluent)
 
+
 ### References
 
 - App **Launcher Icon** made by [freepngimg.com](http://freepngimg.com)
