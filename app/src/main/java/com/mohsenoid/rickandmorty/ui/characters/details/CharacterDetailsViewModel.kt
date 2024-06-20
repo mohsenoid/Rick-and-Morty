@@ -16,11 +16,15 @@ import kotlinx.coroutines.launch
 class CharacterDetailsViewModel(
     private val charactersRepository: CharactersRepository,
 ) : ViewModel() {
-
     private val state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
 
-    val uiState: StateFlow<CharacterDetailsUiState> = state.map { it.toUiState() }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, CharacterDetailsUiState(isLoading = true))
+    val uiState: StateFlow<CharacterDetailsUiState> =
+        state.map { it.toUiState() }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                CharacterDetailsUiState(isLoading = true),
+            )
 
     fun loadCharacter(characterId: Int) {
         state.value = State.Loading
@@ -47,7 +51,6 @@ class CharacterDetailsViewModel(
     }
 
     internal sealed interface State {
-
         data object Loading : State
 
         data class Success(val character: Character) : State

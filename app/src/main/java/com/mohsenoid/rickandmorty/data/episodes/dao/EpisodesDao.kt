@@ -8,7 +8,6 @@ import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
 
 @Dao
 internal interface EpisodesDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertEpisode(episode: EpisodeEntity)
 

@@ -8,36 +8,38 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+val appModule =
+    module {
 
-val appModule = module {
-
-    single {
-        GsonBuilder().create()
-    }
-
-    single<Converter.Factory> {
-        GsonConverterFactory.create(get())
-    }
-
-    single<OkHttpClient> {
-        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
+        single {
+            GsonBuilder().create()
         }
 
-        val httpClient = OkHttpClient.Builder()
-        httpClient.addInterceptor(logging)
-        httpClient.build()
-    }
+        single<Converter.Factory> {
+            GsonConverterFactory.create(get())
+        }
 
-    single {
-        Retrofit.Builder()
-            .addConverterFactory(get())
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .client(get())
-            .build()
+        single<OkHttpClient> {
+            val logging: HttpLoggingInterceptor =
+                HttpLoggingInterceptor().apply {
+                    level =
+                        if (BuildConfig.DEBUG) {
+                            HttpLoggingInterceptor.Level.BODY
+                        } else {
+                            HttpLoggingInterceptor.Level.NONE
+                        }
+                }
+
+            val httpClient = OkHttpClient.Builder()
+            httpClient.addInterceptor(logging)
+            httpClient.build()
+        }
+
+        single {
+            Retrofit.Builder()
+                .addConverterFactory(get())
+                .baseUrl(BuildConfig.API_BASE_URL)
+                .client(get())
+                .build()
+        }
     }
-}

@@ -15,7 +15,6 @@ internal class EpisodesRepositoryImpl(
     val apiService: ApiService,
     val episodesDao: EpisodesDao,
 ) : EpisodesRepository {
-
     private val episodesCache: MutableMap<Int, List<Episode>> = mutableMapOf()
 
     override suspend fun getEpisodes(page: Int): RepositoryGetResult<List<Episode>> =
@@ -53,26 +52,32 @@ internal class EpisodesRepositoryImpl(
     }
 
     private suspend fun getRemoteEpisodes(page: Int): RepositoryGetResult<List<Episode>> {
-        val response = runCatching { apiService.getEpisodes(page) }.getOrNull()
-            ?: return RepositoryGetResult.Failure.NoConnection("Connection Error!")
+        val response =
+            runCatching { apiService.getEpisodes(page) }.getOrNull()
+                ?: return RepositoryGetResult.Failure.NoConnection("Connection Error!")
         val remoteEpisodes: List<EpisodeRemoteModel>? = response.body()?.results
-        if (response.isSuccessful && remoteEpisodes != null) {
+        return if (response.isSuccessful && remoteEpisodes != null) {
             val episodesEntity = remoteEpisodes.map { it.toEpisodeEntity(page) }
             episodesEntity.forEach { episodesDao.insertEpisode(it) }
 
             val serviceEpisodes = episodesEntity.map { it.toEpisode() }
             cacheEpisodes(page, serviceEpisodes)
-            return RepositoryGetResult.Success(serviceEpisodes)
-        } else if (response.code() == 404) {
-            return RepositoryGetResult.Failure.EndOfList("End of list")
+            RepositoryGetResult.Success(serviceEpisodes)
+        } else if (response.code() == HTTP_CODE_404) {
+            RepositoryGetResult.Failure.EndOfList("End of list")
         } else {
-            return RepositoryGetResult.Failure.Unknown(
-                response.message().ifEmpty { "Unknown Error" },
-            )
+            RepositoryGetResult.Failure.Unknown(response.message().ifEmpty { "Unknown Error" })
         }
     }
 
-    private fun cacheEpisodes(page: Int, episodes: List<Episode>) {
+    private fun cacheEpisodes(
+        page: Int,
+        episodes: List<Episode>,
+    ) {
         episodesCache[page] = episodes
+    }
+
+    companion object {
+        private const val HTTP_CODE_404 = 404
     }
 }

@@ -15,7 +15,6 @@ internal class CharactersRepositoryImpl(
     private val apiService: ApiService,
     private val characterDao: CharacterDao,
 ) : CharactersRepository {
-
     private val charactersCache: MutableSet<Character> = mutableSetOf()
 
     override suspend fun getCharacters(characterIds: Set<Int>): RepositoryGetResult<Set<Character>> =
@@ -65,7 +64,6 @@ internal class CharactersRepositoryImpl(
         charactersCache += dbCharacters
     }
 
-
     override suspend fun getCharacter(characterId: Int): RepositoryGetResult<Character> =
         withContext(Dispatchers.IO) {
             val getCachedCharacterResult = getCachedCharacter(characterId)
@@ -106,16 +104,14 @@ internal class CharactersRepositoryImpl(
             runCatching { apiService.getCharacter(characterId) }.getOrNull()
                 ?: return RepositoryGetResult.Failure.NoConnection("No Connection Error")
         val remoteCharacter: CharacterRemoteModel? = response.body()
-        if (response.isSuccessful && remoteCharacter != null) {
+        return if (response.isSuccessful && remoteCharacter != null) {
             val characterEntity = remoteCharacter.toCharacterEntity()
             characterDao.insertCharacter(characterEntity)
             val character = characterEntity.toCharacter()
             charactersCache += character
-            return RepositoryGetResult.Success(character)
+            RepositoryGetResult.Success(character)
         } else {
-            return RepositoryGetResult.Failure.Unknown(
-                response.message().ifEmpty { "Unknown Error" },
-            )
+            RepositoryGetResult.Failure.Unknown(response.message().ifEmpty { "Unknown Error" })
         }
     }
 }

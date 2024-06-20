@@ -16,7 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.mohsenoid.rickandmorty.ui.theme.RickAndMortyTheme
 
 @Composable
-fun UnknownErrorScreen(message: String, modifier: Modifier = Modifier) {
+fun UnknownErrorScreen(
+    message: String,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,

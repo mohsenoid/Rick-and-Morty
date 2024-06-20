@@ -65,6 +65,7 @@ fun CharactersScreen(
         LaunchedEffect(Unit) {
             viewModel.loadCharacters(charactersIds)
             // Fail safety timeout
+            @Suppress("MagicNumber")
             delay(500)
             if (!uiState.isLoading) {
                 pullToRefreshState.endRefresh()
@@ -79,24 +80,27 @@ fun CharactersScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
         if (uiState.isLoading) {
             LoadingScreen()
         } else if (uiState.isNoConnectionError) {
             NoConnectionErrorScreen(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else if (uiState.unknownError != null) {
             UnknownErrorScreen(
                 message = uiState.unknownError!!,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else {
             CharactersList(
@@ -128,36 +132,42 @@ fun CharactersList(
     ) {
         items(characters.toList(), key = Character::id) { character ->
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onCharacterClicked(character) },
-                colors = CardDefaults.cardColors(
-                    containerColor = if (character.status == "Dead") {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        Color.Unspecified
-                    },
-                ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onCharacterClicked(character) },
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor =
+                            if (character.status == "Dead") {
+                                MaterialTheme.colorScheme.error
+                            } else {
+                                Color.Unspecified
+                            },
+                    ),
             ) {
                 Row(modifier = Modifier.height(80.dp)) {
                     AsyncImageWithPreview(
                         model = character.image,
                         contentDescription = character.name,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .aspectRatio(1f),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .aspectRatio(1f),
                     )
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .padding(8.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .weight(1f)
+                                .padding(8.dp),
                     ) {
                         Text(
                             text = "#${character.id}",
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.labelMedium,
@@ -165,8 +175,9 @@ fun CharactersList(
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = character.name,
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleMedium,
@@ -183,31 +194,31 @@ fun CharactersList(
 fun CharactersScreenSuccessPreview() {
     RickAndMortyTheme(darkTheme = true) {
         CharactersList(
-            characters = setOf(
-                Character(
-                    id = 1,
-                    name = "Rick Sanchez",
-                    status = "Alive",
-                    species = "Human",
-                    type = "",
-                    gender = "Male",
-                    origin = "Earth (C-137)",
-                    location = "Citadel of Ricks",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-
+            characters =
+                setOf(
+                    Character(
+                        id = 1,
+                        name = "Rick Sanchez",
+                        status = "Alive",
+                        species = "Human",
+                        type = "",
+                        gender = "Male",
+                        origin = "Earth (C-137)",
+                        location = "Citadel of Ricks",
+                        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
                     ),
-                Character(
-                    id = 2,
-                    name = "Morty Smith",
-                    status = "Dead",
-                    species = "Human",
-                    type = "",
-                    gender = "Male",
-                    origin = "unknown",
-                    location = "Citadel of Ricks",
-                    image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+                    Character(
+                        id = 2,
+                        name = "Morty Smith",
+                        status = "Dead",
+                        species = "Human",
+                        type = "",
+                        gender = "Male",
+                        origin = "unknown",
+                        location = "Citadel of Ricks",
+                        image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
+                    ),
                 ),
-            ),
         )
     }
 }

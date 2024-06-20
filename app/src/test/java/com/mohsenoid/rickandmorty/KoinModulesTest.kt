@@ -7,7 +7,6 @@ import org.koin.test.verify.verify
 
 @OptIn(KoinExperimentalAPI::class)
 class KoinModulesTest : KoinTest {
-
     @Test
     fun `Verify modules`() {
         appModule.verify()

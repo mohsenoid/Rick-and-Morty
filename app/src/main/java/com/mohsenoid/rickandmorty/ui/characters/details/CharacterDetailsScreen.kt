@@ -53,6 +53,7 @@ fun CharacterDetailsScreen(
         LaunchedEffect(Unit) {
             viewModel.loadCharacter(characterId)
             // Fail safety timeout
+            @Suppress("MagicNumber")
             delay(500)
             if (!uiState.isLoading) {
                 pullToRefreshState.endRefresh()
@@ -67,31 +68,35 @@ fun CharacterDetailsScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
         if (uiState.isLoading) {
             LoadingScreen()
         } else if (uiState.isNoConnectionError) {
             NoConnectionErrorScreen(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else if (uiState.unknownError != null) {
             UnknownErrorScreen(
                 message = uiState.unknownError!!,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else if (uiState.character == null) {
             UnknownErrorScreen(
                 message = "Error!",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else {
             CharacterDetails(
@@ -114,15 +119,17 @@ fun CharacterDetails(
         AsyncImageWithPreview(
             model = character.image,
             contentDescription = character.name,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.inverseOnSurface),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.inverseOnSurface),
         )
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "#${character.id}",
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.labelMedium,
@@ -130,8 +137,9 @@ fun CharacterDetails(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = character.name,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleLarge,
@@ -153,7 +161,10 @@ fun CharacterDetails(
 }
 
 @Composable
-private fun CharacterDetailRow(label: String, value: String) {
+private fun CharacterDetailRow(
+    label: String,
+    value: String,
+) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = label,
@@ -176,17 +187,18 @@ private fun CharacterDetailRow(label: String, value: String) {
 fun CharacterDetailsDarkPreview() {
     RickAndMortyTheme(darkTheme = true) {
         CharacterDetails(
-            character = Character(
-                id = 1,
-                name = "Rick Sanchez",
-                status = "Alive",
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = "Earth (C-137)",
-                location = "Citadel of Ricks",
-                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            ),
+            character =
+                Character(
+                    id = 1,
+                    name = "Rick Sanchez",
+                    status = "Alive",
+                    species = "Human",
+                    type = "",
+                    gender = "Male",
+                    origin = "Earth (C-137)",
+                    location = "Citadel of Ricks",
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                ),
         )
     }
 }
@@ -196,17 +208,18 @@ fun CharacterDetailsDarkPreview() {
 fun CharacterDetailsPreview() {
     RickAndMortyTheme(darkTheme = false) {
         CharacterDetails(
-            character = Character(
-                id = 1,
-                name = "Rick Sanchez",
-                status = "Alive",
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = "Earth (C-137)",
-                location = "Citadel of Ricks",
-                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            ),
+            character =
+                Character(
+                    id = 1,
+                    name = "Rick Sanchez",
+                    status = "Alive",
+                    species = "Human",
+                    type = "",
+                    gender = "Male",
+                    origin = "Earth (C-137)",
+                    location = "Citadel of Ricks",
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                ),
         )
     }
 }

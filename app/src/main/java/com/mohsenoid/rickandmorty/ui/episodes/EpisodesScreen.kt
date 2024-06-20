@@ -67,6 +67,7 @@ fun EpisodesScreen(
         LaunchedEffect(Unit) {
             viewModel.loadEpisodes()
             // Fail safety timeout
+            @Suppress("MagicNumber")
             delay(500)
             if (!uiState.isLoading) {
                 pullToRefreshState.endRefresh()
@@ -81,24 +82,27 @@ fun EpisodesScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
         if (uiState.isLoading) {
             LoadingScreen()
         } else if (uiState.isNoConnectionError) {
             NoConnectionErrorScreen(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else if (uiState.unknownError != null) {
             UnknownErrorScreen(
                 message = uiState.unknownError!!,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             )
         } else {
             EpisodesList(
@@ -131,9 +135,10 @@ fun EpisodesList(
     episodes: List<Episode>,
 ) {
     EndlessLazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(8.dp),
         isNoConnectionError = isNoConnectionError,
         isLoading = isLoadingMore,
         isEndOfList = isEndOfList,
@@ -155,16 +160,18 @@ fun EpisodesList(
         },
         itemContent = { episode ->
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onEpisodeClicked(episode) },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onEpisodeClicked(episode) },
             ) {
                 Row(modifier = Modifier.height(80.dp)) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .width(100.dp)
-                            .background(MaterialTheme.colorScheme.inverseOnSurface),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .width(100.dp)
+                                .background(MaterialTheme.colorScheme.inverseOnSurface),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
@@ -174,10 +181,11 @@ fun EpisodesList(
                     }
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .padding(8.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxHeight()
+                                .weight(1f)
+                                .padding(8.dp),
                     ) {
                         Text(
                             text = episode.airDate,
@@ -189,8 +197,9 @@ fun EpisodesList(
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = episode.name,
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth(),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleMedium,
@@ -202,6 +211,7 @@ fun EpisodesList(
     )
 }
 
+@Suppress("MagicNumber")
 @Preview
 @Composable
 fun EpisodesListDarkPreview() {
@@ -209,26 +219,28 @@ fun EpisodesListDarkPreview() {
         EpisodesList(
             isLoadingMore = true,
             isEndOfList = false,
-            episodes = listOf(
-                Episode(
-                    id = 1,
-                    name = "Pilot",
-                    airDate = "December 2, 2013",
-                    episode = "S01E01",
-                    characters = setOf(1, 2, 3),
+            episodes =
+                listOf(
+                    Episode(
+                        id = 1,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = setOf(1, 2, 3),
+                    ),
+                    Episode(
+                        id = 2,
+                        name = "Lawnmower Dog",
+                        airDate = "December 9, 2013",
+                        episode = "S01E02",
+                        characters = setOf(1, 2, 5, 6),
+                    ),
                 ),
-                Episode(
-                    id = 2,
-                    name = "Lawnmower Dog",
-                    airDate = "December 9, 2013",
-                    episode = "S01E02",
-                    characters = setOf(1, 2, 5, 6),
-                ),
-            ),
         )
     }
 }
 
+@Suppress("MagicNumber")
 @Preview
 @Composable
 fun EpisodesListPreview() {
@@ -236,22 +248,23 @@ fun EpisodesListPreview() {
         EpisodesList(
             isLoadingMore = true,
             isEndOfList = false,
-            episodes = listOf(
-                Episode(
-                    id = 1,
-                    name = "Pilot",
-                    airDate = "December 2, 2013",
-                    episode = "S01E01",
-                    characters = setOf(1, 2, 3),
+            episodes =
+                listOf(
+                    Episode(
+                        id = 1,
+                        name = "Pilot",
+                        airDate = "December 2, 2013",
+                        episode = "S01E01",
+                        characters = setOf(1, 2, 3),
+                    ),
+                    Episode(
+                        id = 2,
+                        name = "Lawnmower Dog",
+                        airDate = "December 9, 2013",
+                        episode = "S01E02",
+                        characters = setOf(1, 2, 5, 6),
+                    ),
                 ),
-                Episode(
-                    id = 2,
-                    name = "Lawnmower Dog",
-                    airDate = "December 9, 2013",
-                    episode = "S01E02",
-                    characters = setOf(1, 2, 5, 6),
-                ),
-            ),
         )
     }
 }

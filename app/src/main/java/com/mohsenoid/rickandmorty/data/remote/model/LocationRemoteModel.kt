@@ -1,6 +1,5 @@
 package com.mohsenoid.rickandmorty.data.remote.model
 
-
 import com.google.gson.annotations.SerializedName
 
 internal data class LocationRemoteModel(
