@@ -9,13 +9,18 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface ApiService {
-
     @GET("episode")
-    suspend fun getEpisodes(@Query("page") page: Int): Response<EpisodesResponse>
+    suspend fun getEpisodes(
+        @Query("page") page: Int,
+    ): Response<EpisodesResponse>
 
     @GET("character/{characterIds}")
-    suspend fun getCharacters(@Path("characterIds") characterIds: String): Response<CharactersResponse>
+    suspend fun getCharacters(
+        @Path("characterIds") characterIds: String,
+    ): Response<CharactersResponse>
 
     @GET("character/{characterId}")
-    suspend fun getCharacter(@Path("characterId") characterId: Int): Response<CharacterRemoteModel>
+    suspend fun getCharacter(
+        @Path("characterId") characterId: Int,
+    ): Response<CharacterRemoteModel>
 }

@@ -6,12 +6,12 @@ import com.mohsenoid.rickandmorty.ui.episodes.EpisodesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
+val uiModule =
+    module {
 
-val uiModule = module {
+        viewModelOf(::EpisodesViewModel)
 
-    viewModelOf(::EpisodesViewModel)
+        viewModelOf(::CharactersViewModel)
 
-    viewModelOf(::CharactersViewModel)
-
-    viewModelOf(::CharacterDetailsViewModel)
-}
+        viewModelOf(::CharacterDetailsViewModel)
+    }

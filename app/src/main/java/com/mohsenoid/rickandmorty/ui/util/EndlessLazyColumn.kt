@@ -38,9 +38,9 @@ internal fun <T> EndlessLazyColumn(
     items: List<T>,
     itemKey: (T) -> Any,
     loadMore: () -> Unit,
-    noConnectionItem: @Composable () -> Unit,
-    loadingItem: @Composable () -> Unit,
-    itemContent: @Composable (T) -> Unit,
+    noConnectionItem: @Composable () -> Unit = {},
+    loadingItem: @Composable () -> Unit = {},
+    itemContent: @Composable (T) -> Unit = {},
 ) {
     val reachedBottom: Boolean by remember { derivedStateOf { listState.reachedBottom() } }
 
@@ -53,9 +53,10 @@ internal fun <T> EndlessLazyColumn(
 
     Column(modifier = modifier, verticalArrangement = Arrangement.Center) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             state = listState,
             contentPadding = contentPadding,
             reverseLayout = reverseLayout,
@@ -71,9 +72,10 @@ internal fun <T> EndlessLazyColumn(
             item {
                 if (!isEndOfList) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(48.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .height(48.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         if (isNoConnectionError) {
@@ -85,8 +87,6 @@ internal fun <T> EndlessLazyColumn(
                 }
             }
         }
-
-
     }
 }
 
@@ -115,4 +115,3 @@ private fun LazyListState.reachedBottom(): Boolean {
     val lastVisibleItem = this.layoutInfo.visibleItemsInfo.lastOrNull()
     return lastVisibleItem?.index != 0 && lastVisibleItem?.index == this.layoutInfo.totalItemsCount - 1
 }
-

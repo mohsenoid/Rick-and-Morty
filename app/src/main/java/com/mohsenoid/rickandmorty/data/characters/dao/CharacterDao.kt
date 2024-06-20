@@ -9,7 +9,6 @@ import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
 
 @Dao
 internal interface CharacterDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCharacter(character: CharacterEntity)
 

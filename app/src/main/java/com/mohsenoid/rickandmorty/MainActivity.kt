@@ -69,16 +69,18 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             route = NavRoute.CharactersScreen.route,
-                            deepLinks = listOf(
-                                navDeepLink {
-                                    uriPattern = NavRoute.CharactersScreen.deeplink
-                                },
-                            ),
-                            arguments = listOf(
-                                navArgument(NavRoute.CHARACTERS_ARG) {
-                                    type = NavType.StringType
-                                },
-                            ),
+                            deepLinks =
+                                listOf(
+                                    navDeepLink {
+                                        uriPattern = NavRoute.CharactersScreen.deeplink
+                                    },
+                                ),
+                            arguments =
+                                listOf(
+                                    navArgument(NavRoute.CHARACTERS_ARG) {
+                                        type = NavType.StringType
+                                    },
+                                ),
                         ) { backStackEntry ->
                             val charactersArg =
                                 backStackEntry.arguments?.getString("characters")
@@ -96,16 +98,18 @@ class MainActivity : ComponentActivity() {
 
                         composable(
                             route = NavRoute.CharacterDetailsScreen.route,
-                            deepLinks = listOf(
-                                navDeepLink {
-                                    uriPattern = NavRoute.CharacterDetailsScreen.deeplink
-                                },
-                            ),
-                            arguments = listOf(
-                                navArgument(NavRoute.CHARACTER_ARG) {
-                                    type = NavType.StringType
-                                },
-                            ),
+                            deepLinks =
+                                listOf(
+                                    navDeepLink {
+                                        uriPattern = NavRoute.CharacterDetailsScreen.deeplink
+                                    },
+                                ),
+                            arguments =
+                                listOf(
+                                    navArgument(NavRoute.CHARACTER_ARG) {
+                                        type = NavType.StringType
+                                    },
+                                ),
                         ) { backStackEntry ->
                             val characterArg = backStackEntry.arguments?.getString("character")
 
@@ -137,7 +141,6 @@ fun AppTopBar(
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleLarge,
                 )
-
             }
         },
         modifier = modifier,
@@ -155,9 +158,10 @@ fun AppTopBar(
                     painter = painterResource(id = R.drawable.rick_morty),
                     contentDescription = "Home",
                     tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .size(40.dp),
+                    modifier =
+                        Modifier
+                            .padding(4.dp)
+                            .size(40.dp),
                 )
             }
         },

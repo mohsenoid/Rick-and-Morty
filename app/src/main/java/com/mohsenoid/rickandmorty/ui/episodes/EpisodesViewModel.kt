@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 class EpisodesViewModel(
     private val episodesRepository: EpisodesRepository,
 ) : ViewModel() {
-
     private val state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
 
-    val uiState: StateFlow<EpisodesUiState> = state.map { it.toUiState() }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, EpisodesUiState())
+    val uiState: StateFlow<EpisodesUiState> =
+        state.map { it.toUiState() }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, EpisodesUiState())
 
     fun loadEpisodes() {
         state.value = State.Loading
@@ -76,6 +76,7 @@ class EpisodesViewModel(
         }
     }
 
+    @Suppress("LongMethod")
     private fun loadMoreEpisodes(page: Int) {
         viewModelScope.launch {
             when (val result = episodesRepository.getEpisodes(page)) {
@@ -170,7 +171,6 @@ class EpisodesViewModel(
     }
 
     internal sealed interface State {
-
         data object Loading : State
 
         data class Success(
@@ -187,11 +187,10 @@ class EpisodesViewModel(
 
         data class LoadingMore(val page: Int, val episodes: List<Episode>) : State {
             fun toSuccess(isEndOfList: Boolean) = Success(page, episodes, isEndOfList)
-            fun toLoadingMoreNoConnectionError() =
-                LoadingMoreNoConnectionError(page, episodes)
 
-            fun toLoadingMoreUnknownError(message: String) =
-                LoadingMoreUnknownError(page, episodes, message)
+            fun toLoadingMoreNoConnectionError() = LoadingMoreNoConnectionError(page, episodes)
+
+            fun toLoadingMoreUnknownError(message: String) = LoadingMoreUnknownError(page, episodes, message)
         }
 
         data class LoadingMoreNoConnectionError(
