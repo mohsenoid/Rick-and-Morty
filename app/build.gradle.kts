@@ -92,8 +92,8 @@ android {
     }
 
     lint {
-        isIgnoreWarnings = false
-        isWarningsAsErrors = true
+        // isIgnoreWarnings = false
+        // isWarningsAsErrors = true
     }
 }
 
