@@ -1,4 +1,4 @@
-# <img src="logo.png" alt="Logo" style="width:48px;" /> Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/master/graph/badge.svg)](https://codecov.io/gh/mohsenoid/Rick-and-Morty) [![CodeFactor](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty/badge)](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty)
+# <img src="logo.png" alt="Logo" style="width:48px;" /> Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/develop/graph/badge.svg?token=X2UikOoOfa)](https://codecov.io/gh/mohsenoid/Rick-and-Morty) [![CodeFactor](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty/badge)](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty)
 
 This repository houses my **Rick and Morty** Android application, serving as a personal pet project for training and enhancing my Android development skills.
 
@@ -41,7 +41,7 @@ To get started with the Rick and Morty Android application, follow these simple 
 2. **Open in Android Studio**: Open the project in [the latest Android Studio](https://developer.android.com/studio). The IDE should automatically sync the project and resolve dependencies.
 3. **Run the App**: Once the project is synced, click the "Run" button (green triangle) in the toolbar to build and launch the app on an emulator or a connected Android device.
 
-Alternatively, you can build the project from the command line using Gradle task:
+Alternatively, you can build the project from the command line using the Gradle task:
 
 ```bash
   ./gradlew build
