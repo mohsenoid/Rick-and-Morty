@@ -1,26 +1,31 @@
 name: Android CI
 
-on: [push]
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+on: [ push, pull_request ]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 25
 
     steps:
-      - name: Chrckout repo
+      - name: Checkout repo
         uses: actions/checkout@v1
 
-      - name: set up JDK 1.8
+      - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
       - name: Test and Build
         run: ./gradlew build
 
       - name: Generate Code-Coverage report
-        run: ./gradlew jacocoReport
+        run: ./gradlew jacoco
 
       - name: Push Code-Coverage Report to codecov.io
         env:

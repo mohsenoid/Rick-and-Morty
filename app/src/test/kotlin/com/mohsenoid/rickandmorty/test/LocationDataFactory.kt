@@ -1,38 +1,26 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbLocationModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkLocationModel
-import com.mohsenoid.rickandmorty.domain.entity.LocationEntity
+import com.mohsenoid.rickandmorty.data.api.model.ApiLocation
+import com.mohsenoid.rickandmorty.data.db.model.DbLocation
+import com.mohsenoid.rickandmorty.domain.model.ModelLocation
 
 object LocationDataFactory {
 
-    object Db {
+    internal fun makeDbLocation(): DbLocation =
+        DbLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-        fun makeLocation(): DbLocationModel {
-            return DbLocationModel(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeApiLocation(): ApiLocation =
+        ApiLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 
-    object Network {
-
-        fun makeLocation(): NetworkLocationModel {
-            return NetworkLocationModel(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
-
-    object Entity {
-
-        fun makeEntity(): LocationEntity {
-            return LocationEntity(
-                name = DataFactory.randomString(),
-                url = DataFactory.randomString()
-            )
-        }
-    }
+    internal fun makeLocation(): ModelLocation =
+        ModelLocation(
+            name = DataFactory.randomString(),
+            url = DataFactory.randomString(),
+        )
 }

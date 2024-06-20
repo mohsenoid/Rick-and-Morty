@@ -1,44 +1,35 @@
 package com.mohsenoid.rickandmorty.view.episode.list.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mohsenoid.rickandmorty.R
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.databinding.ItemEpisodeBinding
+import com.mohsenoid.rickandmorty.view.model.ViewEpisodeItem
 import java.util.ArrayList
 
-class EpisodeListAdapter(private val listener: ClickListener) :
+class EpisodeListAdapter :
     RecyclerView.Adapter<EpisodeViewHolder>() {
 
-    private var episodes: MutableList<EpisodeEntity> = ArrayList()
+    private var episodes: MutableList<ViewEpisodeItem> = ArrayList()
 
-    fun setEpisodes(episodes: List<EpisodeEntity>) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun setEpisodes(episodes: List<ViewEpisodeItem>) {
         this.episodes = episodes.toMutableList()
-    }
-
-    fun addMoreEpisodes(episodes: List<EpisodeEntity>) {
-        this.episodes.addAll(episodes)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
-        val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_episode, parent, false)
-        return EpisodeViewHolder(view)
+        val binding = ItemEpisodeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return EpisodeViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        val episode: EpisodeEntity = episodes[position]
+        val episode: ViewEpisodeItem = episodes[position]
         holder.setEpisode(episode)
-        holder.view.setOnClickListener { listener.onEpisodeRowClick(episode) }
     }
 
     override fun getItemCount(): Int {
         return episodes.size
-    }
-
-    interface ClickListener {
-
-        fun onEpisodeRowClick(episode: EpisodeEntity)
     }
 }

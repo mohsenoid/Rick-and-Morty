@@ -18,7 +18,7 @@
         android:id="@+id/characterListFragment"
         android:name="com.mohsenoid.rickandmorty.view.character.list.CharacterListFragment"
         android:label="fragment_character_list"
-        tools:layout="@layout/fragment_character_list" >
+        tools:layout="@layout/fragment_character_list">
         <action
             android:id="@+id/action_characterListFragment_to_characterDetailsFragment"
             app:destination="@id/characterDetailsFragment" />

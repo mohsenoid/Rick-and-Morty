@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.injection
 
 import android.os.Build
+import com.mohsenoid.rickandmorty.appModule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext

@@ -1,80 +1,69 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbEpisodeModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkEpisodeModel
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.api.model.ApiEpisode
+import com.mohsenoid.rickandmorty.data.db.model.DbEpisode
+import com.mohsenoid.rickandmorty.domain.model.ModelEpisode
 
 object EpisodeDataFactory {
 
-    object Db {
+    internal fun makeDbEpisode(episodeId: Int = DataFactory.randomInt()): DbEpisode =
+        DbEpisode(
+            id = episodeId,
+            name = DataFactory.randomString(),
+            airDate = DataFactory.randomString(),
+            episode = DataFactory.randomString(),
+            characterIds = DataFactory.randomIntList(count = 5),
+            url = DataFactory.randomString(),
+            created = DataFactory.randomString(),
+        )
 
-        fun makeEpisode(episodeId: Int = DataFactory.randomInt()): DbEpisodeModel {
-            return DbEpisodeModel(
-                id = episodeId,
-                name = DataFactory.randomString(),
-                airDate = DataFactory.randomString(),
-                episode = DataFactory.randomString(),
-                characterIds = DataFactory.randomIntList(count = 5),
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString()
-            )
+    internal fun makeDbEpisodes(count: Int): List<DbEpisode> {
+        val entityEpisodes: MutableList<DbEpisode> = ArrayList()
+        repeat(count) {
+            val entityEpisode: DbEpisode = makeDbEpisode()
+            entityEpisodes.add(entityEpisode)
         }
-
-        fun makeEpisodes(count: Int): List<DbEpisodeModel> {
-            val episodes: MutableList<DbEpisodeModel> = ArrayList()
-            for (i: Int in 0 until count) {
-                val episode: DbEpisodeModel = makeEpisode()
-                episodes.add(episode)
-            }
-            return episodes
-        }
+        return entityEpisodes
     }
 
-    object Network {
+    internal fun makeApiEpisode(episodeId: Int = DataFactory.randomInt()): ApiEpisode =
+        ApiEpisode(
+            id = episodeId,
+            name = DataFactory.randomString(),
+            airDate = DataFactory.randomString(),
+            episode = DataFactory.randomString(),
+            characters = DataFactory.randomIntList(count = 5)
+                .map { "${DataFactory.randomString()}/$it" },
+            url = DataFactory.randomString(),
+            created = DataFactory.randomString(),
+        )
 
-        fun makeEpisode(episodeId: Int = DataFactory.randomInt()): NetworkEpisodeModel {
-            return NetworkEpisodeModel(
-                id = episodeId,
-                name = DataFactory.randomString(),
-                airDate = DataFactory.randomString(),
-                episode = DataFactory.randomString(),
-                characters = DataFactory.randomIntList(count = 5).map { "${DataFactory.randomString()}/$it" },
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString()
-            )
+    internal fun makeApiEpisodes(count: Int): List<ApiEpisode> {
+        val episodes: MutableList<ApiEpisode> = ArrayList()
+        repeat(count) {
+            val episode: ApiEpisode = makeApiEpisode()
+            episodes.add(episode)
         }
-
-        fun makeEpisodes(count: Int): List<NetworkEpisodeModel> {
-            val episodes: MutableList<NetworkEpisodeModel> = ArrayList()
-            for (i: Int in 0 until count) {
-                val episode: NetworkEpisodeModel = makeEpisode()
-                episodes.add(episode)
-            }
-            return episodes
-        }
+        return episodes
     }
 
-    object Entity {
+    internal fun makeEpisode(episodeId: Int = DataFactory.randomInt()): ModelEpisode =
+        ModelEpisode(
+            id = episodeId,
+            name = DataFactory.randomString(),
+            airDate = DataFactory.randomString(),
+            episode = DataFactory.randomString(),
+            characterIds = DataFactory.randomIntList(count = 5),
+            url = DataFactory.randomString(),
+            created = DataFactory.randomString(),
+        )
 
-        fun makeEpisode(episodeId: Int = DataFactory.randomInt()): EpisodeEntity {
-            return EpisodeEntity(
-                id = episodeId,
-                name = DataFactory.randomString(),
-                airDate = DataFactory.randomString(),
-                episode = DataFactory.randomString(),
-                characterIds = DataFactory.randomIntList(count = 5),
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString()
-            )
+    internal fun makeEpisodes(count: Int): List<ModelEpisode> {
+        val episodes: MutableList<ModelEpisode> = ArrayList()
+        repeat(count) {
+            val episode: ModelEpisode = makeEpisode()
+            episodes.add(episode)
         }
-
-        fun makeEpisodes(count: Int): List<EpisodeEntity> {
-            val episodes: MutableList<EpisodeEntity> = ArrayList()
-            for (i in 0 until count) {
-                val episode: EpisodeEntity = makeEpisode()
-                episodes.add(episode)
-            }
-            return episodes
-        }
+        return episodes
     }
 }

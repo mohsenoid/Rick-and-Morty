@@ -1,109 +1,97 @@
 package com.mohsenoid.rickandmorty.test
 
-import com.mohsenoid.rickandmorty.data.db.dto.DbCharacterModel
-import com.mohsenoid.rickandmorty.data.network.dto.NetworkCharacterModel
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.data.api.model.ApiCharacter
+import com.mohsenoid.rickandmorty.data.db.model.DbCharacter
+import com.mohsenoid.rickandmorty.domain.model.ModelCharacter
 
 object CharacterDataFactory {
 
-    object Db {
+    internal fun makeDbCharacter(
+        characterId: Int = DataFactory.randomInt(),
+        status: String = DataFactory.randomString(),
+        isAlive: Boolean = DataFactory.randomBoolean(),
+        isKilledByUser: Boolean = false,
+    ): DbCharacter =
+        DbCharacter(
+            id = characterId,
+            name = DataFactory.randomString(),
+            status = status,
+            isAlive = isAlive,
+            species = DataFactory.randomString(),
+            type = DataFactory.randomString(),
+            gender = DataFactory.randomString(),
+            origin = OriginDataFactory.makeDbOrigin(),
+            location = LocationDataFactory.makeDbLocation(),
+            image = DataFactory.randomString(),
+            episodeIds = DataFactory.randomIntList(count = 5),
+            url = DataFactory.randomString(),
+            created = DataFactory.randomString(),
+            isKilledByUser = isKilledByUser,
+        )
 
-        fun makeCharacter(
-            characterId: Int = DataFactory.randomInt(),
-            status: String = DataFactory.randomString(),
-            isAlive: Boolean = DataFactory.randomBoolean(),
-            isKilledByUser: Boolean = false
-        ): DbCharacterModel {
-            return DbCharacterModel(
-                id = characterId,
-                name = DataFactory.randomString(),
-                status = status,
-                statusAlive = isAlive,
-                species = DataFactory.randomString(),
-                type = DataFactory.randomString(),
-                gender = DataFactory.randomString(),
-                origin = OriginDataFactory.Db.makeOrigin(),
-                location = LocationDataFactory.Db.makeLocation(),
-                image = DataFactory.randomString(),
-                episodeIds = DataFactory.randomIntList(count = 5),
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString(),
-                killedByUser = isKilledByUser
-            )
+    internal fun makeDbCharacters(count: Int): List<DbCharacter> {
+        val characters: MutableList<DbCharacter> = ArrayList()
+        repeat(count) {
+            val character: DbCharacter = makeDbCharacter()
+            characters.add(character)
         }
-
-        fun makeCharacters(count: Int): List<DbCharacterModel> {
-            val characters: MutableList<DbCharacterModel> = ArrayList()
-            for (i in 0 until count) {
-                val character: DbCharacterModel = makeCharacter()
-                characters.add(character)
-            }
-            return characters
-        }
+        return characters
     }
 
-    object Network {
+    internal fun makeApiCharacter(characterId: Int = DataFactory.randomInt()): ApiCharacter =
+        ApiCharacter(
+            id = characterId,
+            name = DataFactory.randomString(),
+            status = DataFactory.randomString(),
+            species = DataFactory.randomString(),
+            type = DataFactory.randomString(),
+            gender = DataFactory.randomString(),
+            origin = OriginDataFactory.makeApiOrigin(),
+            location = LocationDataFactory.makeApiLocation(),
+            image = DataFactory.randomString(),
+            episodes = DataFactory.randomIntList(count = 5)
+                .map { "${DataFactory.randomString()}/$it" },
+            url = DataFactory.randomString(),
+            created = DataFactory.randomString(),
+        )
 
-        fun makeCharacter(characterId: Int = DataFactory.randomInt()): NetworkCharacterModel {
-            return NetworkCharacterModel(
-                id = characterId,
-                name = DataFactory.randomString(),
-                status = DataFactory.randomString(),
-                species = DataFactory.randomString(),
-                type = DataFactory.randomString(),
-                gender = DataFactory.randomString(),
-                origin = OriginDataFactory.Network.makeOrigin(),
-                location = LocationDataFactory.Network.makeLocation(),
-                image = DataFactory.randomString(),
-                episodes = DataFactory.randomIntList(count = 5).map { "${DataFactory.randomString()}/$it" },
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString()
-            )
+    internal fun makeApiCharacters(count: Int): List<ApiCharacter> {
+        val characters: MutableList<ApiCharacter> = ArrayList()
+        repeat(count) {
+            val character: ApiCharacter = makeApiCharacter()
+            characters.add(character)
         }
-
-        fun makeCharacters(count: Int): List<NetworkCharacterModel> {
-            val characters: MutableList<NetworkCharacterModel> = ArrayList()
-            for (i: Int in 0 until count) {
-                val character: NetworkCharacterModel = makeCharacter()
-                characters.add(character)
-            }
-            return characters
-        }
+        return characters
     }
 
-    object Entity {
+    internal fun makeCharacter(
+        id: Int = DataFactory.randomInt(),
+        status: String = DataFactory.randomString(),
+        isAlive: Boolean = DataFactory.randomBoolean(),
+        isKilledByUser: Boolean = false,
+    ): ModelCharacter = ModelCharacter(
+        id = id,
+        name = DataFactory.randomString(),
+        status = status,
+        isAlive = isAlive,
+        species = DataFactory.randomString(),
+        type = DataFactory.randomString(),
+        gender = DataFactory.randomString(),
+        origin = OriginDataFactory.makeOrigin(),
+        location = LocationDataFactory.makeLocation(),
+        imageUrl = DataFactory.randomString(),
+        episodeIds = DataFactory.randomIntList(count = 5),
+        url = DataFactory.randomString(),
+        created = DataFactory.randomString(),
+        isKilledByUser = isKilledByUser,
+    )
 
-        fun makeCharacter(
-            characterId: Int = DataFactory.randomInt(),
-            status: String = DataFactory.randomString(),
-            isAlive: Boolean = DataFactory.randomBoolean(),
-            isKilledByUser: Boolean = false
-        ): CharacterEntity {
-            return CharacterEntity(
-                id = characterId,
-                name = DataFactory.randomString(),
-                status = status,
-                statusAlive = isAlive,
-                species = DataFactory.randomString(),
-                type = DataFactory.randomString(),
-                gender = DataFactory.randomString(),
-                origin = OriginDataFactory.Entity.makeOrigin(),
-                location = LocationDataFactory.Entity.makeEntity(),
-                imageUrl = DataFactory.randomString(),
-                episodeIds = DataFactory.randomIntList(count = 5),
-                url = DataFactory.randomString(),
-                created = DataFactory.randomString(),
-                killedByUser = isKilledByUser
-            )
+    internal fun makeCharacters(count: Int): List<ModelCharacter> {
+        val characters: MutableList<ModelCharacter> = ArrayList()
+        repeat(count) {
+            val character: ModelCharacter = makeCharacter()
+            characters.add(character)
         }
-
-        fun makeCharacters(count: Int): List<CharacterEntity> {
-            val characters: MutableList<CharacterEntity> = ArrayList()
-            for (i: Int in 0 until count) {
-                val character: CharacterEntity = makeCharacter()
-                characters.add(character)
-            }
-            return characters
-        }
+        return characters
     }
 }

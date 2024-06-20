@@ -1,149 +1,113 @@
 package com.mohsenoid.rickandmorty.view.episode.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.mohsenoid.rickandmorty.R
-import com.mohsenoid.rickandmorty.domain.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.view.base.BaseFragment
-import com.mohsenoid.rickandmorty.view.episode.list.adapter.EpisodeListAdapter
+import com.mohsenoid.rickandmorty.databinding.FragmentEpisodeListBinding
 import com.mohsenoid.rickandmorty.view.util.EndlessRecyclerViewScrollListener
-import kotlinx.android.synthetic.main.fragment_episode_list.*
-import kotlinx.coroutines.launch
-import org.koin.android.ext.android.getKoin
-import org.koin.android.scope.currentScope
+import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 
-class EpisodeListFragment : BaseFragment(),
-    EpisodeListContract.View,
-    EpisodeListAdapter.ClickListener,
-    OnRefreshListener {
+@Suppress("TooManyFunctions")
+class EpisodeListFragment : Fragment() {
 
-    private val presenter: EpisodeListContract.Presenter by currentScope.inject()
+    private var _binding: FragmentEpisodeListBinding? = null
+    private val binding get() = _binding!!
 
-    private val adapter: EpisodeListAdapter = EpisodeListAdapter(listener = this)
+    private val viewModel: EpisodeListViewModel by viewModel()
 
     private var endlessScrollListener: EndlessRecyclerViewScrollListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getKoin().setProperty("EpisodeListFragment", this)
+        loadKoinModules(episodeListFragmentModule)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_episode_list, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentEpisodeListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun initView() {
-        episodeListSwipeRefresh.setOnRefreshListener(this)
 
         val linearLayoutManager = LinearLayoutManager(context)
-        episodeList.layoutManager = linearLayoutManager
+        binding.episodeList.layoutManager = linearLayoutManager
         endlessScrollListener = object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            override fun onLoadMore(
-                page: Int,
-                totalItemsCount: Int,
-                view: RecyclerView
-            ) {
-                launch {
-                    presenter.loadMoreEpisodes(page = page + 1)
-                }
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
+                viewModel.loadMoreEpisodes(page = page + 1)
             }
         }.also {
-            episodeList.addOnScrollListener(it)
+            binding.episodeList.addOnScrollListener(it)
         }
 
-        episodeList.adapter = adapter
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.onError.collectLatest {
+                if (it) showErrorMessage()
+            }
+        }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        presenter.bind(this)
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.isOffline.collectLatest {
+                if (it) showOfflineMessage()
+            }
+        }
 
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.isEndOfList.collectLatest {
+                if (it) reachedEndOfList()
+            }
+        }
 
-    override fun onResume() {
-        super.onResume()
-        launch {
-            presenter.loadEpisodes()
+        lifecycle.launchWhileResumed {
+            viewModel.selectedEpisodeCharacterIds.collectLatest { characterIds ->
+                onEpisodeRowClick(characterIds)
+            }
         }
     }
 
-    override fun onRefresh() {
-        launch {
-            presenter.loadEpisodes()
-        }
+    private fun showErrorMessage() {
+        Toast.makeText(context, R.string.error_message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-    }
-
-    override fun showOfflineMessage(isCritical: Boolean) {
+    private fun showOfflineMessage() {
         Toast.makeText(context, R.string.offline_app, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showLoading() {
-        if (!episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = true
+    private fun reachedEndOfList() {
+        binding.episodeListProgress.visibility = View.GONE
     }
 
-    override fun hideLoading() {
-        if (episodeListSwipeRefresh.isRefreshing) episodeListSwipeRefresh.isRefreshing = false
-    }
-
-    override fun showLoadingMore() {
-        episodeListProgress.visibility = View.VISIBLE
-    }
-
-    override fun hideLoadingMore() {
-        episodeListProgress.visibility = View.GONE
-    }
-
-    override fun setEpisodes(episodes: List<EpisodeEntity>) {
-        episodeListSwipeRefresh.isRefreshing = false
-        adapter.setEpisodes(episodes)
-        endlessScrollListener?.resetState()
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun updateEpisodes(episodes: List<EpisodeEntity>) {
-        episodeListSwipeRefresh.isRefreshing = false
-        adapter.addMoreEpisodes(episodes)
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun reachedEndOfList() {
-        episodeListProgress.visibility = View.GONE
-    }
-
-    override fun onEpisodeRowClick(episode: EpisodeEntity) {
+    private fun onEpisodeRowClick(characterIds: IntArray) {
         val action = EpisodeListFragmentDirections
-            .actionEpisodeListFragmentToCharacterListFragment(episode.characterIds.toIntArray())
+            .actionEpisodeListFragmentToCharacterListFragment(characterIds)
         view?.findNavController()?.navigate(action)
     }
 
-    companion object {
-        fun newInstance(): EpisodeListFragment {
-            return EpisodeListFragment()
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        endlessScrollListener = null
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(episodeListFragmentModule)
+        super.onDestroy()
     }
 }

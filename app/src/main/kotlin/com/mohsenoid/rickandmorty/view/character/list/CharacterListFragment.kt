@@ -1,107 +1,104 @@
 package com.mohsenoid.rickandmorty.view.character.list
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.mohsenoid.rickandmorty.R
-import com.mohsenoid.rickandmorty.domain.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.view.base.BaseFragment
-import com.mohsenoid.rickandmorty.view.character.list.adapter.CharacterListAdapter
-import kotlinx.android.synthetic.main.fragment_character_list.*
-import kotlinx.coroutines.launch
-import org.koin.android.scope.currentScope
+import com.mohsenoid.rickandmorty.databinding.FragmentCharacterListBinding
+import com.mohsenoid.rickandmorty.view.util.launchWhileResumed
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
+import org.koin.core.parameter.parametersOf
 
-class CharacterListFragment : BaseFragment(), CharacterListContract.View,
-    CharacterListAdapter.ClickListener {
+@Suppress("TooManyFunctions")
+class CharacterListFragment : Fragment() {
+
+    private var _binding: FragmentCharacterListBinding? = null
+    private val binding get() = _binding!!
 
     private val args: CharacterListFragmentArgs by navArgs()
 
-    private val presenter: CharacterListContract.Presenter by currentScope.inject()
+    private val viewModel: CharacterListViewModel by viewModel {
+        parametersOf(args.characterIds.toList())
+    }
 
-    private val adapter: CharacterListAdapter = CharacterListAdapter(listener = this)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadKoinModules(characterListFragmentModule)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_character_list, container, false)
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentCharacterListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
         super.onViewCreated(view, savedInstanceState)
-    }
 
-    private fun initView() {
-        val linearLayoutManager = LinearLayoutManager(context)
-        characterList.layoutManager = linearLayoutManager
-        characterList.adapter = adapter
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.onError.collectLatest {
+                if (it) showErrorMessage()
+            }
+        }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        presenter.bind(this)
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.isOffline.collectLatest {
+                if (it) showOfflineMessage()
+            }
+        }
 
-    override fun onDetach() {
-        super.onDetach()
-        presenter.unbind()
-    }
+        lifecycle.launchWhileResumed {
+            viewModel.isNoCache.collectLatest {
+                if (it) onNoOfflineData()
+            }
+        }
 
-    override fun onResume() {
-        super.onResume()
-        launch {
-            presenter.loadCharacters(args.characterIds.toList())
+        lifecycle.launchWhileResumed {
+            viewModel.selectedCharacterId.collectLatest { characterId ->
+                onCharacterRowClick(characterId)
+            }
         }
     }
 
-    override fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    private fun showErrorMessage() {
+        Toast.makeText(context, R.string.error_message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showOfflineMessage(isCritical: Boolean) {
+    private fun showOfflineMessage() {
         Toast.makeText(context, R.string.offline_app, Toast.LENGTH_LONG).show()
     }
 
-    override fun showLoading() {
-        characterListProgress.visibility = View.VISIBLE
-    }
-
-    override fun hideLoading() {
-        characterListProgress.visibility = View.GONE
-    }
-
-    override fun onNoOfflineData() {
+    private fun onNoOfflineData() {
         Toast.makeText(context, R.string.no_offline_data, Toast.LENGTH_LONG).show()
         activity?.onBackPressed()
     }
 
-    override fun setCharacters(characters: List<CharacterEntity>) {
-        adapter.setCharacters(characters)
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun updateCharacter(character: CharacterEntity) {
-        adapter.updateCharacter(character)
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun onCharacterRowClick(character: CharacterEntity) {
+    fun onCharacterRowClick(characterId: Int) {
         val action = CharacterListFragmentDirections
-            .actionCharacterListFragmentToCharacterDetailsFragment(character.id)
+            .actionCharacterListFragmentToCharacterDetailsFragment(characterId)
         view?.findNavController()?.navigate(action)
     }
 
-    override fun onCharacterStatusClick(character: CharacterEntity) {
-        launch {
-            presenter.killCharacter(character)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(characterListFragmentModule)
+        super.onDestroy()
     }
 }

@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.mohsenoid.rickandmorty.R
 
 class MainActivity : AppCompatActivity() {
