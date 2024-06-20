@@ -2,7 +2,7 @@
 
 This repository contains Rick and Morty Android application which I am using as training material.
 
-![Screenshot](SCREENSHOT1.png) ![Screenshot](SCREENSHOT2.png)
+<img src="SCREENSHOT1.png" alt="Screenshot" style="width:200px;" /> <img src="SCREENSHOT2.png" alt="Screenshot" style="width:200px;" /> <img src="SCREENSHOT3.png" alt="Screenshot" style="width:200px;" />
 
 ## User Stories
 
@@ -76,7 +76,7 @@ Code is covered by unit tests implemented using **Mockito** and **Kluent**. Also
 
 ## License 
 
-Copyright 2020 Mohsen Mirhoseini Argi
+Copyright 2020 Mohsen Mirhoseini
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

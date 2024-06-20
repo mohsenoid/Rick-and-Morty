@@ -1,198 +1,109 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    kotlin("plugin.serialization") version "1.5.31"
-    id("org.jetbrains.dokka") version "1.5.30"
-    id("androidx.navigation.safeargs.kotlin")
-
-    id("io.gitlab.arturbosch.detekt") version "1.18.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.2.0"
-
-    jacoco
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
-    compileSdk = 31
+    namespace = "com.mohsenoid.rickandmorty"
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.mohsenoid.rickandmorty"
-
         minSdk = 24
-        targetSdk = 31
-        multiDexEnabled = true
-
-        versionCode = 11
-        versionName = "2.8.0"
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
+        buildConfigField("String", "API_BASE_URL", "\"https://rickandmortyapi.com/api/\"")
+        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {
-        defaultConfig {
-            buildConfigField("String", "BASE_URL", "\"https://rickandmortyapi.com/api/\"")
-        }
-
         debug {
             isMinifyEnabled = false
-            isTestCoverageEnabled = true
+            enableUnitTestCoverage = true
         }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
-
-    sourceSets {
-        getByName("main") {
-            java {
-                srcDirs("src/main/kotlin")
-                srcDirs("${buildDir.absolutePath}/generated/source/kaptKotlin/")
-            }
-        }
-        getByName("test") {
-            java {
-                srcDirs("src/test/kotlin")
-            }
-        }
-        getByName("androidTest") {
-            java {
-                srcDirs("src/androidTest/kotlin")
-            }
-        }
-    }
-
-    testOptions {
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
-        animationsDisabled = true
-
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        dataBinding = true
-    }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
-        allWarningsAsErrors = true
-        jvmTarget = JavaVersion.VERSION_11.toString()
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+        jvmTarget = "1.8"
     }
-
-    lint {
-        // isIgnoreWarnings = false
-        // isWarningsAsErrors = true
+    buildFeatures {
+        buildConfig = true
+        compose = true
     }
-}
-
-// https://arturbosch.github.io/detekt/#quick-start-with-gradle
-detekt {
-    allRules = true
-    source = files("src/main/kotlin/")
-    baseline = file("detekt-baseline.xml")
-    buildUponDefaultConfig = true
-    reports {
-        html { enabled = true }
-        xml { enabled = true }
-        txt { enabled = false }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
-}
-
-// https://github.com/JLLeitschuh/ktlint-gradle#configuration
-ktlint {
-    reporters {
-        reporter(ReporterType.HTML)
-        reporter(ReporterType.CHECKSTYLE)
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
-}
-
-// https://docs.gradle.org/current/userguide/jacoco_plugin.html
-jacoco {
-    toolVersion = "0.8.7"
 }
 
 dependencies {
-    // Android Jetpack
-    implementation("androidx.appcompat:appcompat:1.4.0")
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.multidex:multidex:2.0.1")
-    testImplementation("androidx.test:core:1.4.0")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 
-    // Kotlin
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.5.31"))
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.5.2"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.5.30")
-
-    // Test
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.7.2")
-    testImplementation("io.mockk:mockk:1.12.1")
+    // Compose
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     // Koin
-    val koinVersion = "3.1.4"
-    implementation("io.insert-koin:koin-android:$koinVersion")
-    implementation("io.insert-koin:koin-android-compat:$koinVersion")
-    testImplementation("io.insert-koin:koin-test:$koinVersion")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    testImplementation(platform(libs.koin.bom))
+    testImplementation(libs.koin.test)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    val okhttpVersion = "4.9.3"
-    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
+    implementation(libs.bundles.retrofit)
+    implementation(libs.okhttp3.logging.interceptor)
 
     // Room
-    val roomVersion = "2.3.0"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(platform(libs.koin.bom))
 
-    // Navigation component
-    val navigationComponentVersion = "2.3.5"
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigationComponentVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigationComponentVersion")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$navigationComponentVersion")
-    androidTestImplementation("androidx.navigation:navigation-testing:$navigationComponentVersion")
+    // Coil
+    implementation(libs.coil)
 
-    // timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    testImplementation(libs.junit)
 
-    // picasso
-    implementation("com.squareup.picasso:picasso:2.71828")
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
-    // chucker
-    val chuckerVersion = "3.5.2"
-    debugImplementation("com.github.chuckerteam.chucker:library:$chuckerVersion")
-    releaseImplementation("com.github.chuckerteam.chucker:library-no-op:$chuckerVersion")
-
-    // leakcanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
-
-    // Startup
-    implementation("androidx.startup:startup-runtime:1.1.0")
 }
