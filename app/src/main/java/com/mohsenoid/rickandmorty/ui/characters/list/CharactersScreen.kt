@@ -45,6 +45,7 @@ import com.mohsenoid.rickandmorty.ui.theme.RickAndMortyTheme
 import com.mohsenoid.rickandmorty.ui.util.AsyncImageWithPreview
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,17 +54,17 @@ fun CharactersScreen(
     charactersIds: Set<Int>,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: CharactersViewModel = koinViewModel()
+    val viewModel: CharactersViewModel = koinViewModel { parametersOf(charactersIds) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        viewModel.loadCharacters(charactersIds)
+        viewModel.loadCharacters()
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
     if (pullToRefreshState.isRefreshing) {
         LaunchedEffect(Unit) {
-            viewModel.loadCharacters(charactersIds)
+            viewModel.loadCharacters()
             // Fail safety timeout
             @Suppress("MagicNumber")
             delay(500)
@@ -139,7 +140,7 @@ fun CharactersList(
                 colors =
                     CardDefaults.cardColors(
                         containerColor =
-                            if (character.status == "Dead") {
+                            if (!character.isAlive || character.isKilled) {
                                 MaterialTheme.colorScheme.error
                             } else {
                                 Color.Unspecified
@@ -199,7 +200,8 @@ fun CharactersScreenSuccessPreview() {
                     Character(
                         id = 1,
                         name = "Rick Sanchez",
-                        status = "Alive",
+                        isAlive = true,
+                        isKilled = false,
                         species = "Human",
                         type = "",
                         gender = "Male",
@@ -210,7 +212,8 @@ fun CharactersScreenSuccessPreview() {
                     Character(
                         id = 2,
                         name = "Morty Smith",
-                        status = "Dead",
+                        isAlive = false,
+                        isKilled = false,
                         species = "Human",
                         type = "",
                         gender = "Male",

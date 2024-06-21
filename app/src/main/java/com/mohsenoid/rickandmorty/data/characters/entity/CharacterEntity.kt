@@ -11,8 +11,10 @@ internal data class CharacterEntity(
     val id: Int,
     @ColumnInfo(name = "name")
     val name: String,
-    @ColumnInfo(name = "status")
-    val status: String,
+    @ColumnInfo(name = "is_alive")
+    val isAlive: Boolean,
+    @ColumnInfo(name = "is_killed")
+    val isKilled: Boolean,
     @ColumnInfo(name = "species")
     val species: String,
     @ColumnInfo(name = "type")

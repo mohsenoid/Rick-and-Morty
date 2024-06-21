@@ -9,7 +9,8 @@ internal object CharacterMapper {
         CharacterEntity(
             id = id,
             name = name,
-            status = status,
+            isAlive = !status.equals("dead", ignoreCase = true),
+            isKilled = false,
             species = species,
             type = type,
             gender = gender,
@@ -22,7 +23,8 @@ internal object CharacterMapper {
         Character(
             id = id,
             name = name,
-            status = status,
+            isAlive = isAlive,
+            isKilled = isKilled,
             species = species,
             type = type,
             gender = gender,
