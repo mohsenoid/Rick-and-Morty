@@ -63,13 +63,13 @@ fun CharacterDetailsScreen(
             // Fail safety timeout
             @Suppress("MagicNumber")
             delay(500)
-            if (!uiState.isLoading) {
+            if (uiState !is CharacterDetailsUiState.Loading) {
                 pullToRefreshState.endRefresh()
             }
         }
     }
 
-    if (!uiState.isLoading) {
+    if (uiState !is CharacterDetailsUiState.Loading) {
         LaunchedEffect(Unit) {
             pullToRefreshState.endRefresh()
         }
@@ -81,36 +81,36 @@ fun CharacterDetailsScreen(
                 .fillMaxSize()
                 .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
-        if (uiState.isLoading) {
-            LoadingScreen()
-        } else if (uiState.isNoConnectionError) {
-            NoConnectionErrorScreen(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-            )
-        } else if (uiState.unknownError != null) {
-            UnknownErrorScreen(
-                message = uiState.unknownError!!,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-            )
-        } else if (uiState.character == null) {
-            UnknownErrorScreen(
-                message = "Error!",
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-            )
-        } else {
-            CharacterDetails(
-                character = uiState.character!!,
-                onKillClicked = { viewModel.onKillClicked() },
-            )
+        when (val currentUiState = uiState) {
+            CharacterDetailsUiState.Loading -> {
+                LoadingScreen()
+            }
+
+            CharacterDetailsUiState.Error.NoConnection -> {
+                NoConnectionErrorScreen(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                )
+            }
+
+            is CharacterDetailsUiState.Error.Unknown -> {
+                UnknownErrorScreen(
+                    message = currentUiState.message,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                )
+            }
+
+            is CharacterDetailsUiState.Success -> {
+                CharacterDetails(
+                    character = currentUiState.character,
+                    onKillClicked = { viewModel.onKillClicked() },
+                )
+            }
         }
         PullToRefreshContainer(
             state = pullToRefreshState,
@@ -121,8 +121,8 @@ fun CharacterDetailsScreen(
 
 @Composable
 fun CharacterDetails(
-    modifier: Modifier = Modifier,
     character: Character,
+    modifier: Modifier = Modifier,
     onKillClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -298,19 +298,18 @@ fun CharacterDetailsScreenDeadButHealedPreview() {
 fun CharacterDetailsDarkPreview() {
     RickAndMortyTheme(darkTheme = true) {
         CharacterDetails(
-            character =
-                Character(
-                    id = 1,
-                    name = "Rick Sanchez",
-                    isAlive = true,
-                    isKilled = false,
-                    species = "Human",
-                    type = "",
-                    gender = "Male",
-                    origin = "Earth (C-137)",
-                    location = "Citadel of Ricks",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                ),
+            Character(
+                id = 1,
+                name = "Rick Sanchez",
+                isAlive = true,
+                isKilled = false,
+                species = "Human",
+                type = "",
+                gender = "Male",
+                origin = "Earth (C-137)",
+                location = "Citadel of Ricks",
+                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            ),
         )
     }
 }
@@ -320,19 +319,18 @@ fun CharacterDetailsDarkPreview() {
 fun CharacterDetailsPreview() {
     RickAndMortyTheme(darkTheme = false) {
         CharacterDetails(
-            character =
-                Character(
-                    id = 1,
-                    name = "Rick Sanchez",
-                    isAlive = true,
-                    isKilled = false,
-                    species = "Human",
-                    type = "",
-                    gender = "Male",
-                    origin = "Earth (C-137)",
-                    location = "Citadel of Ricks",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                ),
+            Character(
+                id = 1,
+                name = "Rick Sanchez",
+                isAlive = true,
+                isKilled = false,
+                species = "Human",
+                type = "",
+                gender = "Male",
+                origin = "Earth (C-137)",
+                location = "Citadel of Ricks",
+                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            ),
         )
     }
 }
