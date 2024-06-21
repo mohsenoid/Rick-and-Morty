@@ -7,7 +7,11 @@ import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodesDao
 import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
 
-@Database(entities = [EpisodeEntity::class, CharacterEntity::class], version = 1)
+@Database(
+    entities = [EpisodeEntity::class, CharacterEntity::class],
+    version = 1,
+    exportSchema = true,
+)
 internal abstract class Database : RoomDatabase() {
     abstract fun episodeDao(): EpisodesDao
 
