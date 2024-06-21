@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
 
 @Dao
-internal interface EpisodesDao {
+internal interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertEpisode(episode: EpisodeEntity)
 
@@ -16,7 +16,4 @@ internal interface EpisodesDao {
 
     @Query("SELECT * FROM episodes WHERE id = :episodeId")
     fun getEpisode(episodeId: Int): EpisodeEntity?
-
-    @Query("DELETE FROM episodes")
-    fun deleteAll()
 }

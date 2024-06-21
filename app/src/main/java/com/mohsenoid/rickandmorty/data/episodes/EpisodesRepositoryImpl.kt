@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.data.episodes
 
-import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodesDao
+import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodeDao
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisode
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEntity
 import com.mohsenoid.rickandmorty.data.remote.ApiService
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 internal class EpisodesRepositoryImpl(
     val apiService: ApiService,
-    val episodesDao: EpisodesDao,
+    val episodeDao: EpisodeDao,
 ) : EpisodesRepository {
     private val episodesCache: MutableMap<Int, List<Episode>> = mutableMapOf()
 
@@ -42,7 +42,7 @@ internal class EpisodesRepositoryImpl(
     }
 
     private fun getDatabaseEpisodes(page: Int): RepositoryGetResult<List<Episode>> {
-        val dbEpisodes = episodesDao.getEpisodes(page = page).map { it.toEpisode() }
+        val dbEpisodes = episodeDao.getEpisodes(page = page).map { it.toEpisode() }
         if (dbEpisodes.isNotEmpty()) {
             cacheEpisodes(page, dbEpisodes)
             return RepositoryGetResult.Success(dbEpisodes)
@@ -58,7 +58,7 @@ internal class EpisodesRepositoryImpl(
         val remoteEpisodes: List<EpisodeRemoteModel>? = response.body()?.results
         return if (response.isSuccessful && remoteEpisodes != null) {
             val episodesEntity = remoteEpisodes.map { it.toEpisodeEntity(page) }
-            episodesEntity.forEach { episodesDao.insertEpisode(it) }
+            episodesEntity.forEach { episodeDao.insertEpisode(it) }
 
             val serviceEpisodes = episodesEntity.map { it.toEpisode() }
             cacheEpisodes(page, serviceEpisodes)
