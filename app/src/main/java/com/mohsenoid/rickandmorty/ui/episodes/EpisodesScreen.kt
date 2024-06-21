@@ -69,13 +69,13 @@ fun EpisodesScreen(
             // Fail safety timeout
             @Suppress("MagicNumber")
             delay(500)
-            if (!uiState.isLoading) {
+            if (uiState !is EpisodesUiState.Loading) {
                 pullToRefreshState.endRefresh()
             }
         }
     }
 
-    if (!uiState.isLoading) {
+    if (uiState !is EpisodesUiState.Loading) {
         LaunchedEffect(Unit) {
             pullToRefreshState.endRefresh()
         }
@@ -87,35 +87,43 @@ fun EpisodesScreen(
                 .fillMaxSize()
                 .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
-        if (uiState.isLoading) {
-            LoadingScreen()
-        } else if (uiState.isNoConnectionError) {
-            NoConnectionErrorScreen(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-            )
-        } else if (uiState.unknownError != null) {
-            UnknownErrorScreen(
-                message = uiState.unknownError!!,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-            )
-        } else {
-            EpisodesList(
-                isNoConnectionError = uiState.isLoadMoreNoConnectionError,
-                isLoadingMore = uiState.isLoadingMore,
-                isEndOfList = uiState.isEndOfList,
-                onEndOfListReached = viewModel::loadMoreEpisodes,
-                onEpisodeClicked = { episode ->
-                    val charactersArg = episode.characters.joinToString(",")
-                    navController.navigate(NavRoute.CharactersScreen.endpoint + charactersArg)
-                },
-                episodes = uiState.episodes,
-            )
+        when (val currentUiState = uiState) {
+            EpisodesUiState.Loading -> {
+                LoadingScreen()
+            }
+
+            EpisodesUiState.Error.NoConnection -> {
+                NoConnectionErrorScreen(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                )
+            }
+
+            is EpisodesUiState.Error.Unknown -> {
+                UnknownErrorScreen(
+                    message = currentUiState.message,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                )
+            }
+
+            is EpisodesUiState.Success -> {
+                EpisodesList(
+                    isNoConnectionError = currentUiState.isNoConnectionError,
+                    isLoadingMore = currentUiState.isLoadingMore,
+                    isEndOfList = currentUiState.isEndOfList,
+                    onEndOfListReached = viewModel::loadMoreEpisodes,
+                    onEpisodeClicked = { episode ->
+                        val charactersArg = episode.characters.joinToString(",")
+                        navController.navigate(NavRoute.CharactersScreen.endpoint + charactersArg)
+                    },
+                    episodes = currentUiState.episodes,
+                )
+            }
         }
         PullToRefreshContainer(
             state = pullToRefreshState,
@@ -159,56 +167,100 @@ fun EpisodesList(
             CircularProgressIndicator(Modifier.size(48.dp))
         },
         itemContent = { episode ->
-            Card(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { onEpisodeClicked(episode) },
-            ) {
-                Row(modifier = Modifier.height(80.dp)) {
-                    Box(
-                        modifier =
-                            Modifier
-                                .fillMaxHeight()
-                                .width(100.dp)
-                                .background(MaterialTheme.colorScheme.inverseOnSurface),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = episode.episode,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-
-                    Column(
-                        modifier =
-                            Modifier
-                                .fillMaxHeight()
-                                .weight(1f)
-                                .padding(8.dp),
-                    ) {
-                        Text(
-                            text = episode.airDate,
-                            modifier = Modifier.fillMaxWidth(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.labelMedium,
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = episode.name,
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth(),
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    }
-                }
-            }
+            EpisodeItem(episode, onEpisodeClicked)
         },
     )
+}
+
+@Composable
+private fun EpisodeItem(
+    episode: Episode,
+    onEpisodeClicked: (Episode) -> Unit = {},
+) {
+    Card(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onEpisodeClicked(episode) },
+    ) {
+        Row(modifier = Modifier.height(80.dp)) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .width(100.dp)
+                        .background(MaterialTheme.colorScheme.inverseOnSurface),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = episode.episode,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .padding(8.dp),
+            ) {
+                Text(
+                    text = episode.airDate,
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.labelMedium,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = episode.name,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
+    }
+}
+
+@Suppress("MagicNumber")
+@Preview
+@Composable
+fun EpisodesItemDarkPreview() {
+    RickAndMortyTheme(darkTheme = true) {
+        EpisodeItem(
+            episode =
+                Episode(
+                    id = 1,
+                    name = "Pilot",
+                    airDate = "December 2, 2013",
+                    episode = "S01E01",
+                    characters = setOf(1, 2, 3),
+                ),
+        )
+    }
+}
+
+@Suppress("MagicNumber")
+@Preview
+@Composable
+fun EpisodesItemPreview() {
+    RickAndMortyTheme(darkTheme = false) {
+        EpisodeItem(
+            episode =
+                Episode(
+                    id = 1,
+                    name = "Pilot",
+                    airDate = "December 2, 2013",
+                    episode = "S01E01",
+                    characters = setOf(1, 2, 3),
+                ),
+        )
+    }
 }
 
 @Suppress("MagicNumber")
