@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CharactersViewModel(
+    private val charactersIds: Set<Int>,
     private val charactersRepository: CharactersRepository,
 ) : ViewModel() {
     private val state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
@@ -21,11 +22,11 @@ class CharactersViewModel(
         state.map { it.toUiState() }
             .stateIn(viewModelScope, SharingStarted.Eagerly, CharactersUiState(isLoading = true))
 
-    fun loadCharacters(characters: Set<Int>) {
+    fun loadCharacters() {
         state.value = State.Loading
 
         viewModelScope.launch {
-            when (val result = charactersRepository.getCharacters(characters)) {
+            when (val result = charactersRepository.getCharacters(charactersIds)) {
                 is RepositoryGetResult.Success -> {
                     state.value = State.Success(characters = result.data)
                 }

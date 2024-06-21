@@ -20,4 +20,10 @@ internal interface CharacterDao {
 
     @Update
     fun updateCharacter(character: CharacterEntity)
+
+    @Query("UPDATE characters SET is_killed = :isKilled WHERE id = :characterId")
+    fun updateCharacterStatus(
+        characterId: Int,
+        isKilled: Boolean,
+    ): Int
 }
