@@ -9,6 +9,7 @@ junit = "4.13.2"
 kotlinxCoroutinesTest = "1.8.1"
 mockk = "1.13.5"
 junitVersion = "1.1.5"
+robolectric = "4.12.2"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
@@ -25,6 +26,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" }
+robolectric = { group= "org.robolectric", name="robolectric", version.ref="robolectric" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

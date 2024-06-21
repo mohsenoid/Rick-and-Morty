@@ -35,7 +35,7 @@ val dataModule =
         single<EpisodesRepository> {
             EpisodesRepositoryImpl(
                 apiService = get(),
-                episodesDao = get(),
+                episodeDao = get(),
             )
         }
 

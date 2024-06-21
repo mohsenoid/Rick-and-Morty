@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
 
 @Dao
@@ -17,9 +16,6 @@ internal interface CharacterDao {
 
     @Query("SELECT * FROM characters WHERE id = :characterId")
     fun getCharacter(characterId: Int): CharacterEntity?
-
-    @Update
-    fun updateCharacter(character: CharacterEntity)
 
     @Query("UPDATE characters SET is_killed = :isKilled WHERE id = :characterId")
     fun updateCharacterStatus(
