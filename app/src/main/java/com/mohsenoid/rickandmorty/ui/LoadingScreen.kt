@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,18 +24,11 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun LoadingScreenPreview() {
-    RickAndMortyTheme(darkTheme = false) {
-        LoadingScreen()
-    }
-}
-
-@Preview
-@Composable
-fun LoadingScreenDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
+    RickAndMortyTheme {
         LoadingScreen()
     }
 }

@@ -2,6 +2,7 @@
 
 package com.mohsenoid.rickandmorty
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -168,18 +169,11 @@ fun AppTopBar(
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun AppTopBarDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        AppTopBar(navController = rememberNavController())
-    }
-}
-
-@Preview
-@Composable
-fun AppTopBarLightPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+fun AppTopBarPreview() {
+    RickAndMortyTheme {
         AppTopBar(navController = rememberNavController())
     }
 }

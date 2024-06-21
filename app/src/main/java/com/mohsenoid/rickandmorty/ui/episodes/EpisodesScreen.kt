@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.episodes
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,7 +33,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -160,7 +160,7 @@ fun EpisodesList(
                 imageVector = Icons.Filled.WifiOff,
                 contentDescription = "No Connection Error",
                 modifier = Modifier.size(48.dp),
-                tint = Color.Red,
+                tint = MaterialTheme.colorScheme.error,
             )
         },
         loadingItem = {
@@ -228,28 +228,11 @@ private fun EpisodeItem(
 }
 
 @Suppress("MagicNumber")
-@Preview
-@Composable
-fun EpisodesItemDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        EpisodeItem(
-            episode =
-                Episode(
-                    id = 1,
-                    name = "Pilot",
-                    airDate = "December 2, 2013",
-                    episode = "S01E01",
-                    characters = setOf(1, 2, 3),
-                ),
-        )
-    }
-}
-
-@Suppress("MagicNumber")
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun EpisodesItemPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+    RickAndMortyTheme {
         EpisodeItem(
             episode =
                 Episode(
@@ -264,39 +247,11 @@ fun EpisodesItemPreview() {
 }
 
 @Suppress("MagicNumber")
-@Preview
-@Composable
-fun EpisodesListDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        EpisodesList(
-            isLoadingMore = true,
-            isEndOfList = false,
-            episodes =
-                listOf(
-                    Episode(
-                        id = 1,
-                        name = "Pilot",
-                        airDate = "December 2, 2013",
-                        episode = "S01E01",
-                        characters = setOf(1, 2, 3),
-                    ),
-                    Episode(
-                        id = 2,
-                        name = "Lawnmower Dog",
-                        airDate = "December 9, 2013",
-                        episode = "S01E02",
-                        characters = setOf(1, 2, 5, 6),
-                    ),
-                ),
-        )
-    }
-}
-
-@Suppress("MagicNumber")
-@Preview
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun EpisodesListPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+    RickAndMortyTheme {
         EpisodesList(
             isLoadingMore = true,
             isEndOfList = false,
