@@ -109,7 +109,7 @@ fun EpisodesScreen(
                 isNoConnectionError = uiState.isLoadMoreNoConnectionError,
                 isLoadingMore = uiState.isLoadingMore,
                 isEndOfList = uiState.isEndOfList,
-                onEndOfListReached = viewModel::onEndOfListReached,
+                onEndOfListReached = viewModel::loadMoreEpisodes,
                 onEpisodeClicked = { episode ->
                     val charactersArg = episode.characters.joinToString(",")
                     navController.navigate(NavRoute.CharactersScreen.endpoint + charactersArg)

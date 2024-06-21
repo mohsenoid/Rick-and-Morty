@@ -46,7 +46,7 @@ class EpisodesViewModel(
         }
     }
 
-    fun onEndOfListReached() {
+    fun loadMoreEpisodes() {
         state.update { currentState ->
             when (currentState) {
                 State.Loading,

@@ -19,3 +19,5 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
   UnusedPrivateMember:
     ignoreAnnotated: [ 'Preview' ]
+  MaxLineLength:
+    excludes: [ '**/test/**', '**/*.Test.kt' ]
