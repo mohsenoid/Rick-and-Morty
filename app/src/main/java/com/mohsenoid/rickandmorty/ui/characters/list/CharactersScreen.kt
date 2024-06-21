@@ -1,5 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.characters.list
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -206,52 +207,11 @@ private fun CharacterItem(
     }
 }
 
-@Preview
-@Composable
-fun CharacterItemDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        CharacterItem(
-            Character(
-                id = 1,
-                name = "Rick Sanchez",
-                isAlive = true,
-                isKilled = false,
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = "Earth (C-137)",
-                location = "Citadel of Ricks",
-                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            ),
-        )
-    }
-}
-
-@Preview
-@Composable
-fun CharacterItemDeadDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        CharacterItem(
-            Character(
-                id = 1,
-                name = "Rick Sanchez",
-                isAlive = false,
-                isKilled = false,
-                species = "Human",
-                type = "",
-                gender = "Male",
-                origin = "Earth (C-137)",
-                location = "Citadel of Ricks",
-                image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            ),
-        )
-    }
-}
-
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CharacterItemPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+    RickAndMortyTheme {
         CharacterItem(
             Character(
                 id = 1,
@@ -269,10 +229,11 @@ fun CharacterItemPreview() {
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CharacterItemDeadPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+    RickAndMortyTheme {
         CharacterItem(
             Character(
                 id = 1,
@@ -290,46 +251,11 @@ fun CharacterItemDeadPreview() {
     }
 }
 
-@Preview
-@Composable
-fun CharactersListDarkPreview() {
-    RickAndMortyTheme(darkTheme = true) {
-        CharactersList(
-            characters =
-                setOf(
-                    Character(
-                        id = 1,
-                        name = "Rick Sanchez",
-                        isAlive = true,
-                        isKilled = false,
-                        species = "Human",
-                        type = "",
-                        gender = "Male",
-                        origin = "Earth (C-137)",
-                        location = "Citadel of Ricks",
-                        image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                    ),
-                    Character(
-                        id = 2,
-                        name = "Morty Smith",
-                        isAlive = false,
-                        isKilled = false,
-                        species = "Human",
-                        type = "",
-                        gender = "Male",
-                        origin = "unknown",
-                        location = "Citadel of Ricks",
-                        image = "https://rickandmortyapi.com/api/character/avatar/2.jpeg",
-                    ),
-                ),
-        )
-    }
-}
-
-@Preview
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun CharactersListPreview() {
-    RickAndMortyTheme(darkTheme = false) {
+    RickAndMortyTheme {
         CharactersList(
             characters =
                 setOf(
