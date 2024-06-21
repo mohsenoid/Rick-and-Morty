@@ -4,63 +4,38 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
 import com.mohsenoid.rickandmorty.domain.characters.CharactersRepository
-import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class CharactersViewModel(
     private val charactersIds: Set<Int>,
     private val charactersRepository: CharactersRepository,
 ) : ViewModel() {
-    private val state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
-
-    val uiState: StateFlow<CharactersUiState> =
-        state.map { it.toUiState() }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, CharactersUiState(isLoading = true))
+    private val _uiState: MutableStateFlow<CharactersUiState> =
+        MutableStateFlow(CharactersUiState.Loading)
+    val uiState: StateFlow<CharactersUiState> by ::_uiState
 
     fun loadCharacters() {
-        state.value = State.Loading
+        _uiState.value = CharactersUiState.Loading
 
         viewModelScope.launch {
             when (val result = charactersRepository.getCharacters(charactersIds)) {
                 is RepositoryGetResult.Success -> {
-                    state.value = State.Success(characters = result.data)
+                    _uiState.value = CharactersUiState.Success(characters = result.data)
                 }
 
                 is RepositoryGetResult.Failure.EndOfList -> {
-                    state.value = State.LoadingUnknownError(result.message)
+                    _uiState.value = CharactersUiState.Error.Unknown(result.message)
                 }
 
                 is RepositoryGetResult.Failure.NoConnection -> {
-                    state.value = State.LoadingNoConnectionError
+                    _uiState.value = CharactersUiState.Error.NoConnection
                 }
 
                 is RepositoryGetResult.Failure.Unknown -> {
-                    state.value = State.LoadingUnknownError(result.message)
+                    _uiState.value = CharactersUiState.Error.Unknown(result.message)
                 }
-            }
-        }
-    }
-
-    internal sealed interface State {
-        data object Loading : State
-
-        data class Success(val characters: Set<Character>) : State
-
-        data object LoadingNoConnectionError : State
-
-        data class LoadingUnknownError(val message: String) : State
-
-        fun toUiState(): CharactersUiState {
-            return when (this) {
-                Loading -> CharactersUiState(isLoading = true)
-                is Success -> CharactersUiState(characters = characters)
-                is LoadingNoConnectionError -> CharactersUiState(isNoConnectionError = true)
-                is LoadingUnknownError -> CharactersUiState(unknownError = message)
             }
         }
     }
