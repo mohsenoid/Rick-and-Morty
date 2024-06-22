@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.util
 
 import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
 
-internal fun createCharacterEntitiesList(
+internal fun createCharactersEntityList(
     count: Int,
     id: (Int) -> Int = { it },
     name: (Int) -> String = { "name$it" },
