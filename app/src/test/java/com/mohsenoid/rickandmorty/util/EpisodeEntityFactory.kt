@@ -2,7 +2,7 @@ package com.mohsenoid.rickandmorty.util
 
 import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
 
-internal fun createEpisodeEntitiesList(
+internal fun createEpisodesEntityList(
     count: Int,
     id: (Int) -> Int = { it },
     page: (Int) -> Int = { 0 },

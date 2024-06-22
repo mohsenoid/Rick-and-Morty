@@ -1,10 +1,10 @@
 package com.mohsenoid.rickandmorty.data.episodes.mapper
 
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisode
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEntity
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
-import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
+import com.mohsenoid.rickandmorty.util.createEpisode
+import com.mohsenoid.rickandmorty.util.createEpisodeEntity
+import com.mohsenoid.rickandmorty.util.createEpisodeRemoteModel
 import org.junit.Test
 
 class EpisodeMapperTest {
@@ -34,7 +34,7 @@ class EpisodeMapperTest {
         private const val PAGE = 0
 
         private val TEST_CHARACTER_REMOTE_MODEL =
-            EpisodeRemoteModel(
+            createEpisodeRemoteModel(
                 id = 1,
                 name = "name",
                 airDate = "airDate",
@@ -50,7 +50,7 @@ class EpisodeMapperTest {
             )
 
         private val TEST_CHARACTER_ENTITY =
-            EpisodeEntity(
+            createEpisodeEntity(
                 id = 1,
                 page = PAGE,
                 name = "name",
@@ -60,7 +60,7 @@ class EpisodeMapperTest {
             )
 
         private val TEST_CHARACTER =
-            Episode(
+            createEpisode(
                 id = 1,
                 name = "name",
                 airDate = "airDate",
