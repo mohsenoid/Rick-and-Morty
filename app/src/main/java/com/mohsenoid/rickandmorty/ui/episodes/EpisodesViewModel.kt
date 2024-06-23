@@ -3,14 +3,14 @@ package com.mohsenoid.rickandmorty.ui.episodes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.episodes.EpisodesRepository
+import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class EpisodesViewModel(
-    private val episodesRepository: EpisodesRepository,
+    private val episodeRepository: EpisodeRepository,
 ) : ViewModel() {
     private var currentPage = 0
     private val episodes: MutableList<Episode> = mutableListOf()
@@ -24,7 +24,7 @@ class EpisodesViewModel(
         currentPage = 0
 
         viewModelScope.launch {
-            when (val result = episodesRepository.getEpisodes()) {
+            when (val result = episodeRepository.getEpisodes()) {
                 is RepositoryGetResult.Success -> {
                     episodes.clear()
                     episodes += result.data
@@ -56,7 +56,7 @@ class EpisodesViewModel(
     private fun loadMoreEpisodes(page: Int) {
         viewModelScope.launch {
             _uiState.value =
-                when (val result = episodesRepository.getEpisodes(page)) {
+                when (val result = episodeRepository.getEpisodes(page)) {
                     is RepositoryGetResult.Success -> {
                         currentPage++
                         episodes += result.data

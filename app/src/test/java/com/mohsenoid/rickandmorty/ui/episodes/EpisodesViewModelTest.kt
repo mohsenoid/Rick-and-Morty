@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.episodes
 
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.episodes.EpisodesRepository
+import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createEpisodesList
 import io.mockk.coEvery
@@ -18,14 +18,14 @@ class EpisodesViewModelTest {
     @get:Rule
     var rule: TestRule = MainDispatcherRule()
 
-    private lateinit var repository: EpisodesRepository
+    private lateinit var repository: EpisodeRepository
 
     private lateinit var viewModel: EpisodesViewModel
 
     @Before
     fun setUp() {
         repository = mockk()
-        viewModel = EpisodesViewModel(episodesRepository = repository)
+        viewModel = EpisodesViewModel(episodeRepository = repository)
     }
 
     @Test

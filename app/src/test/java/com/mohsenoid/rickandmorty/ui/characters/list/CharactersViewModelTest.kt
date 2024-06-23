@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.characters.list
 
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharactersRepository
+import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createCharactersList
 import io.mockk.coEvery
@@ -18,7 +18,7 @@ class CharactersViewModelTest {
     @get:Rule
     var rule: TestRule = MainDispatcherRule()
 
-    private lateinit var repository: CharactersRepository
+    private lateinit var repository: CharacterRepository
 
     private lateinit var viewModel: CharactersViewModel
 
@@ -28,7 +28,7 @@ class CharactersViewModelTest {
         viewModel =
             CharactersViewModel(
                 charactersIds = TEST_CHARACTERS_IDS,
-                charactersRepository = repository,
+                characterRepository = repository,
             )
     }
 
