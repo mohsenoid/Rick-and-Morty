@@ -6,16 +6,16 @@ import com.mohsenoid.rickandmorty.data.characters.mapper.CharacterMapper.toChara
 import com.mohsenoid.rickandmorty.data.remote.ApiService
 import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharactersRepository
+import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.SortedMap
 
-internal class CharactersRepositoryImpl(
+internal class CharacterRepositoryImpl(
     private val apiService: ApiService,
     private val characterDao: CharacterDao,
-) : CharactersRepository {
+) : CharacterRepository {
     private val charactersCache: SortedMap<Int, Character> = sortedMapOf()
 
     override suspend fun getCharacters(charactersIds: Set<Int>): RepositoryGetResult<Set<Character>> =

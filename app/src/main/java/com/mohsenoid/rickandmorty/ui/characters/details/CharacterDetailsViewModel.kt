@@ -3,7 +3,7 @@ package com.mohsenoid.rickandmorty.ui.characters.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharactersRepository
+import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(
     private val characterId: Int,
-    private val charactersRepository: CharactersRepository,
+    private val characterRepository: CharacterRepository,
 ) : ViewModel() {
     private var character: Character? = null
 
@@ -23,7 +23,7 @@ class CharacterDetailsViewModel(
         _uiState.value = CharacterDetailsUiState.Loading
 
         viewModelScope.launch {
-            val result = charactersRepository.getCharacter(characterId)
+            val result = characterRepository.getCharacter(characterId)
             updateUiState(result)
         }
     }
@@ -33,7 +33,7 @@ class CharacterDetailsViewModel(
 
         viewModelScope.launch {
             val result =
-                charactersRepository.updateCharacterStatus(characterId, !character.isKilled)
+                characterRepository.updateCharacterStatus(characterId, !character.isKilled)
             updateUiState(result)
         }
     }

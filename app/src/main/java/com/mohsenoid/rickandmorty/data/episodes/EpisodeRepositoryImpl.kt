@@ -6,15 +6,15 @@ import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEn
 import com.mohsenoid.rickandmorty.data.remote.ApiService
 import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
 import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.episodes.EpisodesRepository
+import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-internal class EpisodesRepositoryImpl(
+internal class EpisodeRepositoryImpl(
     val apiService: ApiService,
     val episodeDao: EpisodeDao,
-) : EpisodesRepository {
+) : EpisodeRepository {
     private val episodesCache: MutableMap<Int, List<Episode>> = mutableMapOf()
 
     override suspend fun getEpisodes(page: Int): RepositoryGetResult<List<Episode>> =
