@@ -1,4 +1,4 @@
-# <img src="logo.png" alt="Logo" style="width:48px;" /> Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/workflows/Android%20CI/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/branch/develop/graph/badge.svg?token=X2UikOoOfa)](https://codecov.io/gh/mohsenoid/Rick-and-Morty) [![CodeFactor](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty/badge)](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty)
+# <img src="logo.png" alt="Logo" style="width:48px;" /> Rick and Morty [![Actions Status](https://github.com/mohsenoid/Rick-and-Morty/actions/workflows/android.yml/badge.svg)](https://github.com/mohsenoid/Rick-and-Morty/actions/workflows/android.yml) [![codecov](https://codecov.io/gh/mohsenoid/Rick-and-Morty/graph/badge.svg?token=X2UikOoOfa)](https://codecov.io/gh/mohsenoid/Rick-and-Morty) [![CodeFactor](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty/badge)](https://www.codefactor.io/repository/github/mohsenoid/rick-and-morty)
 
 This repository houses my **Rick and Morty** Android application, serving as a personal pet project for training and enhancing my Android development skills.
 
@@ -22,7 +22,7 @@ The app consists of three main compose screens, designed to provide a seamless u
 
 ### 2. Episode's Characters List
    **Purpose**: Displays a list of characters featured in the selected episode. Characters are clearly marked as alive or dead by the card background color, including those "killed" by the user.
-   **Data Handling**: Character data is retrieved from the network and stored in the database's characters table. Updates to character information preserve as "killed by user" status, maintaining user interactions.
+   **Data Handling**: Character data is retrieved from the network and stored in the database's characters table. Updates to character information preserved as "isKilled" status, maintaining user interactions.
 
 <img src="SCREENSHOT2.png" alt="Episode's Characters List" style="width:200px;" />
 
