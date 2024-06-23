@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.episodes
 
 import android.content.res.Configuration
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -133,7 +134,7 @@ fun EpisodesScreen(
 }
 
 @Composable
-fun EpisodesList(
+private fun EpisodesList(
     modifier: Modifier = Modifier,
     isNoConnectionError: Boolean = false,
     isLoadingMore: Boolean = false,
@@ -172,8 +173,9 @@ fun EpisodesList(
     )
 }
 
+@VisibleForTesting
 @Composable
-private fun EpisodeItem(
+fun EpisodeItem(
     episode: Episode,
     onEpisodeClicked: (Episode) -> Unit = {},
 ) {
