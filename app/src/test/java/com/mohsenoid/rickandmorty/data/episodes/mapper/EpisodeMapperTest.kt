@@ -5,7 +5,7 @@ import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEn
 import com.mohsenoid.rickandmorty.util.createEpisode
 import com.mohsenoid.rickandmorty.util.createEpisodeEntity
 import com.mohsenoid.rickandmorty.util.createEpisodeRemoteModel
-import org.junit.Test
+import kotlin.test.Test
 
 class EpisodeMapperTest {
     @Test
