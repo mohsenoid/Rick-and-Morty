@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    id("kotlin-power-assert")
 }
 
 android {
