@@ -7,7 +7,7 @@ import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
 import com.mohsenoid.rickandmorty.data.remote.model.LocationRemoteModel
 import com.mohsenoid.rickandmorty.data.remote.model.OriginRemoteModel
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CharacterMapperTest {

@@ -5,8 +5,12 @@ import com.mohsenoid.rickandmorty.data.remote.model.CharactersResponse
 import com.mohsenoid.rickandmorty.data.remote.model.LocationRemoteModel
 import com.mohsenoid.rickandmorty.data.remote.model.OriginRemoteModel
 
-internal fun createCharactersResponse(characters: List<CharacterRemoteModel> = createCharactersRemoteModelList(3)): CharactersResponse =
-    characters
+internal fun createCharactersResponse(
+    characters: List<CharacterRemoteModel> =
+        createCharactersRemoteModelList(
+            count = 3,
+        ),
+): CharactersResponse = characters
 
 internal fun createCharactersRemoteModelList(
     count: Int,
