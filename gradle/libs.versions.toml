@@ -59,6 +59,8 @@ okhttp3-mockWebServer = { group = "com.squareup.okhttp3", name = "mockwebserver"
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
+kotlin-powerAssert-plugin = { group = "org.jetbrains.kotlin.plugin.power-assert", name = "org.jetbrains.kotlin.plugin.power-assert.gradle.plugin", version.ref = "kotlin" }
+
 [bundles]
 retrofit = ["retrofit-retrofit", "retrofit-converter-gson"]
 
