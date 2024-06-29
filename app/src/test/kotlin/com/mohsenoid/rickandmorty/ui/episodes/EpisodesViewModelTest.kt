@@ -1,7 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.episodes
 
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
+import com.mohsenoid.rickandmorty.domain.episodes.usecase.GetEpisodesUseCase
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createEpisodesList
 import io.mockk.coEvery
@@ -18,14 +17,14 @@ class EpisodesViewModelTest {
     @get:Rule
     var rule: TestRule = MainDispatcherRule()
 
-    private lateinit var repository: EpisodeRepository
+    private lateinit var getEpisodesUseCase: GetEpisodesUseCase
 
     private lateinit var viewModel: EpisodesViewModel
 
     @Before
     fun setUp() {
-        repository = mockk()
-        viewModel = EpisodesViewModel(episodeRepository = repository)
+        getEpisodesUseCase = mockk()
+        viewModel = EpisodesViewModel(getEpisodesUseCase = getEpisodesUseCase)
     }
 
     @Test
@@ -41,10 +40,10 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns Success, When loadEpisodes called, Then UiState should be Success`() {
+    fun `Given GetEpisodesUseCase returns Success, When loadEpisodes called, Then UiState should be Success`() {
         // GIVEN
         val episodes = createEpisodesList(3)
-        coEvery { repository.getEpisodes(0) } returns RepositoryGetResult.Success(episodes)
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Success(episodes)
 
         // WHEN
         viewModel.loadEpisodes()
@@ -56,11 +55,11 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns end of list, When loadMoreEpisodes called, Then UiState should be end of list Success`() {
+    fun `Given GetEpisodesUseCase returns end of list, When loadMoreEpisodes called, Then UiState should be end of list Success`() {
         // GIVEN
         val episodes = createEpisodesList(3)
-        coEvery { repository.getEpisodes(0) } returns RepositoryGetResult.Success(episodes)
-        coEvery { repository.getEpisodes(1) } returns RepositoryGetResult.Failure.EndOfList("End of list")
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Success(episodes)
+        coEvery { getEpisodesUseCase(1) } returns GetEpisodesUseCase.Result.EndOfList
 
         // WHEN
         viewModel.loadEpisodes()
@@ -73,9 +72,9 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns no connection, When loadEpisodes called, Then UiState should be no connection error`() {
+    fun `Given GetEpisodesUseCase returns no connection, When loadEpisodes called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery { repository.getEpisodes(0) } returns RepositoryGetResult.Failure.NoConnection("No connection")
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.NoConnection
 
         // WHEN
         viewModel.loadEpisodes()
@@ -87,11 +86,11 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns no connection, When loadMoreEpisodes called, Then UiState should be no connection Success`() {
+    fun `Given GetEpisodesUseCase returns no connection, When loadMoreEpisodes called, Then UiState should be no connection Success`() {
         // GIVEN
         val episodes = createEpisodesList(3)
-        coEvery { repository.getEpisodes(0) } returns RepositoryGetResult.Success(episodes)
-        coEvery { repository.getEpisodes(1) } returns RepositoryGetResult.Failure.NoConnection("No connection")
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Success(episodes)
+        coEvery { getEpisodesUseCase(1) } returns GetEpisodesUseCase.Result.NoConnection
 
         // WHEN
         viewModel.loadEpisodes()
@@ -105,13 +104,10 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns unknown error, When loadEpisodes called, Then UiState should be unknown error`() {
+    fun `Given GetEpisodesUseCase returns unknown error, When loadEpisodes called, Then UiState should be unknown error`() {
         // GIVEN
         val errorMessage = "Unknown error"
-        coEvery { repository.getEpisodes(0) } returns
-            RepositoryGetResult.Failure.Unknown(
-                errorMessage,
-            )
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Failure(errorMessage)
 
         // WHEN
         viewModel.loadEpisodes()
@@ -123,15 +119,12 @@ class EpisodesViewModelTest {
     }
 
     @Test
-    fun `Given repository returns unknown error, When loadMoreEpisodes called, Then UiState should be unknown error`() {
+    fun `Given GetEpisodesUseCase returns unknown error, When loadMoreEpisodes called, Then UiState should be unknown error`() {
         // GIVEN
         val episodes = createEpisodesList(3)
         val errorMessage = "Unknown error"
-        coEvery { repository.getEpisodes(0) } returns RepositoryGetResult.Success(episodes)
-        coEvery { repository.getEpisodes(1) } returns
-            RepositoryGetResult.Failure.Unknown(
-                errorMessage,
-            )
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Success(episodes)
+        coEvery { getEpisodesUseCase(1) } returns GetEpisodesUseCase.Result.Failure(errorMessage)
 
         // WHEN
         viewModel.loadEpisodes()

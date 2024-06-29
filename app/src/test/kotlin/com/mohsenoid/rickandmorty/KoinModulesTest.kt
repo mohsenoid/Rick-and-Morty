@@ -4,6 +4,7 @@ import com.mohsenoid.rickandmorty.data.dataModules
 import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.domainModules
 import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
+import com.mohsenoid.rickandmorty.domain.episodes.usecase.GetEpisodesUseCase
 import com.mohsenoid.rickandmorty.ui.uiModule
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.KoinTest
@@ -20,7 +21,12 @@ class KoinModulesTest : KoinTest {
 
     @Test
     fun `Verify domain modules`() {
-        domainModules.verify()
+        domainModules.verify(
+            extraTypes =
+                listOf(
+                    EpisodeRepository::class,
+                ),
+        )
     }
 
     @Test
@@ -29,8 +35,8 @@ class KoinModulesTest : KoinTest {
             extraTypes =
                 listOf(
                     Set::class,
+                    GetEpisodesUseCase::class,
                     CharacterRepository::class,
-                    EpisodeRepository::class,
                 ),
         )
     }

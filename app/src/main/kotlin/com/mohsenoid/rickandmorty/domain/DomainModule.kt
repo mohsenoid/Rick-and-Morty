@@ -1,5 +1,5 @@
 package com.mohsenoid.rickandmorty.domain
 
-import org.koin.dsl.module
+import com.mohsenoid.rickandmorty.domain.episodes.episodeModule
 
-val domainModules = module { }
+val domainModules = episodeModule
