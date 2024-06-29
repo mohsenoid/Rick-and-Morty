@@ -11,67 +11,63 @@ import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 internal class EpisodeRepositoryImpl(
-    val apiService: ApiService,
-    val episodeDao: EpisodeDao,
+    private val apiService: ApiService,
+    private val episodeDao: EpisodeDao,
 ) : EpisodeRepository {
     private val episodesCache: MutableMap<Int, List<Episode>> = mutableMapOf()
 
     override suspend fun getEpisodes(page: Int): Result<List<Episode>> =
         withContext(Dispatchers.IO) {
-            val getCachedEpisodesResult = getCachedEpisodes(page)
-            if (getCachedEpisodesResult.isSuccess) {
-                return@withContext getCachedEpisodesResult
-            }
-
-            val getDatabaseEpisodesResult = getDatabaseEpisodes(page)
-            if (getDatabaseEpisodesResult.isSuccess) {
-                return@withContext getDatabaseEpisodesResult
-            }
-
-            return@withContext getRemoteEpisodes(page)
+            getEpisodesFromCache(page)
+                ?: getEpisodesFromDb(page)
+                ?: getEpisodesFromRemote(page)
         }
 
-    private fun getCachedEpisodes(page: Int): Result<List<Episode>> {
-        val cachedEpisodes = episodesCache.getOrDefault(page, emptyList())
-        if (cachedEpisodes.isNotEmpty()) {
-            return Result.success(cachedEpisodes)
-        }
-
-        return Result.failure(Exception("No cached episodes"))
+    private fun getEpisodesFromCache(page: Int): Result<List<Episode>>? {
+        return episodesCache[page]?.let { Result.success(it) }
     }
 
-    private fun getDatabaseEpisodes(page: Int): Result<List<Episode>> {
-        val dbEpisodes = episodeDao.getEpisodes(page = page).map { it.toEpisode() }
-        if (dbEpisodes.isNotEmpty()) {
+    private fun getEpisodesFromDb(page: Int): Result<List<Episode>>? {
+        val dbEpisodes = episodeDao.getEpisodes(page).map { it.toEpisode() }
+        return if (dbEpisodes.isNotEmpty()) {
             cacheEpisodes(page, dbEpisodes)
-            return Result.success(dbEpisodes)
+            Result.success(dbEpisodes)
+        } else {
+            null
         }
-
-        return Result.failure(Exception("No database episodes"))
     }
 
-    private suspend fun getRemoteEpisodes(page: Int): Result<List<Episode>> {
-        val response =
-            try {
-                apiService.getEpisodes(page)
-            } catch (e: Exception) {
-                return Result.failure(NoInternetConnectionException())
+    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>> {
+        return try {
+            val response = apiService.getEpisodes(page)
+            val remoteEpisodes = response.body()?.results
+            if (response.isSuccessful && remoteEpisodes != null) {
+                handleSuccessfulRemoteResponse(page, remoteEpisodes)
+                getEpisodesFromCache(page)!! // All episodes should be cached
+            } else if (response.code() == HTTP_CODE_404 && page != 0) {
+                Result.failure(EndOfListException())
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
-        val remoteEpisodes: List<EpisodeRemoteModel>? = response.body()?.results
-        return if (response.isSuccessful && remoteEpisodes != null) {
-            val episodesEntity = remoteEpisodes.map { it.toEpisodeEntity(page) }
-            episodesEntity.forEach { episodeDao.insertEpisode(it) }
-
-            val serviceEpisodes = episodesEntity.map { it.toEpisode() }
-            cacheEpisodes(page, serviceEpisodes)
-            Result.success(serviceEpisodes)
-        } else if (response.code() == HTTP_CODE_404 && page != 0) {
-            Result.failure(EndOfListException())
-        } else {
-            Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
+        } catch (e: UnknownHostException) {
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e: SocketTimeoutException) {
+            Result.failure(NoInternetConnectionException(e.message))
         }
+    }
+
+    private fun handleSuccessfulRemoteResponse(
+        page: Int,
+        remoteEpisodes: List<EpisodeRemoteModel>,
+    ) {
+        val episodesEntity = remoteEpisodes.map { it.toEpisodeEntity(page) }
+        episodesEntity.forEach { episodeDao.insertEpisode(it) }
+        val episodes = episodesEntity.map { it.toEpisode() }
+        cacheEpisodes(page, episodes)
     }
 
     private fun cacheEpisodes(

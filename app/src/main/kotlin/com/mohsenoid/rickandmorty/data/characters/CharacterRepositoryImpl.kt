@@ -10,6 +10,7 @@ import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.SortedMap
 
@@ -21,7 +22,8 @@ internal class CharacterRepositoryImpl(
 
     override suspend fun getCharacters(charactersIds: Set<Int>): Result<Set<Character>> =
         withContext(Dispatchers.IO) {
-            getCharactersFromCache(charactersIds) ?: getCharactersFromDb(charactersIds)
+            getCharactersFromCache(charactersIds)
+                ?: getCharactersFromDb(charactersIds)
                 ?: getCharactersFromRemote(charactersIds)
         }
 
@@ -51,14 +53,14 @@ internal class CharacterRepositoryImpl(
             val remoteCharacters: List<CharacterRemoteModel>? = response.body()
             if (response.isSuccessful && remoteCharacters != null) {
                 handleSuccessfulRemoteResponse(remoteCharacters)
-                getCharactersFromCache(charactersIds)!! // Now all characters should be cached
+                getCharactersFromCache(charactersIds)!! // All characters should be cached
             } else {
                 Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
         } catch (e: UnknownHostException) {
-            Result.failure(NoInternetConnectionException())
-        } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e: SocketTimeoutException) {
+            Result.failure(NoInternetConnectionException(e.message))
         }
     }
 
@@ -75,11 +77,14 @@ internal class CharacterRepositoryImpl(
 
     override suspend fun getCharacter(characterId: Int): Result<Character> =
         withContext(Dispatchers.IO) {
-            getCharacterFromCache(characterId) ?: getCharacterFromDb(characterId)
+            getCharacterFromCache(characterId)
+                ?: getCharacterFromDb(characterId)
                 ?: getCharacterFromRemote(characterId)
         }
 
-    private fun getCharacterFromCache(characterId: Int): Result<Character>? = charactersCache[characterId]?.let { Result.success(it) }
+    private fun getCharacterFromCache(characterId: Int): Result<Character>? {
+        return charactersCache[characterId]?.let { Result.success(it) }
+    }
 
     private fun getCharacterFromDb(characterId: Int): Result<Character>? {
         val dbCharacter = characterDao.getCharacter(characterId)?.toCharacter()
@@ -103,9 +108,9 @@ internal class CharacterRepositoryImpl(
                 Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
         } catch (e: UnknownHostException) {
-            Result.failure(NoInternetConnectionException())
-        } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e: SocketTimeoutException) {
+            Result.failure(NoInternetConnectionException(e.message))
         }
     }
 

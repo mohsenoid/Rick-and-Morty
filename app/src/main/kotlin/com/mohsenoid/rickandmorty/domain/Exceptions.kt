@@ -1,5 +1,5 @@
 package com.mohsenoid.rickandmorty.domain
 
-class NoInternetConnectionException : Exception("No Internet Connection")
+class NoInternetConnectionException(message: String?) : Exception(message)
 
 class EndOfListException : Exception("End of list")

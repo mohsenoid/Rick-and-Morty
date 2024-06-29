@@ -12,6 +12,8 @@ complexity:
     threshold: 80
   TooManyFunctions:
     ignoreAnnotatedFunctions: [ 'Preview' ]
+    thresholdInClasses: 15
+
 
 style:
   MagicNumber:
