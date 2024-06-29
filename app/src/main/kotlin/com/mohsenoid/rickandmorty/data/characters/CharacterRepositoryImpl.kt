@@ -5,11 +5,12 @@ import com.mohsenoid.rickandmorty.data.characters.mapper.CharacterMapper.toChara
 import com.mohsenoid.rickandmorty.data.characters.mapper.CharacterMapper.toCharacterEntity
 import com.mohsenoid.rickandmorty.data.remote.ApiService
 import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
+import com.mohsenoid.rickandmorty.domain.NoInternetConnectionException
 import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.UnknownHostException
 import java.util.SortedMap
 
 internal class CharacterRepositoryImpl(
@@ -18,128 +19,115 @@ internal class CharacterRepositoryImpl(
 ) : CharacterRepository {
     private val charactersCache: SortedMap<Int, Character> = sortedMapOf()
 
-    override suspend fun getCharacters(charactersIds: Set<Int>): RepositoryGetResult<Set<Character>> =
+    override suspend fun getCharacters(charactersIds: Set<Int>): Result<Set<Character>> =
         withContext(Dispatchers.IO) {
-            val getCachedCharactersResult = getCachedCharacters(charactersIds)
-            if (getCachedCharactersResult is RepositoryGetResult.Success) {
-                return@withContext getCachedCharactersResult
-            }
-
-            val getDbCharactersResult = getDbCharacters(charactersIds)
-            if (getDbCharactersResult is RepositoryGetResult.Success) {
-                return@withContext getDbCharactersResult
-            }
-
-            return@withContext getRemoteCharacters(charactersIds)
+            getCharactersFromCache(charactersIds) ?: getCharactersFromDb(charactersIds)
+                ?: getCharactersFromRemote(charactersIds)
         }
 
-    private fun getCachedCharacters(charactersIds: Set<Int>): RepositoryGetResult<Set<Character>> {
-        if (charactersCache.keys.containsAll(charactersIds)) {
-            return RepositoryGetResult.Success(charactersCache.filterKeys { it in charactersIds }.values.toSet())
+    private fun getCharactersFromCache(charactersIds: Set<Int>): Result<Set<Character>>? {
+        return if (charactersCache.keys.containsAll(charactersIds)) {
+            Result.success(charactersCache.filterKeys { it in charactersIds }.values.toSet())
+        } else {
+            null
         }
-
-        return RepositoryGetResult.Failure.Unknown("Not all characters are cached")
     }
 
-    private fun getDbCharacters(charactersIds: Set<Int>): RepositoryGetResult<Set<Character>> {
-        val pendingCharactersIds = charactersIds - charactersCache.keys
+    private fun getCharactersFromDb(charactersIds: Set<Int>): Result<Set<Character>>? {
+        val missingCharactersIds = charactersIds - charactersCache.keys
 
-        val dbCharacters = characterDao.getCharacters(pendingCharactersIds).map { it.toCharacter() }
+        val dbCharacters = characterDao.getCharacters(missingCharactersIds).map { it.toCharacter() }
         cacheCharacters(dbCharacters)
 
-        return getCachedCharacters(charactersIds)
+        return getCharactersFromCache(charactersIds)
     }
 
-    private suspend fun getRemoteCharacters(charactersIds: Set<Int>): RepositoryGetResult<Set<Character>> {
-        val pendingCharactersIds = charactersIds - charactersCache.keys
+    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<Set<Character>> {
+        val missingCharactersIds = charactersIds - charactersCache.keys
+        val missingCharactersIdsString = missingCharactersIds.joinToString(",")
 
-        val pendingCharactersIdsString = pendingCharactersIds.joinToString(",")
-        val response =
-            runCatching { apiService.getCharacters(pendingCharactersIdsString) }.getOrNull()
-                ?: return RepositoryGetResult.Failure.NoConnection("Connection Error!")
-        val remoteCharacters: List<CharacterRemoteModel>? = response.body()
-        return if (response.isSuccessful && remoteCharacters != null) {
-            val charactersEntity = remoteCharacters.map { it.toCharacterEntity() }
-            charactersEntity.forEach { characterDao.insertCharacter(it) }
-            val characters = charactersEntity.map { it.toCharacter() }
-            cacheCharacters(characters)
-            getCachedCharacters(charactersIds)
-        } else {
-            RepositoryGetResult.Failure.Unknown(
-                response.message().ifEmpty { "Unknown Error" },
-            )
+        return try {
+            val response = apiService.getCharacters(missingCharactersIdsString)
+            val remoteCharacters: List<CharacterRemoteModel>? = response.body()
+            if (response.isSuccessful && remoteCharacters != null) {
+                handleSuccessfulRemoteResponse(remoteCharacters)
+                getCharactersFromCache(charactersIds)!! // Now all characters should be cached
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(NoInternetConnectionException())
+        } catch (e: Exception) {
+            Result.failure(e)
         }
+    }
+
+    private fun handleSuccessfulRemoteResponse(remoteCharacters: List<CharacterRemoteModel>) {
+        val charactersEntity = remoteCharacters.map { it.toCharacterEntity() }
+        charactersEntity.forEach { characterDao.insertCharacter(it) }
+        val characters = charactersEntity.map { it.toCharacter() }
+        cacheCharacters(characters)
     }
 
     private fun cacheCharacters(dbCharacters: List<Character>) {
         charactersCache.putAll(dbCharacters.associateBy { it.id })
     }
 
-    override suspend fun getCharacter(characterId: Int): RepositoryGetResult<Character> =
+    override suspend fun getCharacter(characterId: Int): Result<Character> =
         withContext(Dispatchers.IO) {
-            val getCachedCharacterResult = getCachedCharacter(characterId)
-            if (getCachedCharacterResult is RepositoryGetResult.Success) {
-                return@withContext getCachedCharacterResult
-            }
-
-            val getDatabaseCharacterResult = getDatabaseCharacter(characterId)
-            if (getDatabaseCharacterResult is RepositoryGetResult.Success) {
-                return@withContext getDatabaseCharacterResult
-            }
-
-            val getRemoteCharacterResult = getRemoteCharacter(characterId)
-            return@withContext getRemoteCharacterResult
+            getCharacterFromCache(characterId) ?: getCharacterFromDb(characterId)
+                ?: getCharacterFromRemote(characterId)
         }
 
-    private fun getCachedCharacter(characterId: Int): RepositoryGetResult<Character> {
-        val cachedCharacter = charactersCache[characterId]
-        if (cachedCharacter != null) {
-            return RepositoryGetResult.Success(cachedCharacter)
-        }
+    private fun getCharacterFromCache(characterId: Int): Result<Character>? = charactersCache[characterId]?.let { Result.success(it) }
 
-        return RepositoryGetResult.Failure.Unknown("No cached character")
-    }
-
-    private fun getDatabaseCharacter(characterId: Int): RepositoryGetResult<Character> {
+    private fun getCharacterFromDb(characterId: Int): Result<Character>? {
         val dbCharacter = characterDao.getCharacter(characterId)?.toCharacter()
-        if (dbCharacter != null) {
-            charactersCache += dbCharacter.id to dbCharacter
-            return RepositoryGetResult.Success(dbCharacter)
+        return dbCharacter?.let {
+            charactersCache += it.id to it
+            Result.success(it)
         }
-
-        return RepositoryGetResult.Failure.Unknown("No database character")
     }
 
-    private suspend fun getRemoteCharacter(characterId: Int): RepositoryGetResult<Character> {
-        val response =
-            runCatching { apiService.getCharacter(characterId) }.getOrNull()
-                ?: return RepositoryGetResult.Failure.NoConnection("No Connection Error")
-        val remoteCharacter: CharacterRemoteModel? = response.body()
-        return if (response.isSuccessful && remoteCharacter != null) {
-            val characterEntity = remoteCharacter.toCharacterEntity()
-            characterDao.insertCharacter(characterEntity)
-            val character = characterEntity.toCharacter()
-            charactersCache += character.id to character
-            RepositoryGetResult.Success(character)
-        } else {
-            RepositoryGetResult.Failure.Unknown(response.message().ifEmpty { "Unknown Error" })
+    private suspend fun getCharacterFromRemote(characterId: Int): Result<Character> {
+        return try {
+            val response = apiService.getCharacter(characterId)
+            val remoteCharacter: CharacterRemoteModel? = response.body()
+            if (response.isSuccessful && remoteCharacter != null) {
+                val characterEntity = remoteCharacter.toCharacterEntity()
+                characterDao.insertCharacter(characterEntity)
+                val character = characterEntity.toCharacter()
+                charactersCache += character.id to character
+                Result.success(character)
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
+            }
+        } catch (e: UnknownHostException) {
+            Result.failure(NoInternetConnectionException())
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
     override suspend fun updateCharacterStatus(
         characterId: Int,
         isKilled: Boolean,
-    ): Boolean =
+    ): Result<Unit> =
         withContext(Dispatchers.IO) {
-            val updatedSuccessfully = characterDao.updateCharacterStatus(characterId, isKilled) == 1
-            if (updatedSuccessfully) {
-                charactersCache[characterId]?.run {
-                    charactersCache[characterId] = copy(isKilled = isKilled)
-                }
-
-                return@withContext true
+            if (characterDao.updateCharacterStatus(characterId, isKilled) == 1) {
+                updateCharacterInCache(characterId, isKilled)
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Unable to update character status"))
             }
-
-            return@withContext false
         }
+
+    private fun updateCharacterInCache(
+        characterId: Int,
+        isKilled: Boolean,
+    ) {
+        charactersCache[characterId]?.let {
+            charactersCache[characterId] = it.copy(isKilled = isKilled)
+        }
+    }
 }

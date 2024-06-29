@@ -1,16 +1,22 @@
 package com.mohsenoid.rickandmorty.domain.characters.usecase
 
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
+import com.mohsenoid.rickandmorty.domain.NoInternetConnectionException
 import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 
 class GetCharactersUseCase(private val characterRepository: CharacterRepository) {
     suspend operator fun invoke(charactersIds: Set<Int>): Result {
-        return when (val result = characterRepository.getCharacters(charactersIds)) {
-            is RepositoryGetResult.Success -> Result.Success(result.data)
-            is RepositoryGetResult.Failure.NoConnection -> Result.NoConnection
-            is RepositoryGetResult.Failure -> Result.Failure(result.message)
-        }
+        return characterRepository.getCharacters(charactersIds).fold(
+            onSuccess = { characters ->
+                Result.Success(characters)
+            },
+            onFailure = { exception ->
+                when (exception) {
+                    is NoInternetConnectionException -> Result.NoConnection
+                    else -> Result.Failure(exception.message ?: "Unknown Error")
+                }
+            },
+        )
     }
 
     sealed interface Result {

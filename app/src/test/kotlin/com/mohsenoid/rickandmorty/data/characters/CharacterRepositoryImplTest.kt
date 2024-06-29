@@ -222,7 +222,7 @@ class CharacterRepositoryImplTest {
             val updateResult = repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
 
             // THEN
-            assertTrue(updateResult)
+            assertTrue(updateResult.isSuccess)
             verify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
         }
 
