@@ -2,15 +2,14 @@ package com.mohsenoid.rickandmorty.ui.characters.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
+import com.mohsenoid.rickandmorty.domain.characters.usecase.GetCharactersUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CharactersViewModel(
     private val charactersIds: Set<Int>,
-    private val characterRepository: CharacterRepository,
+    private val getCharactersUseCase: GetCharactersUseCase,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CharactersUiState> =
         MutableStateFlow(CharactersUiState.Loading)
@@ -20,20 +19,16 @@ class CharactersViewModel(
         _uiState.value = CharactersUiState.Loading
 
         viewModelScope.launch {
-            when (val result = characterRepository.getCharacters(charactersIds)) {
-                is RepositoryGetResult.Success -> {
-                    _uiState.value = CharactersUiState.Success(characters = result.data)
+            when (val result = getCharactersUseCase(charactersIds)) {
+                is GetCharactersUseCase.Result.Success -> {
+                    _uiState.value = CharactersUiState.Success(characters = result.characters)
                 }
 
-                is RepositoryGetResult.Failure.EndOfList -> {
-                    _uiState.value = CharactersUiState.Error.Unknown(result.message)
-                }
-
-                is RepositoryGetResult.Failure.NoConnection -> {
+                GetCharactersUseCase.Result.NoConnection -> {
                     _uiState.value = CharactersUiState.Error.NoConnection
                 }
 
-                is RepositoryGetResult.Failure.Unknown -> {
+                is GetCharactersUseCase.Result.Failure -> {
                     _uiState.value = CharactersUiState.Error.Unknown(result.message)
                 }
             }

@@ -1,7 +1,6 @@
 package com.mohsenoid.rickandmorty.ui.characters.list
 
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
+import com.mohsenoid.rickandmorty.domain.characters.usecase.GetCharactersUseCase
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createCharactersList
 import io.mockk.coEvery
@@ -18,17 +17,17 @@ class CharactersViewModelTest {
     @get:Rule
     var rule: TestRule = MainDispatcherRule()
 
-    private lateinit var repository: CharacterRepository
+    private lateinit var getCharactersUseCase: GetCharactersUseCase
 
     private lateinit var viewModel: CharactersViewModel
 
     @Before
     fun setUp() {
-        repository = mockk()
+        getCharactersUseCase = mockk()
         viewModel =
             CharactersViewModel(
                 charactersIds = TEST_CHARACTERS_IDS,
-                characterRepository = repository,
+                getCharactersUseCase = getCharactersUseCase,
             )
     }
 
@@ -45,12 +44,12 @@ class CharactersViewModelTest {
     }
 
     @Test
-    fun `Given repository returns Success, When loadEpisodes called, Then UiState should be Success`() {
+    fun `Given GetCharactersUseCase returns Success, When loadEpisodes called, Then UiState should be Success`() {
         // GIVEN
         val characters = createCharactersList(3).toSet()
         coEvery {
-            repository.getCharacters(TEST_CHARACTERS_IDS)
-        } returns RepositoryGetResult.Success(characters)
+            getCharactersUseCase(TEST_CHARACTERS_IDS)
+        } returns GetCharactersUseCase.Result.Success(characters)
 
         // WHEN
         viewModel.loadCharacters()
@@ -62,11 +61,11 @@ class CharactersViewModelTest {
     }
 
     @Test
-    fun `Given repository returns no connection, When loadEpisodes called, Then UiState should be no connection error`() {
+    fun `Given GetCharactersUseCase returns NoConnection, When loadEpisodes called, Then UiState should be no connection error`() {
         // GIVEN
         coEvery {
-            repository.getCharacters(TEST_CHARACTERS_IDS)
-        } returns RepositoryGetResult.Failure.NoConnection("No connection")
+            getCharactersUseCase(TEST_CHARACTERS_IDS)
+        } returns GetCharactersUseCase.Result.NoConnection
 
         // WHEN
         viewModel.loadCharacters()
@@ -78,12 +77,12 @@ class CharactersViewModelTest {
     }
 
     @Test
-    fun `Given repository returns unknown error, When loadEpisodes called, Then UiState should be unknown error`() {
+    fun `Given GetCharactersUseCase returns Failure, When loadEpisodes called, Then UiState should be unknown error`() {
         // GIVEN
         val errorMessage = "Unknown error"
         coEvery {
-            repository.getCharacters(TEST_CHARACTERS_IDS)
-        } returns RepositoryGetResult.Failure.Unknown(errorMessage)
+            getCharactersUseCase(TEST_CHARACTERS_IDS)
+        } returns GetCharactersUseCase.Result.Failure(errorMessage)
 
         // WHEN
         viewModel.loadCharacters()

@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.characters.details
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,6 +75,15 @@ fun CharacterDetailsScreen(
     if (uiState !is CharacterDetailsUiState.Loading) {
         LaunchedEffect(Unit) {
             pullToRefreshState.endRefresh()
+        }
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.updateStatusError.collect { updateStatusError ->
+            if (updateStatusError) {
+                Toast.makeText(context, "Update Error!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
