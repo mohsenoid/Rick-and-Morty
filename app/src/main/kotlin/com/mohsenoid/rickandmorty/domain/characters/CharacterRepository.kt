@@ -11,5 +11,5 @@ interface CharacterRepository {
     suspend fun updateCharacterStatus(
         characterId: Int,
         isKilled: Boolean,
-    ): RepositoryGetResult<Character>
+    ): Boolean
 }

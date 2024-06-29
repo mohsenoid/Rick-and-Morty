@@ -2,16 +2,19 @@ package com.mohsenoid.rickandmorty.ui.characters.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohsenoid.rickandmorty.domain.RepositoryGetResult
-import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
+import com.mohsenoid.rickandmorty.domain.characters.usecase.GetCharacterDetailsUseCase
+import com.mohsenoid.rickandmorty.domain.characters.usecase.UpdateCharacterStatusUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(
     private val characterId: Int,
-    private val characterRepository: CharacterRepository,
+    private val getCharacterDetailsUseCase: GetCharacterDetailsUseCase,
+    private val updateCharacterStatusUseCase: UpdateCharacterStatusUseCase,
 ) : ViewModel() {
     private var character: Character? = null
 
@@ -19,42 +22,45 @@ class CharacterDetailsViewModel(
         MutableStateFlow(CharacterDetailsUiState.Loading)
     val uiState: StateFlow<CharacterDetailsUiState> by ::_uiState
 
+    private val _updateStatusError: MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val updateStatusError: Flow<Boolean> by ::_updateStatusError
+
     fun loadCharacter() {
         _uiState.value = CharacterDetailsUiState.Loading
-
-        viewModelScope.launch {
-            val result = characterRepository.getCharacter(characterId)
-            updateUiState(result)
-        }
+        getCharacterDetails()
     }
 
     fun onKillClicked() {
-        val character = character ?: return
+        val isKilled = character?.isKilled ?: return
 
         viewModelScope.launch {
-            val result =
-                characterRepository.updateCharacterStatus(characterId, !character.isKilled)
-            updateUiState(result)
+            when (updateCharacterStatusUseCase(characterId, !isKilled)) {
+                UpdateCharacterStatusUseCase.Result.Success -> {
+                    getCharacterDetails()
+                }
+
+                UpdateCharacterStatusUseCase.Result.Failure -> {
+                    _updateStatusError.emit(true)
+                }
+            }
         }
     }
 
-    private fun updateUiState(result: RepositoryGetResult<Character>) {
-        when (result) {
-            is RepositoryGetResult.Success -> {
-                character = result.data
-                _uiState.value = CharacterDetailsUiState.Success(character = result.data)
-            }
+    private fun getCharacterDetails() {
+        viewModelScope.launch {
+            when (val result = getCharacterDetailsUseCase(characterId)) {
+                is GetCharacterDetailsUseCase.Result.Success -> {
+                    character = result.character
+                    _uiState.value = CharacterDetailsUiState.Success(character = result.character)
+                }
 
-            is RepositoryGetResult.Failure.EndOfList -> {
-                _uiState.value = CharacterDetailsUiState.Error.Unknown(result.message)
-            }
+                GetCharacterDetailsUseCase.Result.NoConnection -> {
+                    _uiState.value = CharacterDetailsUiState.Error.NoConnection
+                }
 
-            is RepositoryGetResult.Failure.NoConnection -> {
-                _uiState.value = CharacterDetailsUiState.Error.NoConnection
-            }
-
-            is RepositoryGetResult.Failure.Unknown -> {
-                _uiState.value = CharacterDetailsUiState.Error.Unknown(result.message)
+                is GetCharacterDetailsUseCase.Result.Failure -> {
+                    _uiState.value = CharacterDetailsUiState.Error.Unknown(result.message)
+                }
             }
         }
     }

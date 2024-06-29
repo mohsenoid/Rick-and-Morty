@@ -129,14 +129,17 @@ internal class CharacterRepositoryImpl(
     override suspend fun updateCharacterStatus(
         characterId: Int,
         isKilled: Boolean,
-    ): RepositoryGetResult<Character> =
+    ): Boolean =
         withContext(Dispatchers.IO) {
             val updatedSuccessfully = characterDao.updateCharacterStatus(characterId, isKilled) == 1
             if (updatedSuccessfully) {
-                charactersCache.remove(characterId)
-                return@withContext getCharacter(characterId)
+                charactersCache[characterId]?.run {
+                    charactersCache[characterId] = copy(isKilled = isKilled)
+                }
+
+                return@withContext true
             }
 
-            return@withContext RepositoryGetResult.Failure.Unknown(message = "Error updating character status!")
+            return@withContext false
         }
 }

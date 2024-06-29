@@ -26,6 +26,7 @@ import retrofit2.Response
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class CharacterRepositoryImplTest {
     private lateinit var apiService: ApiService
@@ -210,28 +211,19 @@ class CharacterRepositoryImplTest {
         }
 
     @Test
-    fun `Given db has character, When updateCharacterStatus, Then return updated character`() =
+    fun `Given db has character, When updateCharacterStatus, Then return true`() =
         runTest {
             // GIVEN
-            val characterEntity: CharacterEntity =
-                createCharacterEntity(id = TEST_CHARACTER_ID, isKilled = false)
-            val expectedCharacter: Character = characterEntity.toCharacter().copy(isKilled = true)
-
             every {
                 characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true)
             } returns 1
-            every {
-                characterDao.getCharacter(TEST_CHARACTER_ID)
-            } returns characterEntity.copy(isKilled = true)
 
             // WHEN
-            val actualCharacter: Character? =
-                repository.updateCharacterStatus(TEST_CHARACTER_ID, true).getOrNull()
+            val updateResult = repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
 
             // THEN
-            assertEquals(expectedCharacter, actualCharacter)
+            assertTrue(updateResult)
             verify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
-            verify(exactly = 1) { characterDao.getCharacter(any()) }
         }
 
     @Test
@@ -250,7 +242,7 @@ class CharacterRepositoryImplTest {
             } returns characterEntity.copy(isKilled = true)
 
             // WHEN
-            repository.updateCharacterStatus(TEST_CHARACTER_ID, true).getOrNull()
+            repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
             val actualCharacter: Character? = repository.getCharacter(TEST_CHARACTER_ID).getOrNull()
 
             // THEN

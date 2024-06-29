@@ -2,6 +2,9 @@ package com.mohsenoid.rickandmorty
 
 import com.mohsenoid.rickandmorty.data.dataModules
 import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
+import com.mohsenoid.rickandmorty.domain.characters.usecase.GetCharacterDetailsUseCase
+import com.mohsenoid.rickandmorty.domain.characters.usecase.GetCharactersUseCase
+import com.mohsenoid.rickandmorty.domain.characters.usecase.UpdateCharacterStatusUseCase
 import com.mohsenoid.rickandmorty.domain.domainModules
 import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.usecase.GetEpisodesUseCase
@@ -21,10 +24,11 @@ class KoinModulesTest : KoinTest {
 
     @Test
     fun `Verify domain modules`() {
-        domainModules.verify(
+        domainModules.verifyAll(
             extraTypes =
                 listOf(
                     EpisodeRepository::class,
+                    CharacterRepository::class,
                 ),
         )
     }
@@ -36,7 +40,9 @@ class KoinModulesTest : KoinTest {
                 listOf(
                     Set::class,
                     GetEpisodesUseCase::class,
-                    CharacterRepository::class,
+                    GetCharactersUseCase::class,
+                    GetCharacterDetailsUseCase::class,
+                    UpdateCharacterStatusUseCase::class,
                 ),
         )
     }

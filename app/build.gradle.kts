@@ -135,6 +135,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.junit)
     testImplementation(libs.robolectric)
+    testImplementation(libs.turbine)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.kotlin.test)
