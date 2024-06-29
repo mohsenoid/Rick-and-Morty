@@ -7,11 +7,10 @@ class UpdateCharacterStatusUseCase(private val characterRepository: CharacterRep
         characterId: Int,
         isKilled: Boolean,
     ): Result {
-        return if (characterRepository.updateCharacterStatus(characterId, isKilled)) {
-            Result.Success
-        } else {
-            Result.Failure
-        }
+        return characterRepository.updateCharacterStatus(characterId, isKilled).fold(
+            onSuccess = { Result.Success },
+            onFailure = { Result.Failure },
+        )
     }
 
     sealed interface Result {
