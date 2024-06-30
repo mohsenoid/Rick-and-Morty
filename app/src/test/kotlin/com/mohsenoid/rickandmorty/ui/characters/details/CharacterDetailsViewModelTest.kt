@@ -68,7 +68,7 @@ class CharacterDetailsViewModelTest {
     @Test
     fun `Given GetCharacterDetailsUseCase returns no connection, When loadCharacter called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.NoConnection
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.NoInternetConnection
 
         // WHEN
         viewModel.loadCharacter()
