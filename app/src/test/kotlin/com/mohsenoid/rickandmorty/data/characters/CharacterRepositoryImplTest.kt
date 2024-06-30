@@ -119,7 +119,7 @@ class CharacterRepositoryImplTest {
             every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
 
             // WHEN
-            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: List<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
@@ -147,7 +147,7 @@ class CharacterRepositoryImplTest {
             coVerify(exactly = 0) { apiService.getCharacters(any()) }
 
             // WHEN
-            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: List<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
@@ -176,7 +176,7 @@ class CharacterRepositoryImplTest {
             coEvery { apiService.getCharacters(pendingCharactersIdsString) } returns Response.success(characterResponse)
 
             // WHEN
-            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: List<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)

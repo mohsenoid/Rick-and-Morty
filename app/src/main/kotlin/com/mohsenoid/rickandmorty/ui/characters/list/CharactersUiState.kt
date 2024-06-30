@@ -5,7 +5,7 @@ import com.mohsenoid.rickandmorty.domain.characters.model.Character
 sealed interface CharactersUiState {
     data object Loading : CharactersUiState
 
-    data class Success(val characters: Set<Character>) : CharactersUiState
+    data class Success(val characters: List<Character>) : CharactersUiState
 
     sealed interface Error : CharactersUiState {
         data object NoConnection : Error
