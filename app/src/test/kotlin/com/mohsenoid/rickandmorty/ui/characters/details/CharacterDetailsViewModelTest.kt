@@ -54,9 +54,7 @@ class CharacterDetailsViewModelTest {
     fun `Given GetCharacterDetailsUseCase returns Success, When loadCharacter called, Then UiState should be Success`() {
         // GIVEN
         val character = createCharacter(id = TEST_CHARACTER_ID)
-        coEvery {
-            getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-        } returns GetCharacterDetailsUseCase.Result.Success(character)
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.Success(character)
 
         // WHEN
         viewModel.loadCharacter()
@@ -70,9 +68,7 @@ class CharacterDetailsViewModelTest {
     @Test
     fun `Given GetCharacterDetailsUseCase returns no connection, When loadCharacter called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery {
-            getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-        } returns GetCharacterDetailsUseCase.Result.NoConnection
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.NoConnection
 
         // WHEN
         viewModel.loadCharacter()
@@ -87,9 +83,7 @@ class CharacterDetailsViewModelTest {
     fun `Given GetCharacterDetailsUseCase returns unknown error, When loadCharacter called, Then UiState should be unknown error`() {
         // GIVEN
         val errorMessage = "Unknown error"
-        coEvery {
-            getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-        } returns GetCharacterDetailsUseCase.Result.Failure(errorMessage)
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.Failure(errorMessage)
 
         // WHEN
         viewModel.loadCharacter()
@@ -104,12 +98,8 @@ class CharacterDetailsViewModelTest {
     fun `Given GetCharacterDetailsUseCase returns Success, When onKillClicked called, Then UiState should be Success`() {
         // GIVEN
         val character = createCharacter(id = TEST_CHARACTER_ID)
-        coEvery {
-            getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-        } returns GetCharacterDetailsUseCase.Result.Success(character)
-        coEvery {
-            updateCharacterStatusUseCase(TEST_CHARACTER_ID, true)
-        } returns UpdateCharacterStatusUseCase.Result.Success
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.Success(character)
+        coEvery { updateCharacterStatusUseCase(TEST_CHARACTER_ID, true) } returns UpdateCharacterStatusUseCase.Result.Success
 
         // WHEN
         viewModel.loadCharacter()
@@ -125,12 +115,8 @@ class CharacterDetailsViewModelTest {
     fun `Given UpdateCharacterStatusUseCase returns Failure, When onKillClicked called, Then UiState should still remain success`() {
         // GIVEN
         val character = createCharacter(id = TEST_CHARACTER_ID)
-        coEvery {
-            getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-        } returns GetCharacterDetailsUseCase.Result.Success(character)
-        coEvery {
-            updateCharacterStatusUseCase(TEST_CHARACTER_ID, true)
-        } returns UpdateCharacterStatusUseCase.Result.Failure
+        coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.Success(character)
+        coEvery { updateCharacterStatusUseCase(TEST_CHARACTER_ID, true) } returns UpdateCharacterStatusUseCase.Result.Failure
 
         // WHEN
         viewModel.loadCharacter()
@@ -147,12 +133,8 @@ class CharacterDetailsViewModelTest {
         runTest {
             // GIVEN
             val character = createCharacter(id = TEST_CHARACTER_ID)
-            coEvery {
-                getCharacterDetailsUseCase(TEST_CHARACTER_ID)
-            } returns GetCharacterDetailsUseCase.Result.Success(character)
-            coEvery {
-                updateCharacterStatusUseCase(TEST_CHARACTER_ID, true)
-            } returns UpdateCharacterStatusUseCase.Result.Failure
+            coEvery { getCharacterDetailsUseCase(TEST_CHARACTER_ID) } returns GetCharacterDetailsUseCase.Result.Success(character)
+            coEvery { updateCharacterStatusUseCase(TEST_CHARACTER_ID, true) } returns UpdateCharacterStatusUseCase.Result.Failure
 
             viewModel.updateStatusError.test {
                 // WHEN

@@ -47,9 +47,7 @@ class CharactersViewModelTest {
     fun `Given GetCharactersUseCase returns Success, When loadEpisodes called, Then UiState should be Success`() {
         // GIVEN
         val characters = createCharactersList(3).toSet()
-        coEvery {
-            getCharactersUseCase(TEST_CHARACTERS_IDS)
-        } returns GetCharactersUseCase.Result.Success(characters)
+        coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.Success(characters)
 
         // WHEN
         viewModel.loadCharacters()
@@ -63,9 +61,7 @@ class CharactersViewModelTest {
     @Test
     fun `Given GetCharactersUseCase returns NoConnection, When loadEpisodes called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery {
-            getCharactersUseCase(TEST_CHARACTERS_IDS)
-        } returns GetCharactersUseCase.Result.NoConnection
+        coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.NoConnection
 
         // WHEN
         viewModel.loadCharacters()
@@ -80,9 +76,7 @@ class CharactersViewModelTest {
     fun `Given GetCharactersUseCase returns Failure, When loadEpisodes called, Then UiState should be unknown error`() {
         // GIVEN
         val errorMessage = "Unknown error"
-        coEvery {
-            getCharactersUseCase(TEST_CHARACTERS_IDS)
-        } returns GetCharactersUseCase.Result.Failure(errorMessage)
+        coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.Failure(errorMessage)
 
         // WHEN
         viewModel.loadCharacters()

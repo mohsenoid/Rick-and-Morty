@@ -52,9 +52,7 @@ class CharacterRepositoryImplTest {
             // GIVEN
             val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID)
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every {
-                characterDao.getCharacter(TEST_CHARACTER_ID)
-            } returns characterEntity
+            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
 
             // WHEN
             val actualCharacter: Character? = repository.getCharacter(TEST_CHARACTER_ID).getOrNull()
@@ -71,9 +69,7 @@ class CharacterRepositoryImplTest {
             // GIVEN
             val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID)
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every {
-                characterDao.getCharacter(TEST_CHARACTER_ID)
-            } returns characterEntity
+            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
 
             // WHEN
             repository.getCharacter(TEST_CHARACTER_ID)
@@ -93,19 +89,12 @@ class CharacterRepositoryImplTest {
     fun `Given db don't have character, When getCharacter, Then return remote character`() =
         runTest {
             // GIVEN
-            val characterRemoteModel: CharacterRemoteModel =
-                createCharacterRemoteModel(id = TEST_CHARACTER_ID)
+            val characterRemoteModel: CharacterRemoteModel = createCharacterRemoteModel(id = TEST_CHARACTER_ID)
             val characterEntity: CharacterEntity = characterRemoteModel.toCharacterEntity()
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every {
-                characterDao.getCharacter(TEST_CHARACTER_ID)
-            } returns null
-            every {
-                characterDao.insertCharacter(characterEntity)
-            } just runs
-            coEvery {
-                apiService.getCharacter(TEST_CHARACTER_ID)
-            } returns Response.success(characterRemoteModel)
+            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns null
+            every { characterDao.insertCharacter(characterEntity) } just runs
+            coEvery { apiService.getCharacter(TEST_CHARACTER_ID) } returns Response.success(characterRemoteModel)
 
             // WHEN
             val actualCharacter: Character? = repository.getCharacter(TEST_CHARACTER_ID).getOrNull()
@@ -127,13 +116,10 @@ class CharacterRepositoryImplTest {
                     id = { TEST_CHARACTERS_IDS[it] },
                 )
             val expectedCharacters: List<Character> = characterEntities.map { it.toCharacter() }
-            every {
-                characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet())
-            } returns characterEntities
+            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
 
             // WHEN
-            val actualCharacters: Set<Character>? =
-                repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
@@ -151,9 +137,7 @@ class CharacterRepositoryImplTest {
                     id = { TEST_CHARACTERS_IDS[it] },
                 )
             val expectedCharacters: List<Character> = characterEntities.map { it.toCharacter() }
-            every {
-                characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet())
-            } returns characterEntities
+            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
 
             // WHEN
             repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
@@ -163,8 +147,7 @@ class CharacterRepositoryImplTest {
             coVerify(exactly = 0) { apiService.getCharacters(any()) }
 
             // WHEN
-            val actualCharacters: Set<Character>? =
-                repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
@@ -179,29 +162,21 @@ class CharacterRepositoryImplTest {
                     count = TEST_CHARACTERS_SIZE,
                     id = { TEST_CHARACTERS_IDS[it] },
                 )
-            val characterEntities: List<CharacterEntity> =
-                charactersRemoteModel.map { it.toCharacterEntity() }
+            val characterEntities: List<CharacterEntity> = charactersRemoteModel.map { it.toCharacterEntity() }
             val expectedCharacters: List<Character> = characterEntities.map { it.toCharacter() }
 
             val characterResponse = createCharactersResponse(characters = charactersRemoteModel)
             val dbCharacters = listOf(characterEntities[0])
-            every {
-                characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet())
-            } returns dbCharacters
+            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns dbCharacters
             characterEntities.forEach { characterEntity ->
-                every {
-                    characterDao.insertCharacter(characterEntity)
-                } just runs
+                every { characterDao.insertCharacter(characterEntity) } just runs
             }
             val pendingCharactersIds = TEST_CHARACTERS_IDS - dbCharacters.map { it.id }.toSet()
             val pendingCharactersIdsString = pendingCharactersIds.joinToString(",")
-            coEvery {
-                apiService.getCharacters(pendingCharactersIdsString)
-            } returns Response.success(characterResponse)
+            coEvery { apiService.getCharacters(pendingCharactersIdsString) } returns Response.success(characterResponse)
 
             // WHEN
-            val actualCharacters: Set<Character>? =
-                repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
+            val actualCharacters: Set<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
@@ -214,9 +189,7 @@ class CharacterRepositoryImplTest {
     fun `Given db has character, When updateCharacterStatus, Then return true`() =
         runTest {
             // GIVEN
-            every {
-                characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true)
-            } returns 1
+            every { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
 
             // WHEN
             val updateResult = repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
@@ -230,16 +203,11 @@ class CharacterRepositoryImplTest {
     fun `Given db has character, When updateCharacterStatus, Then second call return updated character from cache`() =
         runTest {
             // GIVEN
-            val characterEntity: CharacterEntity =
-                createCharacterEntity(id = TEST_CHARACTER_ID, isKilled = false)
+            val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID, isKilled = false)
             val expectedCharacter: Character = characterEntity.toCharacter().copy(isKilled = true)
 
-            every {
-                characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true)
-            } returns 1
-            every {
-                characterDao.getCharacter(TEST_CHARACTER_ID)
-            } returns characterEntity.copy(isKilled = true)
+            every { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
+            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity.copy(isKilled = true)
 
             // WHEN
             repository.updateCharacterStatus(TEST_CHARACTER_ID, true)

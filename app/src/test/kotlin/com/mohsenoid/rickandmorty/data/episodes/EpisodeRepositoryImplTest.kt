@@ -48,9 +48,7 @@ class EpisodeRepositoryImplTest {
             // GIVEN
             val episodeEntities: List<EpisodeEntity> = createEpisodesEntityList(TEST_EPISODES_SIZE)
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
-            every {
-                episodeDao.getEpisodes(TEST_PAGE)
-            } returns episodeEntities
+            every { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
 
             // WHEN
             val actualEpisodes: List<Episode>? = repository.getEpisodes(TEST_PAGE).getOrNull()
@@ -67,9 +65,7 @@ class EpisodeRepositoryImplTest {
             // GIVEN
             val episodeEntities: List<EpisodeEntity> = createEpisodesEntityList(TEST_EPISODES_SIZE)
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
-            every {
-                episodeDao.getEpisodes(TEST_PAGE)
-            } returns episodeEntities
+            every { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
 
             // WHEN
             repository.getEpisodes(TEST_PAGE).getOrNull()
@@ -95,17 +91,11 @@ class EpisodeRepositoryImplTest {
                 episodesRemoteModel.map { it.toEpisodeEntity(TEST_PAGE) }
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
             val episodeResponse = createEpisodeResponse(results = episodesRemoteModel)
-            every {
-                episodeDao.getEpisodes(TEST_PAGE)
-            } returns emptyList()
+            every { episodeDao.getEpisodes(TEST_PAGE) } returns emptyList()
             episodeEntities.forEach { episodeEntity ->
-                every {
-                    episodeDao.insertEpisode(episodeEntity)
-                } just runs
+                every { episodeDao.insertEpisode(episodeEntity) } just runs
             }
-            coEvery {
-                apiService.getEpisodes(TEST_PAGE)
-            } returns Response.success(episodeResponse)
+            coEvery { apiService.getEpisodes(TEST_PAGE) } returns Response.success(episodeResponse)
 
             // WHEN
             val actualEpisodes: List<Episode>? = repository.getEpisodes(TEST_PAGE).getOrNull()

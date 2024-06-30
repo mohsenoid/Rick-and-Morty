@@ -12,7 +12,7 @@ class GetEpisodesUseCase(private val episodeRepository: EpisodeRepository) {
             onFailure = { exception ->
                 when (exception) {
                     is EndOfListException -> Result.EndOfList
-                    is NoInternetConnectionException -> Result.NoConnection
+                    is NoInternetConnectionException -> Result.NoInternetConnection
                     else -> Result.Failure(exception.message ?: "Unknown Error")
                 }
             },
@@ -24,7 +24,7 @@ class GetEpisodesUseCase(private val episodeRepository: EpisodeRepository) {
 
         data object EndOfList : Result
 
-        data object NoConnection : Result
+        data object NoInternetConnection : Result
 
         data class Failure(val message: String) : Result
     }
