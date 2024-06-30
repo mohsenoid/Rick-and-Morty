@@ -131,7 +131,7 @@ fun CharactersScreen(
 fun CharactersList(
     modifier: Modifier = Modifier,
     onCharacterClicked: (Character) -> Unit = {},
-    characters: Set<Character>,
+    characters: List<Character>,
 ) {
     LazyColumn(
         modifier
@@ -258,7 +258,7 @@ fun CharactersListPreview() {
     RickAndMortyTheme {
         CharactersList(
             characters =
-                setOf(
+                listOf(
                     Character(
                         id = 1,
                         name = "Rick Sanchez",

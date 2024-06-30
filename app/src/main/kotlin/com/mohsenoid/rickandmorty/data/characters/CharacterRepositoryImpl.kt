@@ -20,22 +20,22 @@ internal class CharacterRepositoryImpl(
 ) : CharacterRepository {
     private val charactersCache: SortedMap<Int, Character> = sortedMapOf()
 
-    override suspend fun getCharacters(charactersIds: Set<Int>): Result<Set<Character>> =
+    override suspend fun getCharacters(charactersIds: Set<Int>): Result<List<Character>> =
         withContext(Dispatchers.IO) {
             getCharactersFromCache(charactersIds)
                 ?: getCharactersFromDb(charactersIds)
                 ?: getCharactersFromRemote(charactersIds)
         }
 
-    private fun getCharactersFromCache(charactersIds: Set<Int>): Result<Set<Character>>? {
+    private fun getCharactersFromCache(charactersIds: Set<Int>): Result<List<Character>>? {
         return if (charactersCache.keys.containsAll(charactersIds)) {
-            Result.success(charactersCache.filterKeys { it in charactersIds }.values.toSet())
+            Result.success(charactersCache.filterKeys { it in charactersIds }.values.toList())
         } else {
             null
         }
     }
 
-    private fun getCharactersFromDb(charactersIds: Set<Int>): Result<Set<Character>>? {
+    private fun getCharactersFromDb(charactersIds: Set<Int>): Result<List<Character>>? {
         val missingCharactersIds = charactersIds - charactersCache.keys
 
         val dbCharacters = characterDao.getCharacters(missingCharactersIds).map { it.toCharacter() }
@@ -44,7 +44,7 @@ internal class CharacterRepositoryImpl(
         return getCharactersFromCache(charactersIds)
     }
 
-    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<Set<Character>> {
+    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<List<Character>> {
         val missingCharactersIds = charactersIds - charactersCache.keys
         val missingCharactersIdsString = missingCharactersIds.joinToString(",")
 

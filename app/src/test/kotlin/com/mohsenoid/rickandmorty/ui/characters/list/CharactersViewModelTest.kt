@@ -46,7 +46,7 @@ class CharactersViewModelTest {
     @Test
     fun `Given GetCharactersUseCase returns Success, When loadEpisodes called, Then UiState should be Success`() {
         // GIVEN
-        val characters = createCharactersList(3).toSet()
+        val characters = createCharactersList(TEST_CHARACTERS_SIZE)
         coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.Success(characters)
 
         // WHEN
@@ -61,7 +61,7 @@ class CharactersViewModelTest {
     @Test
     fun `Given GetCharactersUseCase returns NoConnection, When loadEpisodes called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.NoConnection
+        coEvery { getCharactersUseCase(TEST_CHARACTERS_IDS) } returns GetCharactersUseCase.Result.NoInternetConnection
 
         // WHEN
         viewModel.loadCharacters()
@@ -89,5 +89,6 @@ class CharactersViewModelTest {
 
     companion object {
         private val TEST_CHARACTERS_IDS: Set<Int> = setOf(1, 2, 3)
+        private val TEST_CHARACTERS_SIZE = TEST_CHARACTERS_IDS.size
     }
 }

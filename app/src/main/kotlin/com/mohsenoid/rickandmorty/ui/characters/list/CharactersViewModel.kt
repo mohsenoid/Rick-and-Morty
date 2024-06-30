@@ -24,7 +24,7 @@ class CharactersViewModel(
                     _uiState.value = CharactersUiState.Success(characters = result.characters)
                 }
 
-                GetCharactersUseCase.Result.NoConnection -> {
+                GetCharactersUseCase.Result.NoInternetConnection -> {
                     _uiState.value = CharactersUiState.Error.NoConnection
                 }
 

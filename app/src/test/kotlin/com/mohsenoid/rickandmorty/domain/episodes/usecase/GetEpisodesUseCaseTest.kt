@@ -27,16 +27,15 @@ class GetEpisodesUseCaseTest {
     fun `Given repository returns success, When use case is invoked, Then result is success`() =
         runTest {
             // GIVEN
-            val page = 0
-            val expectedEpisodes = createEpisodesList(3)
-            coEvery { episodeRepository.getEpisodes(page) } returns Result.success(expectedEpisodes)
+            val expectedEpisodes = createEpisodesList(TEST_EPISODES_SIZE)
+            coEvery { episodeRepository.getEpisodes(TEST_PAGE) } returns Result.success(expectedEpisodes)
             val expectedResult = GetEpisodesUseCase.Result.Success(expectedEpisodes)
 
             // WHEN
-            val actualResult = useCase(page)
+            val actualResult = useCase(TEST_PAGE)
 
             // THEN
-            coVerify(exactly = 1) { episodeRepository.getEpisodes(page) }
+            coVerify(exactly = 1) { episodeRepository.getEpisodes(TEST_PAGE) }
             assertEquals(expectedResult, actualResult)
         }
 
@@ -44,15 +43,14 @@ class GetEpisodesUseCaseTest {
     fun `Given repository returns failure caused by EndOfListException, When use case is invoked, Then result is EndOfList`() =
         runTest {
             // GIVEN
-            val page = 0
-            coEvery { episodeRepository.getEpisodes(page) } returns Result.failure(EndOfListException())
+            coEvery { episodeRepository.getEpisodes(TEST_PAGE) } returns Result.failure(EndOfListException())
             val expectedResult = GetEpisodesUseCase.Result.EndOfList
 
             // WHEN
-            val actualResult = useCase(page)
+            val actualResult = useCase(TEST_PAGE)
 
             // THEN
-            coVerify(exactly = 1) { episodeRepository.getEpisodes(page) }
+            coVerify(exactly = 1) { episodeRepository.getEpisodes(TEST_PAGE) }
             assertEquals(expectedResult, actualResult)
         }
 
@@ -60,15 +58,14 @@ class GetEpisodesUseCaseTest {
     fun `Given repository returns failure caused by NoInternetConnectionException, When use case is invoked, Then result is NoInternetConnection`() =
         runTest {
             // GIVEN
-            val page = 0
-            coEvery { episodeRepository.getEpisodes(page) } returns Result.failure(NoInternetConnectionException("No Internet Connection"))
+            coEvery { episodeRepository.getEpisodes(TEST_PAGE) } returns Result.failure(NoInternetConnectionException("No Internet Connection"))
             val expectedResult = GetEpisodesUseCase.Result.NoInternetConnection
 
             // WHEN
-            val actualResult = useCase(page)
+            val actualResult = useCase(TEST_PAGE)
 
             // THEN
-            coVerify(exactly = 1) { episodeRepository.getEpisodes(page) }
+            coVerify(exactly = 1) { episodeRepository.getEpisodes(TEST_PAGE) }
             assertEquals(expectedResult, actualResult)
         }
 
@@ -76,16 +73,20 @@ class GetEpisodesUseCaseTest {
     fun `Given repository returns failure caused by unknown Exception, When use case is invoked, Then result is Failure`() =
         runTest {
             // GIVEN
-            val page = 0
             val errorMessage = "Unknown Error"
-            coEvery { episodeRepository.getEpisodes(page) } returns Result.failure(Exception(errorMessage))
+            coEvery { episodeRepository.getEpisodes(TEST_PAGE) } returns Result.failure(Exception(errorMessage))
             val expectedResult = GetEpisodesUseCase.Result.Failure(errorMessage)
 
             // WHEN
-            val actualResult = useCase(page)
+            val actualResult = useCase(TEST_PAGE)
 
             // THEN
-            coVerify(exactly = 1) { episodeRepository.getEpisodes(page) }
+            coVerify(exactly = 1) { episodeRepository.getEpisodes(TEST_PAGE) }
             assertEquals(expectedResult, actualResult)
         }
+
+    companion object {
+        private const val TEST_PAGE = 0
+        private const val TEST_EPISODES_SIZE = 3
+    }
 }
