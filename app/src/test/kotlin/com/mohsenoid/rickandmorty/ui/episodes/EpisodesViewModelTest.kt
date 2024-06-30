@@ -74,7 +74,7 @@ class EpisodesViewModelTest {
     @Test
     fun `Given GetEpisodesUseCase returns no connection, When loadEpisodes called, Then UiState should be no connection error`() {
         // GIVEN
-        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.NoConnection
+        coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.NoInternetConnection
 
         // WHEN
         viewModel.loadEpisodes()
@@ -90,7 +90,7 @@ class EpisodesViewModelTest {
         // GIVEN
         val episodes = createEpisodesList(3)
         coEvery { getEpisodesUseCase(0) } returns GetEpisodesUseCase.Result.Success(episodes)
-        coEvery { getEpisodesUseCase(1) } returns GetEpisodesUseCase.Result.NoConnection
+        coEvery { getEpisodesUseCase(1) } returns GetEpisodesUseCase.Result.NoInternetConnection
 
         // WHEN
         viewModel.loadEpisodes()

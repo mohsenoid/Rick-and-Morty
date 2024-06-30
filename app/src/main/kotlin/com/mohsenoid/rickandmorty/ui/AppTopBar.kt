@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty
+package com.mohsenoid.rickandmorty.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.mohsenoid.rickandmorty.ui.NavRoute
+import com.mohsenoid.rickandmorty.R
 import com.mohsenoid.rickandmorty.ui.theme.RickAndMortyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -35,7 +35,7 @@ class EpisodesViewModel(
                     _uiState.value = EpisodesUiState.Error.Unknown("End of list!")
                 }
 
-                GetEpisodesUseCase.Result.NoConnection -> {
+                GetEpisodesUseCase.Result.NoInternetConnection -> {
                     _uiState.value = EpisodesUiState.Error.NoConnection
                 }
 
@@ -66,7 +66,7 @@ class EpisodesViewModel(
                         EpisodesUiState.Success(episodes = episodes, isEndOfList = true)
                     }
 
-                    GetEpisodesUseCase.Result.NoConnection -> {
+                    GetEpisodesUseCase.Result.NoInternetConnection -> {
                         EpisodesUiState.Success(episodes = episodes, isNoConnectionError = true)
                     }
 

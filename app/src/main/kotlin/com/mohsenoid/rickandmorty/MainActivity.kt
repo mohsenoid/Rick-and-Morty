@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.mohsenoid.rickandmorty.ui.AppTopBar
 import com.mohsenoid.rickandmorty.ui.NavRoute
 import com.mohsenoid.rickandmorty.ui.characters.details.CharacterDetailsScreen
 import com.mohsenoid.rickandmorty.ui.characters.list.CharactersScreen
