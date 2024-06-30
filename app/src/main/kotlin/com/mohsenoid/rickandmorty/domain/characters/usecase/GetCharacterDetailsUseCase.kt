@@ -12,7 +12,7 @@ class GetCharacterDetailsUseCase(private val characterRepository: CharacterRepos
             },
             onFailure = { exception ->
                 when (exception) {
-                    is NoInternetConnectionException -> Result.NoConnection
+                    is NoInternetConnectionException -> Result.NoInternetConnection
                     else -> Result.Failure(exception.message ?: "Unknown Error")
                 }
             },
@@ -22,7 +22,7 @@ class GetCharacterDetailsUseCase(private val characterRepository: CharacterRepos
     sealed interface Result {
         data class Success(val character: Character) : Result
 
-        data object NoConnection : Result
+        data object NoInternetConnection : Result
 
         data class Failure(val message: String) : Result
     }
