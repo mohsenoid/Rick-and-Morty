@@ -55,6 +55,7 @@ koin-test = { module = "io.insert-koin:koin-test" }
 retrofit-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp3-mockWebServer = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 

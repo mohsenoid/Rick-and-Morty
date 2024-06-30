@@ -11,6 +11,7 @@ import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -48,7 +49,7 @@ internal class EpisodeRepositoryImpl(
             if (response.isSuccessful && remoteEpisodes != null) {
                 handleSuccessfulRemoteResponse(page, remoteEpisodes)
                 getEpisodesFromCache(page)!! // All episodes should be cached
-            } else if (response.code() == HTTP_CODE_404 && page != 0) {
+            } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND && page != 0) {
                 Result.failure(EndOfListException())
             } else {
                 Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
@@ -75,9 +76,5 @@ internal class EpisodeRepositoryImpl(
         episodes: List<Episode>,
     ) {
         episodesCache[page] = episodes
-    }
-
-    companion object {
-        private const val HTTP_CODE_404 = 404
     }
 }

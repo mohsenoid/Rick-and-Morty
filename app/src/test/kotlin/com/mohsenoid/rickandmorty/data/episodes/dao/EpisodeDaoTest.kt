@@ -30,6 +30,8 @@ class EpisodeDaoTest {
 
     @Before
     fun setUp() {
+        stopKoin() // To fix KoinAppAlreadyStartedException
+
         val context: Context = ApplicationProvider.getApplicationContext()
         db = Room.inMemoryDatabaseBuilder(context, Database::class.java).build()
         episodeDao = db.episodeDao()

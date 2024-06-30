@@ -2,9 +2,11 @@ package com.mohsenoid.rickandmorty.data.remote
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.mohsenoid.rickandmorty.BASE_URL_QUALIFIER
 import com.mohsenoid.rickandmorty.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -40,7 +42,7 @@ internal val remoteModule =
         single {
             Retrofit.Builder()
                 .addConverterFactory(get())
-                .baseUrl(BuildConfig.API_BASE_URL)
+                .baseUrl(get<String>(named(BASE_URL_QUALIFIER)))
                 .client(get())
                 .build()
         }

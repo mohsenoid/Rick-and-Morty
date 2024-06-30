@@ -136,6 +136,7 @@ dependencies {
     testImplementation(libs.androidx.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.turbine)
+    testImplementation(libs.okhttp3.mockWebServer)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.kotlin.test)
