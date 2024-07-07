@@ -7,6 +7,7 @@ import com.mohsenoid.rickandmorty.data.db.Database
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createEpisodeEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -44,33 +45,35 @@ class EpisodeDaoTest {
     }
 
     @Test
-    fun `Given episodeEntity inserted, When getEpisodes called, Then result should include episodeEntity`() {
-        // Given
-        val expectedEntity = createEpisodeEntity(id = 1, page = 0)
-        val unexpectedEntity = createEpisodeEntity(id = 2, page = 1)
-        episodeDao.insertEpisode(expectedEntity)
-        episodeDao.insertEpisode(unexpectedEntity)
+    fun `Given episodeEntity inserted, When getEpisodes called, Then result should include episodeEntity`() =
+        runTest {
+            // Given
+            val expectedEntity = createEpisodeEntity(id = 1, page = 0)
+            val unexpectedEntity = createEpisodeEntity(id = 2, page = 1)
+            episodeDao.insertEpisode(expectedEntity)
+            episodeDao.insertEpisode(unexpectedEntity)
 
-        // When
-        val actualEpisodes = episodeDao.getEpisodes(page = 0)
+            // When
+            val actualEpisodes = episodeDao.getEpisodes(page = 0)
 
-        // Then
-        assertTrue(actualEpisodes.contains(expectedEntity))
-        assertFalse(actualEpisodes.contains(unexpectedEntity))
-    }
+            // Then
+            assertTrue(actualEpisodes.contains(expectedEntity))
+            assertFalse(actualEpisodes.contains(unexpectedEntity))
+        }
 
     @Test
-    fun `Given episodeEntity inserted, When getEpisode called, Then result should be episodeEntity`() {
-        // Given
-        val expectedEntity = createEpisodeEntity(id = 1, page = 0)
-        val unexpectedEntity = createEpisodeEntity(id = 2, page = 1)
-        episodeDao.insertEpisode(expectedEntity)
-        episodeDao.insertEpisode(unexpectedEntity)
+    fun `Given episodeEntity inserted, When getEpisode called, Then result should be episodeEntity`() =
+        runTest {
+            // Given
+            val expectedEntity = createEpisodeEntity(id = 1, page = 0)
+            val unexpectedEntity = createEpisodeEntity(id = 2, page = 1)
+            episodeDao.insertEpisode(expectedEntity)
+            episodeDao.insertEpisode(unexpectedEntity)
 
-        // When
-        val actualEpisode = episodeDao.getEpisode(episodeId = expectedEntity.id)
+            // When
+            val actualEpisode = episodeDao.getEpisode(episodeId = expectedEntity.id)
 
-        // Then
-        assertEquals(expectedEntity, actualEpisode)
-    }
+            // Then
+            assertEquals(expectedEntity, actualEpisode)
+        }
 }

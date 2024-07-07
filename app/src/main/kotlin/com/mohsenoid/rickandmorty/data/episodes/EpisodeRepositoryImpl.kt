@@ -32,7 +32,7 @@ internal class EpisodeRepositoryImpl(
         return episodesCache[page]?.let { Result.success(it) }
     }
 
-    private fun getEpisodesFromDb(page: Int): Result<List<Episode>>? {
+    private suspend fun getEpisodesFromDb(page: Int): Result<List<Episode>>? {
         val dbEpisodes = episodeDao.getEpisodes(page).map { it.toEpisode() }
         return if (dbEpisodes.isNotEmpty()) {
             cacheEpisodes(page, dbEpisodes)
@@ -61,7 +61,7 @@ internal class EpisodeRepositoryImpl(
         }
     }
 
-    private fun handleSuccessfulRemoteResponse(
+    private suspend fun handleSuccessfulRemoteResponse(
         page: Int,
         remoteEpisodes: List<EpisodeRemoteModel>,
     ) {

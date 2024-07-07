@@ -15,11 +15,9 @@ import com.mohsenoid.rickandmorty.util.createCharactersRemoteModelList
 import com.mohsenoid.rickandmorty.util.createCharactersResponse
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import retrofit2.Response
@@ -52,14 +50,14 @@ class CharacterRepositoryImplTest {
             // GIVEN
             val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID)
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
+            coEvery { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
 
             // WHEN
             val actualCharacter: Character? = repository.getCharacter(TEST_CHARACTER_ID).getOrNull()
 
             // THEN
             assertEquals(expectedCharacter, actualCharacter)
-            verify(exactly = 1) { characterDao.getCharacter(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacter(any()) }
             coVerify(exactly = 0) { apiService.getCharacter(any()) }
         }
 
@@ -69,13 +67,13 @@ class CharacterRepositoryImplTest {
             // GIVEN
             val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID)
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
+            coEvery { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity
 
             // WHEN
             repository.getCharacter(TEST_CHARACTER_ID)
 
             // THEN
-            verify(exactly = 1) { characterDao.getCharacter(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacter(any()) }
             coVerify(exactly = 0) { apiService.getCharacter(any()) }
 
             // WHEN
@@ -92,8 +90,8 @@ class CharacterRepositoryImplTest {
             val characterRemoteModel: CharacterRemoteModel = createCharacterRemoteModel(id = TEST_CHARACTER_ID)
             val characterEntity: CharacterEntity = characterRemoteModel.toCharacterEntity()
             val expectedCharacter: Character = characterEntity.toCharacter()
-            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns null
-            every { characterDao.insertCharacter(characterEntity) } just runs
+            coEvery { characterDao.getCharacter(TEST_CHARACTER_ID) } returns null
+            coEvery { characterDao.insertCharacter(characterEntity) } just runs
             coEvery { apiService.getCharacter(TEST_CHARACTER_ID) } returns Response.success(characterRemoteModel)
 
             // WHEN
@@ -101,7 +99,7 @@ class CharacterRepositoryImplTest {
 
             // THEN
             assertEquals(expectedCharacter, actualCharacter)
-            verify(exactly = 1) { characterDao.getCharacter(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacter(any()) }
             coVerify(exactly = 1) { apiService.getCharacter(any()) }
             coVerify(exactly = 1) { characterDao.insertCharacter(any()) }
         }
@@ -116,14 +114,14 @@ class CharacterRepositoryImplTest {
                     id = { TEST_CHARACTERS_IDS[it] },
                 )
             val expectedCharacters: List<Character> = characterEntities.map { it.toCharacter() }
-            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
+            coEvery { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
 
             // WHEN
             val actualCharacters: List<Character>? = repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
-            verify(exactly = 1) { characterDao.getCharacters(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacters(any()) }
             coVerify(exactly = 0) { apiService.getCharacters(any()) }
         }
 
@@ -137,13 +135,13 @@ class CharacterRepositoryImplTest {
                     id = { TEST_CHARACTERS_IDS[it] },
                 )
             val expectedCharacters: List<Character> = characterEntities.map { it.toCharacter() }
-            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
+            coEvery { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns characterEntities
 
             // WHEN
             repository.getCharacters(TEST_CHARACTERS_IDS.toSet()).getOrNull()
 
             // THEN
-            verify(exactly = 1) { characterDao.getCharacters(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacters(any()) }
             coVerify(exactly = 0) { apiService.getCharacters(any()) }
 
             // WHEN
@@ -167,9 +165,9 @@ class CharacterRepositoryImplTest {
 
             val characterResponse = createCharactersResponse(characters = charactersRemoteModel)
             val dbCharacters = listOf(characterEntities[0])
-            every { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns dbCharacters
+            coEvery { characterDao.getCharacters(TEST_CHARACTERS_IDS.toSet()) } returns dbCharacters
             characterEntities.forEach { characterEntity ->
-                every { characterDao.insertCharacter(characterEntity) } just runs
+                coEvery { characterDao.insertCharacter(characterEntity) } just runs
             }
             val pendingCharactersIds = TEST_CHARACTERS_IDS - dbCharacters.map { it.id }.toSet()
             val pendingCharactersIdsString = pendingCharactersIds.joinToString(",")
@@ -180,7 +178,7 @@ class CharacterRepositoryImplTest {
 
             // THEN
             assertContentEquals(expectedCharacters, actualCharacters)
-            verify(exactly = 1) { characterDao.getCharacters(any()) }
+            coVerify(exactly = 1) { characterDao.getCharacters(any()) }
             coVerify(exactly = 1) { apiService.getCharacters(any()) }
             coVerify(exactly = TEST_CHARACTERS_SIZE) { characterDao.insertCharacter(any()) }
         }
@@ -189,14 +187,14 @@ class CharacterRepositoryImplTest {
     fun `Given db has character, When updateCharacterStatus, Then return true`() =
         runTest {
             // GIVEN
-            every { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
+            coEvery { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
 
             // WHEN
             val updateResult = repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
 
             // THEN
             assertTrue(updateResult.isSuccess)
-            verify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
+            coVerify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
         }
 
     @Test
@@ -206,8 +204,8 @@ class CharacterRepositoryImplTest {
             val characterEntity: CharacterEntity = createCharacterEntity(id = TEST_CHARACTER_ID, isKilled = false)
             val expectedCharacter: Character = characterEntity.toCharacter().copy(isKilled = true)
 
-            every { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
-            every { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity.copy(isKilled = true)
+            coEvery { characterDao.updateCharacterStatus(TEST_CHARACTER_ID, true) } returns 1
+            coEvery { characterDao.getCharacter(TEST_CHARACTER_ID) } returns characterEntity.copy(isKilled = true)
 
             // WHEN
             repository.updateCharacterStatus(TEST_CHARACTER_ID, true)
@@ -215,8 +213,8 @@ class CharacterRepositoryImplTest {
 
             // THEN
             assertEquals(expectedCharacter, actualCharacter)
-            verify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
-            verify(exactly = 1) { characterDao.getCharacter(any()) }
+            coVerify(exactly = 1) { characterDao.updateCharacterStatus(any(), any()) }
+            coVerify(exactly = 1) { characterDao.getCharacter(any()) }
         }
 
     companion object {
