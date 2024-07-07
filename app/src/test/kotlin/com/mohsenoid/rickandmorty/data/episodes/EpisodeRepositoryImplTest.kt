@@ -13,11 +13,9 @@ import com.mohsenoid.rickandmorty.util.createEpisodesEntityList
 import com.mohsenoid.rickandmorty.util.createEpisodesRemoteModelList
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import retrofit2.Response
@@ -48,14 +46,14 @@ class EpisodeRepositoryImplTest {
             // GIVEN
             val episodeEntities: List<EpisodeEntity> = createEpisodesEntityList(TEST_EPISODES_SIZE)
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
-            every { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
+            coEvery { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
 
             // WHEN
             val actualEpisodes: List<Episode>? = repository.getEpisodes(TEST_PAGE).getOrNull()
 
             // THEN
             assertContentEquals(expectedEpisodes, actualEpisodes)
-            verify(exactly = 1) { episodeDao.getEpisodes(any()) }
+            coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
             coVerify(exactly = 0) { apiService.getEpisodes(any()) }
         }
 
@@ -65,13 +63,13 @@ class EpisodeRepositoryImplTest {
             // GIVEN
             val episodeEntities: List<EpisodeEntity> = createEpisodesEntityList(TEST_EPISODES_SIZE)
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
-            every { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
+            coEvery { episodeDao.getEpisodes(TEST_PAGE) } returns episodeEntities
 
             // WHEN
             repository.getEpisodes(TEST_PAGE).getOrNull()
 
             // THEN
-            verify(exactly = 1) { episodeDao.getEpisodes(any()) }
+            coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
             coVerify(exactly = 0) { apiService.getEpisodes(any()) }
 
             // WHEN
@@ -91,9 +89,9 @@ class EpisodeRepositoryImplTest {
                 episodesRemoteModel.map { it.toEpisodeEntity(TEST_PAGE) }
             val expectedEpisodes: List<Episode> = episodeEntities.map { it.toEpisode() }
             val episodeResponse = createEpisodeResponse(results = episodesRemoteModel)
-            every { episodeDao.getEpisodes(TEST_PAGE) } returns emptyList()
+            coEvery { episodeDao.getEpisodes(TEST_PAGE) } returns emptyList()
             episodeEntities.forEach { episodeEntity ->
-                every { episodeDao.insertEpisode(episodeEntity) } just runs
+                coEvery { episodeDao.insertEpisode(episodeEntity) } just runs
             }
             coEvery { apiService.getEpisodes(TEST_PAGE) } returns Response.success(episodeResponse)
 
@@ -102,7 +100,7 @@ class EpisodeRepositoryImplTest {
 
             // THEN
             assertContentEquals(expectedEpisodes, actualEpisodes)
-            verify(exactly = 1) { episodeDao.getEpisodes(any()) }
+            coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
             coVerify(exactly = 1) { apiService.getEpisodes(any()) }
             coVerify(exactly = TEST_EPISODES_SIZE) { episodeDao.insertEpisode(any()) }
         }

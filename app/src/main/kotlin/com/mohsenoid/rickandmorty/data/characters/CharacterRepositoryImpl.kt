@@ -35,7 +35,7 @@ internal class CharacterRepositoryImpl(
         }
     }
 
-    private fun getCharactersFromDb(charactersIds: Set<Int>): Result<List<Character>>? {
+    private suspend fun getCharactersFromDb(charactersIds: Set<Int>): Result<List<Character>>? {
         val missingCharactersIds = charactersIds - charactersCache.keys
 
         val dbCharacters = characterDao.getCharacters(missingCharactersIds).map { it.toCharacter() }
@@ -64,7 +64,7 @@ internal class CharacterRepositoryImpl(
         }
     }
 
-    private fun handleSuccessfulRemoteResponse(remoteCharacters: List<CharacterRemoteModel>) {
+    private suspend fun handleSuccessfulRemoteResponse(remoteCharacters: List<CharacterRemoteModel>) {
         val charactersEntity = remoteCharacters.map { it.toCharacterEntity() }
         charactersEntity.forEach { characterDao.insertCharacter(it) }
         val characters = charactersEntity.map { it.toCharacter() }
@@ -86,7 +86,7 @@ internal class CharacterRepositoryImpl(
         return charactersCache[characterId]?.let { Result.success(it) }
     }
 
-    private fun getCharacterFromDb(characterId: Int): Result<Character>? {
+    private suspend fun getCharacterFromDb(characterId: Int): Result<Character>? {
         val dbCharacter = characterDao.getCharacter(characterId)?.toCharacter()
         return dbCharacter?.let {
             charactersCache += it.id to it

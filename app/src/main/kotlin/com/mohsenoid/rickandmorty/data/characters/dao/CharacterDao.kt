@@ -9,16 +9,16 @@ import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
 @Dao
 internal interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacter(character: CharacterEntity)
+    suspend fun insertCharacter(character: CharacterEntity)
 
     @Query("SELECT * FROM characters WHERE id IN (:characterIds)")
-    fun getCharacters(characterIds: Set<Int>): List<CharacterEntity>
+    suspend fun getCharacters(characterIds: Set<Int>): List<CharacterEntity>
 
     @Query("SELECT * FROM characters WHERE id = :characterId")
-    fun getCharacter(characterId: Int): CharacterEntity?
+    suspend fun getCharacter(characterId: Int): CharacterEntity?
 
     @Query("UPDATE characters SET is_killed = :isKilled WHERE id = :characterId")
-    fun updateCharacterStatus(
+    suspend fun updateCharacterStatus(
         characterId: Int,
         isKilled: Boolean,
     ): Int
