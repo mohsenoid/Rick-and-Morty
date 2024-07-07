@@ -2,10 +2,10 @@ package com.mohsenoid.rickandmorty.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.mohsenoid.rickandmorty.data.characters.dao.CharacterDao
-import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodeDao
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.characters.db.dao.CharacterDao
+import com.mohsenoid.rickandmorty.data.characters.db.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.data.episodes.db.dao.EpisodeDao
+import com.mohsenoid.rickandmorty.data.episodes.db.entity.EpisodeEntity
 
 @Database(
     entities = [EpisodeEntity::class, CharacterEntity::class],

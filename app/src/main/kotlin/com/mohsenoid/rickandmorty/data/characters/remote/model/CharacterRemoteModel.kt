@@ -1,4 +1,4 @@
-package com.mohsenoid.rickandmorty.data.remote.model
+package com.mohsenoid.rickandmorty.data.characters.remote.model
 
 import com.google.gson.annotations.SerializedName
 

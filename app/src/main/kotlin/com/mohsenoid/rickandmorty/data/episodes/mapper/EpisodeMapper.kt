@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.data.episodes.mapper
 
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
+import com.mohsenoid.rickandmorty.data.episodes.db.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.EpisodeRemoteModel
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 
 internal object EpisodeMapper {

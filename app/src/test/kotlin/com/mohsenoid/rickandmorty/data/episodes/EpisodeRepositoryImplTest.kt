@@ -1,11 +1,11 @@
 package com.mohsenoid.rickandmorty.data.episodes
 
-import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodeDao
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.episodes.db.dao.EpisodeDao
+import com.mohsenoid.rickandmorty.data.episodes.db.entity.EpisodeEntity
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisode
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEntity
-import com.mohsenoid.rickandmorty.data.remote.ApiService
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
+import com.mohsenoid.rickandmorty.data.episodes.remote.EpisodeApiService
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.EpisodeRemoteModel
 import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import com.mohsenoid.rickandmorty.util.createEpisodeResponse
@@ -23,19 +23,19 @@ import kotlin.test.Test
 import kotlin.test.assertContentEquals
 
 class EpisodeRepositoryImplTest {
-    private lateinit var apiService: ApiService
+    private lateinit var episodeApiService: EpisodeApiService
     private lateinit var episodeDao: EpisodeDao
 
     private lateinit var repository: EpisodeRepository
 
     @Before
     fun setUp() {
-        apiService = mockk()
+        episodeApiService = mockk()
         episodeDao = mockk()
 
         repository =
             EpisodeRepositoryImpl(
-                apiService = apiService,
+                episodeApiService = episodeApiService,
                 episodeDao = episodeDao,
             )
     }
@@ -54,7 +54,7 @@ class EpisodeRepositoryImplTest {
             // THEN
             assertContentEquals(expectedEpisodes, actualEpisodes)
             coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
-            coVerify(exactly = 0) { apiService.getEpisodes(any()) }
+            coVerify(exactly = 0) { episodeApiService.getEpisodes(any()) }
         }
 
     @Test
@@ -70,7 +70,7 @@ class EpisodeRepositoryImplTest {
 
             // THEN
             coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
-            coVerify(exactly = 0) { apiService.getEpisodes(any()) }
+            coVerify(exactly = 0) { episodeApiService.getEpisodes(any()) }
 
             // WHEN
             val actualEpisodes: List<Episode>? = repository.getEpisodes(TEST_PAGE).getOrNull()
@@ -93,7 +93,7 @@ class EpisodeRepositoryImplTest {
             episodeEntities.forEach { episodeEntity ->
                 coEvery { episodeDao.insertEpisode(episodeEntity) } just runs
             }
-            coEvery { apiService.getEpisodes(TEST_PAGE) } returns Response.success(episodeResponse)
+            coEvery { episodeApiService.getEpisodes(TEST_PAGE) } returns Response.success(episodeResponse)
 
             // WHEN
             val actualEpisodes: List<Episode>? = repository.getEpisodes(TEST_PAGE).getOrNull()
@@ -101,7 +101,7 @@ class EpisodeRepositoryImplTest {
             // THEN
             assertContentEquals(expectedEpisodes, actualEpisodes)
             coVerify(exactly = 1) { episodeDao.getEpisodes(any()) }
-            coVerify(exactly = 1) { apiService.getEpisodes(any()) }
+            coVerify(exactly = 1) { episodeApiService.getEpisodes(any()) }
             coVerify(exactly = TEST_EPISODES_SIZE) { episodeDao.insertEpisode(any()) }
         }
 

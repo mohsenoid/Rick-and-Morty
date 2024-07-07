@@ -1,54 +1,25 @@
 package com.mohsenoid.rickandmorty.data.remote
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.mohsenoid.rickandmorty.BASE_URL_QUALIFIER
-import com.mohsenoid.rickandmorty.BuildConfig
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.mohsenoid.rickandmorty.data.characters.remote.CharacterApiService
+import com.mohsenoid.rickandmorty.data.episodes.remote.EpisodeApiService
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 internal val remoteModule =
     module {
-        single<Gson> {
-            GsonBuilder().create()
+        single<Retrofit> {
+            ApiServiceProvider.getRetrofit(get(named(BASE_URL_QUALIFIER)))
         }
 
-        single<Converter.Factory> {
-            val gson: Gson = get()
-            GsonConverterFactory.create(gson)
-        }
-
-        single<OkHttpClient> {
-            val logging: HttpLoggingInterceptor =
-                HttpLoggingInterceptor().apply {
-                    level =
-                        if (BuildConfig.DEBUG) {
-                            HttpLoggingInterceptor.Level.BODY
-                        } else {
-                            HttpLoggingInterceptor.Level.NONE
-                        }
-                }
-
-            val httpClient = OkHttpClient.Builder()
-            httpClient.addInterceptor(logging)
-            httpClient.build()
-        }
-
-        single {
-            Retrofit.Builder()
-                .addConverterFactory(get())
-                .baseUrl(get<String>(named(BASE_URL_QUALIFIER)))
-                .client(get())
-                .build()
-        }
-
-        single {
+        single<CharacterApiService> {
             val retrofit: Retrofit = get()
-            retrofit.create(ApiService::class.java)
+            retrofit.create(CharacterApiService::class.java)
+        }
+
+        single<EpisodeApiService> {
+            val retrofit: Retrofit = get()
+            retrofit.create(EpisodeApiService::class.java)
         }
     }

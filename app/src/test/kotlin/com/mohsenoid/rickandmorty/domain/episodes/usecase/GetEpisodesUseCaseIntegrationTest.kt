@@ -79,7 +79,7 @@ class GetEpisodesUseCaseIntegrationTest : KoinTest {
         server =
             MockWebServer().apply {
                 dispatcher = mockDispatcher
-                start()
+                start(8080)
             }
 
         val baseUrl = server.url("/").toString()

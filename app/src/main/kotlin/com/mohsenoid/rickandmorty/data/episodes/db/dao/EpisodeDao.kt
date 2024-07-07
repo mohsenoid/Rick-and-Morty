@@ -1,10 +1,10 @@
-package com.mohsenoid.rickandmorty.data.episodes.dao
+package com.mohsenoid.rickandmorty.data.episodes.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.episodes.db.entity.EpisodeEntity
 
 @Dao
 internal interface EpisodeDao {

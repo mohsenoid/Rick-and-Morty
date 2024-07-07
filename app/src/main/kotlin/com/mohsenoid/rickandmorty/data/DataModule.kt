@@ -12,14 +12,14 @@ private val dataModule =
     module {
         single<EpisodeRepository> {
             EpisodeRepositoryImpl(
-                apiService = get(),
+                episodeApiService = get(),
                 episodeDao = get(),
             )
         }
 
         single<CharacterRepository> {
             CharacterRepositoryImpl(
-                apiService = get(),
+                characterApiService = get(),
                 characterDao = get(),
             )
         }

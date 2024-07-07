@@ -3,6 +3,7 @@ package com.mohsenoid.rickandmorty.data.characters.dao
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.mohsenoid.rickandmorty.data.characters.db.dao.CharacterDao
 import com.mohsenoid.rickandmorty.data.db.Database
 import com.mohsenoid.rickandmorty.util.MainDispatcherRule
 import com.mohsenoid.rickandmorty.util.createCharacterEntity
