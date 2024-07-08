@@ -99,4 +99,11 @@ class CharacterDaoTest {
             assertTrue(actualEpisodes.contains(expectedEntity))
             assertFalse(actualEpisodes.contains(unexpectedEntity))
         }
+
+    @Test
+    fun testFunction() {
+        val hello = "Hello"
+        val world = "world!"
+        assert(hello.length == world.substring(1, 4).length) { "Incorrect length" }
+    }
 }
