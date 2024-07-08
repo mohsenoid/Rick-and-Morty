@@ -1,10 +1,10 @@
 package com.mohsenoid.rickandmorty.data.episodes
 
-import com.mohsenoid.rickandmorty.data.episodes.dao.EpisodeDao
+import com.mohsenoid.rickandmorty.data.episodes.db.dao.EpisodeDao
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisode
 import com.mohsenoid.rickandmorty.data.episodes.mapper.EpisodeMapper.toEpisodeEntity
-import com.mohsenoid.rickandmorty.data.remote.ApiService
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
+import com.mohsenoid.rickandmorty.data.episodes.remote.EpisodeApiService
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.EpisodeRemoteModel
 import com.mohsenoid.rickandmorty.domain.EndOfListException
 import com.mohsenoid.rickandmorty.domain.NoInternetConnectionException
 import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
@@ -16,7 +16,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 internal class EpisodeRepositoryImpl(
-    private val apiService: ApiService,
+    private val episodeApiService: EpisodeApiService,
     private val episodeDao: EpisodeDao,
 ) : EpisodeRepository {
     private val episodesCache: MutableMap<Int, List<Episode>> = mutableMapOf()
@@ -42,24 +42,25 @@ internal class EpisodeRepositoryImpl(
         }
     }
 
-    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>> {
-        return try {
-            val response = apiService.getEpisodes(page)
-            val remoteEpisodes = response.body()?.results
-            if (response.isSuccessful && remoteEpisodes != null) {
-                handleSuccessfulRemoteResponse(page, remoteEpisodes)
-                getEpisodesFromCache(page)!! // All episodes should be cached
-            } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND && page != 0) {
-                Result.failure(EndOfListException())
-            } else {
-                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
+    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = episodeApiService.getEpisodes(page)
+                val remoteEpisodes = response.body()?.results
+                if (response.isSuccessful && remoteEpisodes != null) {
+                    handleSuccessfulRemoteResponse(page, remoteEpisodes)
+                    getEpisodesFromCache(page)!! // All episodes should be cached
+                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND && page != 0) {
+                    Result.failure(EndOfListException())
+                } else {
+                    Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
+                }
+            } catch (e: UnknownHostException) {
+                Result.failure(NoInternetConnectionException(e.message))
+            } catch (e: SocketTimeoutException) {
+                Result.failure(NoInternetConnectionException(e.message))
             }
-        } catch (e: UnknownHostException) {
-            Result.failure(NoInternetConnectionException(e.message))
-        } catch (e: SocketTimeoutException) {
-            Result.failure(NoInternetConnectionException(e.message))
         }
-    }
 
     private suspend fun handleSuccessfulRemoteResponse(
         page: Int,

@@ -1,9 +1,9 @@
 package com.mohsenoid.rickandmorty.util
 
-import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
-import com.mohsenoid.rickandmorty.data.remote.model.CharactersResponse
-import com.mohsenoid.rickandmorty.data.remote.model.LocationRemoteModel
-import com.mohsenoid.rickandmorty.data.remote.model.OriginRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.CharacterRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.CharactersResponse
+import com.mohsenoid.rickandmorty.data.characters.remote.model.LocationRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.OriginRemoteModel
 
 internal fun createCharactersResponse(
     characters: List<CharacterRemoteModel> =

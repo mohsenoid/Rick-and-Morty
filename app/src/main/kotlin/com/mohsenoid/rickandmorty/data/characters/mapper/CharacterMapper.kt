@@ -1,7 +1,7 @@
 package com.mohsenoid.rickandmorty.data.characters.mapper
 
-import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
-import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.db.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.data.characters.remote.model.CharacterRemoteModel
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 
 internal object CharacterMapper {

@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.util
 
-import com.mohsenoid.rickandmorty.data.episodes.entity.EpisodeEntity
+import com.mohsenoid.rickandmorty.data.episodes.db.entity.EpisodeEntity
 
 internal fun createEpisodesEntityList(
     count: Int,

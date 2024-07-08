@@ -1,8 +1,8 @@
 package com.mohsenoid.rickandmorty.util
 
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodeRemoteModel
-import com.mohsenoid.rickandmorty.data.remote.model.EpisodesResponse
-import com.mohsenoid.rickandmorty.data.remote.model.InfoRemoteModel
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.EpisodeRemoteModel
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.EpisodesResponse
+import com.mohsenoid.rickandmorty.data.episodes.remote.model.InfoRemoteModel
 
 internal fun createEpisodeResponse(
     info: InfoRemoteModel = createInfoRemoteModel(),

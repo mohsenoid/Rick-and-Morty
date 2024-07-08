@@ -1,11 +1,11 @@
 package com.mohsenoid.rickandmorty.data.characters.mapper
 
-import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.data.characters.db.entity.CharacterEntity
 import com.mohsenoid.rickandmorty.data.characters.mapper.CharacterMapper.toCharacter
 import com.mohsenoid.rickandmorty.data.characters.mapper.CharacterMapper.toCharacterEntity
-import com.mohsenoid.rickandmorty.data.remote.model.CharacterRemoteModel
-import com.mohsenoid.rickandmorty.data.remote.model.LocationRemoteModel
-import com.mohsenoid.rickandmorty.data.remote.model.OriginRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.CharacterRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.LocationRemoteModel
+import com.mohsenoid.rickandmorty.data.characters.remote.model.OriginRemoteModel
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlin.test.Test
 import kotlin.test.assertEquals

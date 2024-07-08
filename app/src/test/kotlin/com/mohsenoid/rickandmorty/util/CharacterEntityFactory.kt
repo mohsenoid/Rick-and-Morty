@@ -1,6 +1,6 @@
 package com.mohsenoid.rickandmorty.util
 
-import com.mohsenoid.rickandmorty.data.characters.entity.CharacterEntity
+import com.mohsenoid.rickandmorty.data.characters.db.entity.CharacterEntity
 
 internal fun createCharactersEntityList(
     count: Int,
