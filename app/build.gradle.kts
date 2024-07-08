@@ -37,6 +37,7 @@ android {
         debug {
             isMinifyEnabled = false
             enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
 
         release {
@@ -72,6 +73,10 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+    }
+
+    testCoverage {
+        jacocoVersion = "0.8.13-SNAPSHOT"
     }
 }
 
