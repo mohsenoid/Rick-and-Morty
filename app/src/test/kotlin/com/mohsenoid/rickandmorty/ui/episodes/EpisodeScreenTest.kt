@@ -3,8 +3,11 @@ package com.mohsenoid.rickandmorty.ui.episodes
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.mohsenoid.rickandmorty.util.createEpisode
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.RobolectricTestRunner
 import kotlin.test.Test
 
@@ -13,8 +16,18 @@ class EpisodeScreenTest {
     @get:Rule
     val rule = createComposeRule()
 
+    @Before
+    fun setUp() {
+        stopKoin() // To fix KoinAppAlreadyStartedException
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin() // To fix KoinAppAlreadyStartedException
+    }
+
     @Test
-    fun `When content is EpisodeItem, Then it should display EpisodeItem name, airDate and episode`() {
+    fun `When content is EpisodeItem, Then it should display episode name, airDate, and episode`() {
         // GIVEN
 
         // WHEN

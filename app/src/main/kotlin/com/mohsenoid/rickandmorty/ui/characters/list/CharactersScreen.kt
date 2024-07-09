@@ -1,6 +1,7 @@
 package com.mohsenoid.rickandmorty.ui.characters.list
 
 import android.content.res.Configuration
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -146,8 +147,9 @@ fun CharactersList(
     }
 }
 
+@VisibleForTesting
 @Composable
-private fun CharacterItem(
+fun CharacterItem(
     character: Character,
     onCharacterClicked: (Character) -> Unit = {},
 ) {
