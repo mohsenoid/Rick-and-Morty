@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.screenshot)
+    alias(libs.plugins.screenshotbot)
 }
 
 android {

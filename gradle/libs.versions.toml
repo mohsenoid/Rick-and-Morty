@@ -22,6 +22,7 @@ room = "2.6.1"
 coil = "2.4.0"
 turbine = "1.1.0"
 screenshot = "0.0.1-alpha02"
+screenshotbot = "1.14"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,3 +73,4 @@ androidx-room = { id = "androidx.room", version.ref = "room" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot"}
+screenshotbot = { id = "io.screenshotbot.plugin", version.ref = "screenshotbot" }

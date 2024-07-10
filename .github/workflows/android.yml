@@ -27,6 +27,12 @@ jobs:
           distribution: 'adopt'
           java-version: 17
 
+      - name: Screenshot Test
+        env:
+          SCREENSHOTBOT_API_KEY: ${{ secrets.SCREENSHOTBOT_API_KEY }}
+          SCREENSHOTBOT_API_SECRET: ${{ secrets.SCREENSHOTBOT_API_SECRET }}
+        run: ./gradlew recordAndVerifyDebugScreenshotTest
+
       - name: Test and Build
         run: ./gradlew build
 
