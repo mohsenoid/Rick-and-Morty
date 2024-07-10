@@ -133,8 +133,9 @@ fun EpisodesScreen(
     }
 }
 
+@VisibleForTesting
 @Composable
-private fun EpisodesList(
+fun EpisodesList(
     modifier: Modifier = Modifier,
     isNoConnectionError: Boolean = false,
     isLoadingMore: Boolean = false,

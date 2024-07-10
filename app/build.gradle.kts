@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.screenshot)
 }
 
 android {
@@ -73,6 +74,9 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    // Enables screenshotTest source set for the screenshot test plugin
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
 }
 
 composeCompiler {
@@ -88,6 +92,10 @@ tasks.withType<AbstractTestTask> {
     if (name == "testReleaseUnitTest") {
         enabled = false
     }
+}
+
+tasks.check {
+    dependsOn(tasks.validateScreenshotTest)
 }
 
 dependencies {
@@ -109,6 +117,7 @@ dependencies {
     testImplementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.androidx.compose.ui.test.junit4)
+    screenshotTestImplementation(libs.androidx.compose.ui.tooling)
 
     // Koin
     implementation(libs.koin.core)
