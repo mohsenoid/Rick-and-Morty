@@ -15,7 +15,7 @@ class CharactersScreenKtTest {
             CharacterItem(
                 Character(
                     id = 1,
-                    name = "Rick Sanchez",
+                    name = "Mohsen Sanchez",
                     isAlive = true,
                     isKilled = false,
                     species = "Human",

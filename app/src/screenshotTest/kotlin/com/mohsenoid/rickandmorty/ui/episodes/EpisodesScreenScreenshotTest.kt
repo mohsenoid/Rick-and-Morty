@@ -17,8 +17,8 @@ class EpisodesScreenScreenshotTest {
                 episode =
                     Episode(
                         id = 1,
-                        name = "Pilot",
-                        airDate = "December 4, 2013",
+                        name = "Pilot2",
+                        airDate = "December 14, 2013",
                         episode = "S01E01",
                         characters = setOf(1, 2, 3),
                     ),
@@ -39,8 +39,8 @@ class EpisodesScreenScreenshotTest {
                     listOf(
                         Episode(
                             id = 1,
-                            name = "Pilot",
-                            airDate = "December 2, 2013",
+                            name = "Pilot2",
+                            airDate = "December 4, 2013",
                             episode = "S01E01",
                             characters = setOf(1, 2, 3),
                         ),

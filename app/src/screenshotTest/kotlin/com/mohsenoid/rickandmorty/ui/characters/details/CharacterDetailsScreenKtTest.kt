@@ -54,7 +54,7 @@ class CharacterDetailsScreenKtTest {
                     name = "Rick Sanchez",
                     isAlive = true,
                     isKilled = false,
-                    species = "Human",
+                    species = "Test",
                     type = "",
                     gender = "Male",
                     origin = "Earth (C-137)",
