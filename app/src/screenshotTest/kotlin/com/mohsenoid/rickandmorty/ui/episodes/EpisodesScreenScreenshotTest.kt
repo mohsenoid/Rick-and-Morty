@@ -17,8 +17,8 @@ class EpisodesScreenScreenshotTest {
                 episode =
                     Episode(
                         id = 1,
-                        name = "Pilot",
-                        airDate = "December 2, 2013",
+                        name = "Pilot2",
+                        airDate = "October 4, 2024",
                         episode = "S01E01",
                         characters = setOf(1, 2, 3),
                     ),
