@@ -3,6 +3,7 @@ package com.mohsenoid.rickandmorty.ui.characters.details
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -131,6 +132,7 @@ fun CharacterDetailsScreen(
     }
 }
 
+@VisibleForTesting
 @Composable
 fun CharacterDetails(
     character: Character,
@@ -193,8 +195,9 @@ fun CharacterDetails(
     }
 }
 
+@VisibleForTesting
 @Composable
-private fun CharacterDetailRow(
+fun CharacterDetailRow(
     label: String,
     value: String,
 ) {
@@ -215,8 +218,9 @@ private fun CharacterDetailRow(
     }
 }
 
+@VisibleForTesting
 @Composable
-private fun CharacterStatusButton(
+fun CharacterStatusButton(
     isAlive: Boolean,
     isKilled: Boolean,
     modifier: Modifier = Modifier,
@@ -255,8 +259,9 @@ private fun CharacterStatusButton(
     )
 }
 
+@VisibleForTesting
 @Composable
-private fun StatusButton(
+fun StatusButton(
     status: String,
     text: String,
     @DrawableRes resourceId: Int,

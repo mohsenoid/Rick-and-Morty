@@ -27,7 +27,7 @@ jobs:
           distribution: 'adopt'
           java-version: 17
 
-      - name: Test and Build
+      - name: Build
         run: ./gradlew build
 
       - name: Generate Code-Coverage report
@@ -44,6 +44,13 @@ jobs:
         with:
           name: test-reports
           path: '**/build/reports/tests/'
+
+      - name: Upload Screenshot Test Reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screehnshot-test-reports
+          path: '**/build/reports/screenshotTest/'
 
       - name: Upload Coverage Reports
         if: ${{ always() }}
