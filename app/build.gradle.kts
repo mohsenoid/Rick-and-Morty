@@ -13,13 +13,13 @@ plugins {
 
 android {
     namespace = "com.mohsenoid.rickandmorty"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.mohsenoid.rickandmorty"
 
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
 
         versionCode = 12
         versionName = "3.0.0"

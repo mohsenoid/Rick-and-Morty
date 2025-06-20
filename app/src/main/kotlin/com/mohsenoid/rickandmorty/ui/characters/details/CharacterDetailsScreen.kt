@@ -1,12 +1,10 @@
 package com.mohsenoid.rickandmorty.ui.characters.details
 
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +39,6 @@ import com.mohsenoid.rickandmorty.ui.NoConnectionErrorScreen
 import com.mohsenoid.rickandmorty.ui.UnknownErrorScreen
 import com.mohsenoid.rickandmorty.ui.theme.RickAndMortyTheme
 import com.mohsenoid.rickandmorty.ui.util.AsyncImageWithPreview
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -61,38 +56,12 @@ fun CharacterDetailsScreen(
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
-    if (pullToRefreshState.isRefreshing) {
-        LaunchedEffect(Unit) {
-            viewModel.loadCharacter()
-            // Fail safety timeout
-            @Suppress("MagicNumber")
-            delay(500)
-            if (uiState !is CharacterDetailsUiState.Loading) {
-                pullToRefreshState.endRefresh()
-            }
-        }
-    }
 
-    if (uiState !is CharacterDetailsUiState.Loading) {
-        LaunchedEffect(Unit) {
-            pullToRefreshState.endRefresh()
-        }
-    }
-
-    val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.updateStatusError.collect { updateStatusError ->
-            if (updateStatusError) {
-                Toast.makeText(context, "Update Error!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .nestedScroll(pullToRefreshState.nestedScrollConnection),
+    PullToRefreshBox(
+        modifier = modifier.fillMaxSize(),
+        state = pullToRefreshState,
+        isRefreshing = uiState is CharacterDetailsUiState.Loading,
+        onRefresh = { viewModel.loadCharacter() },
     ) {
         when (val currentUiState = uiState) {
             CharacterDetailsUiState.Loading -> {
@@ -102,9 +71,9 @@ fun CharacterDetailsScreen(
             CharacterDetailsUiState.Error.NoConnection -> {
                 NoConnectionErrorScreen(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 )
             }
 
@@ -112,9 +81,9 @@ fun CharacterDetailsScreen(
                 UnknownErrorScreen(
                     message = currentUiState.message,
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 )
             }
 
@@ -125,10 +94,6 @@ fun CharacterDetailsScreen(
                 )
             }
         }
-        PullToRefreshContainer(
-            state = pullToRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
     }
 }
 
@@ -144,21 +109,21 @@ fun CharacterDetails(
             model = character.image,
             contentDescription = character.name,
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.inverseOnSurface),
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.inverseOnSurface),
         )
         Column(
             modifier =
-                Modifier
-                    .padding(16.dp)
-                    .weight(1f),
+            Modifier
+                .padding(16.dp)
+                .weight(1f),
         ) {
             Text(
                 text = "#${character.id}",
                 modifier =
-                    Modifier
-                        .fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.labelMedium,
@@ -167,8 +132,8 @@ fun CharacterDetails(
             Text(
                 text = character.name,
                 modifier =
-                    Modifier
-                        .fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleLarge,
@@ -253,9 +218,9 @@ fun CharacterStatusButton(
         resourceId = resourceId,
         tint = tint,
         modifier =
-            modifier
-                .then(clickableModifier)
-                .padding(8.dp),
+        modifier
+            .then(clickableModifier)
+            .padding(8.dp),
     )
 }
 

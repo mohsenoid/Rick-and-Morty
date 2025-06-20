@@ -27,14 +27,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,7 +46,6 @@ import com.mohsenoid.rickandmorty.ui.NoConnectionErrorScreen
 import com.mohsenoid.rickandmorty.ui.UnknownErrorScreen
 import com.mohsenoid.rickandmorty.ui.theme.RickAndMortyTheme
 import com.mohsenoid.rickandmorty.ui.util.EndlessLazyColumn
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,29 +62,12 @@ fun EpisodesScreen(
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
-    if (pullToRefreshState.isRefreshing) {
-        LaunchedEffect(Unit) {
-            viewModel.loadEpisodes()
-            // Fail safety timeout
-            @Suppress("MagicNumber")
-            delay(500)
-            if (uiState !is EpisodesUiState.Loading) {
-                pullToRefreshState.endRefresh()
-            }
-        }
-    }
 
-    if (uiState !is EpisodesUiState.Loading) {
-        LaunchedEffect(Unit) {
-            pullToRefreshState.endRefresh()
-        }
-    }
-
-    Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .nestedScroll(pullToRefreshState.nestedScrollConnection),
+    PullToRefreshBox(
+        modifier = modifier.fillMaxSize(),
+        state = pullToRefreshState,
+        isRefreshing = uiState is EpisodesUiState.Loading,
+        onRefresh = { viewModel.loadEpisodes() },
     ) {
         when (val currentUiState = uiState) {
             EpisodesUiState.Loading -> {
@@ -96,9 +77,9 @@ fun EpisodesScreen(
             EpisodesUiState.Error.NoConnection -> {
                 NoConnectionErrorScreen(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 )
             }
 
@@ -106,9 +87,9 @@ fun EpisodesScreen(
                 UnknownErrorScreen(
                     message = currentUiState.message,
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
                 )
             }
 
@@ -126,10 +107,6 @@ fun EpisodesScreen(
                 )
             }
         }
-        PullToRefreshContainer(
-            state = pullToRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
     }
 }
 
@@ -146,9 +123,9 @@ fun EpisodesList(
 ) {
     EndlessLazyColumn(
         modifier =
-            modifier
-                .fillMaxSize()
-                .padding(8.dp),
+        modifier
+            .fillMaxSize()
+            .padding(8.dp),
         isNoConnectionError = isNoConnectionError,
         isLoading = isLoadingMore,
         isEndOfList = isEndOfList,
@@ -182,17 +159,17 @@ fun EpisodeItem(
 ) {
     Card(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .clickable { onEpisodeClicked(episode) },
+        Modifier
+            .fillMaxWidth()
+            .clickable { onEpisodeClicked(episode) },
     ) {
         Row(modifier = Modifier.height(80.dp)) {
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .width(100.dp)
-                        .background(MaterialTheme.colorScheme.inverseOnSurface),
+                Modifier
+                    .fillMaxHeight()
+                    .width(100.dp)
+                    .background(MaterialTheme.colorScheme.inverseOnSurface),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -203,10 +180,10 @@ fun EpisodeItem(
 
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .weight(1f)
-                        .padding(8.dp),
+                Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .padding(8.dp),
             ) {
                 Text(
                     text = episode.airDate,
@@ -219,8 +196,8 @@ fun EpisodeItem(
                 Text(
                     text = episode.name,
                     modifier =
-                        Modifier
-                            .fillMaxWidth(),
+                    Modifier
+                        .fillMaxWidth(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium,
@@ -238,13 +215,13 @@ fun EpisodesItemPreview() {
     RickAndMortyTheme {
         EpisodeItem(
             episode =
-                Episode(
-                    id = 1,
-                    name = "Pilot",
-                    airDate = "December 2, 2013",
-                    episode = "S01E01",
-                    characters = setOf(1, 2, 3),
-                ),
+            Episode(
+                id = 1,
+                name = "Pilot",
+                airDate = "December 2, 2013",
+                episode = "S01E01",
+                characters = setOf(1, 2, 3),
+            ),
         )
     }
 }
@@ -259,22 +236,22 @@ fun EpisodesListPreview() {
             isLoadingMore = true,
             isEndOfList = false,
             episodes =
-                listOf(
-                    Episode(
-                        id = 1,
-                        name = "Pilot",
-                        airDate = "December 2, 2013",
-                        episode = "S01E01",
-                        characters = setOf(1, 2, 3),
-                    ),
-                    Episode(
-                        id = 2,
-                        name = "Lawnmower Dog",
-                        airDate = "December 9, 2013",
-                        episode = "S01E02",
-                        characters = setOf(1, 2, 5, 6),
-                    ),
+            listOf(
+                Episode(
+                    id = 1,
+                    name = "Pilot",
+                    airDate = "December 2, 2013",
+                    episode = "S01E01",
+                    characters = setOf(1, 2, 3),
                 ),
+                Episode(
+                    id = 2,
+                    name = "Lawnmower Dog",
+                    airDate = "December 9, 2013",
+                    episode = "S01E02",
+                    characters = setOf(1, 2, 5, 6),
+                ),
+            ),
         )
     }
 }
