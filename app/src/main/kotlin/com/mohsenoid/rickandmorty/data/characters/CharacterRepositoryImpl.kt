@@ -10,8 +10,7 @@ import com.mohsenoid.rickandmorty.domain.characters.CharacterRepository
 import com.mohsenoid.rickandmorty.domain.characters.model.Character
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
+import java.io.IOException
 import java.util.SortedMap
 
 internal class CharacterRepositoryImpl(
@@ -44,25 +43,25 @@ internal class CharacterRepositoryImpl(
         return getCharactersFromCache(charactersIds)
     }
 
-    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<List<Character>>  {
-            val missingCharactersIds = charactersIds - charactersCache.keys
-            val missingCharactersIdsString = missingCharactersIds.joinToString(",")
+    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<List<Character>> {
+        val missingCharactersIds = charactersIds - charactersCache.keys
+        val missingCharactersIdsString = missingCharactersIds.joinToString(",")
 
-           return try {
-                val response = characterApiService.getCharacters(missingCharactersIdsString)
-                val remoteCharacters: List<CharacterRemoteModel>? = response.body()
-                if (response.isSuccessful && remoteCharacters != null) {
-                    handleSuccessfulRemoteResponse(remoteCharacters)
-                    getCharactersFromCache(charactersIds)!! // All characters should be cached
-                } else {
-                    Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
-                }
-            } catch (e: UnknownHostException) {
-                Result.failure(NoInternetConnectionException(e.message))
-            } catch (e: SocketTimeoutException) {
-                Result.failure(NoInternetConnectionException(e.message))
+        return try {
+            val response = characterApiService.getCharacters(missingCharactersIdsString)
+            val remoteCharacters: List<CharacterRemoteModel>? = response.body()
+            if (response.isSuccessful && remoteCharacters != null) {
+                handleSuccessfulRemoteResponse(remoteCharacters)
+                getCharactersFromCache(charactersIds)!! // All characters should be cached
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
+        } catch (e: IOException) {
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e: Exception) {
+            Result.failure(e)
         }
+    }
 
     private suspend fun handleSuccessfulRemoteResponse(remoteCharacters: List<CharacterRemoteModel>) {
         val charactersEntity = remoteCharacters.map { it.toCharacterEntity() }
@@ -95,24 +94,24 @@ internal class CharacterRepositoryImpl(
     }
 
     private suspend fun getCharacterFromRemote(characterId: Int): Result<Character> {
-          return  try {
-                val response = characterApiService.getCharacter(characterId)
-                val remoteCharacter: CharacterRemoteModel? = response.body()
-                if (response.isSuccessful && remoteCharacter != null) {
-                    val characterEntity = remoteCharacter.toCharacterEntity()
-                    characterDao.insertCharacter(characterEntity)
-                    val character = characterEntity.toCharacter()
-                    charactersCache += character.id to character
-                    Result.success(character)
-                } else {
-                    Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
-                }
-            } catch (e: UnknownHostException) {
-                Result.failure(NoInternetConnectionException(e.message))
-            } catch (e: SocketTimeoutException) {
-                Result.failure(NoInternetConnectionException(e.message))
+        return try {
+            val response = characterApiService.getCharacter(characterId)
+            val remoteCharacter: CharacterRemoteModel? = response.body()
+            if (response.isSuccessful && remoteCharacter != null) {
+                val characterEntity = remoteCharacter.toCharacterEntity()
+                characterDao.insertCharacter(characterEntity)
+                val character = characterEntity.toCharacter()
+                charactersCache += character.id to character
+                Result.success(character)
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
+        } catch (e: IOException) {
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e: Exception) {
+            Result.failure(e)
         }
+    }
 
     override suspend fun updateCharacterStatus(
         characterId: Int,

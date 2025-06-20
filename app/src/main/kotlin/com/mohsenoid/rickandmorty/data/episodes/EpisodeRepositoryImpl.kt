@@ -11,9 +11,8 @@ import com.mohsenoid.rickandmorty.domain.episodes.EpisodeRepository
 import com.mohsenoid.rickandmorty.domain.episodes.model.Episode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okio.IOException
 import java.net.HttpURLConnection
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 internal class EpisodeRepositoryImpl(
     private val episodeApiService: EpisodeApiService,
@@ -42,24 +41,24 @@ internal class EpisodeRepositoryImpl(
         }
     }
 
-    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>>  {
-           return try {
-                val response = episodeApiService.getEpisodes(page)
-                val remoteEpisodes = response.body()?.results
-                if (response.isSuccessful && remoteEpisodes != null) {
-                    handleSuccessfulRemoteResponse(page, remoteEpisodes)
-                    getEpisodesFromCache(page)!! // All episodes should be cached
-                } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND && page != 0) {
-                    Result.failure(EndOfListException())
-                } else {
-                    Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
-                }
-            } catch (e: UnknownHostException) {
-                Result.failure(NoInternetConnectionException(e.message))
-            } catch (e: SocketTimeoutException) {
-                Result.failure(NoInternetConnectionException(e.message))
+    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>> {
+        return try {
+            val response = episodeApiService.getEpisodes(page)
+            val remoteEpisodes = response.body()?.results
+            if (response.isSuccessful && remoteEpisodes != null) {
+                handleSuccessfulRemoteResponse(page, remoteEpisodes)
+                getEpisodesFromCache(page)!! // All episodes should be cached
+            } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND && page != 0) {
+                Result.failure(EndOfListException())
+            } else {
+                Result.failure(Exception(response.message().ifEmpty { "Unknown Error" }))
             }
+        } catch (e: IOException) {
+            Result.failure(NoInternetConnectionException(e.message))
+        } catch (e:Exception){
+            Result.failure(e)
         }
+    }
 
     private suspend fun handleSuccessfulRemoteResponse(
         page: Int,
