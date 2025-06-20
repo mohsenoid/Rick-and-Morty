@@ -42,9 +42,8 @@ internal class EpisodeRepositoryImpl(
         }
     }
 
-    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>> =
-        withContext(Dispatchers.IO) {
-            try {
+    private suspend fun getEpisodesFromRemote(page: Int): Result<List<Episode>>  {
+           return try {
                 val response = episodeApiService.getEpisodes(page)
                 val remoteEpisodes = response.body()?.results
                 if (response.isSuccessful && remoteEpisodes != null) {

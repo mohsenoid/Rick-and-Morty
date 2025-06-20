@@ -44,12 +44,11 @@ internal class CharacterRepositoryImpl(
         return getCharactersFromCache(charactersIds)
     }
 
-    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<List<Character>> =
-        withContext(Dispatchers.IO) {
+    private suspend fun getCharactersFromRemote(charactersIds: Set<Int>): Result<List<Character>>  {
             val missingCharactersIds = charactersIds - charactersCache.keys
             val missingCharactersIdsString = missingCharactersIds.joinToString(",")
 
-            try {
+           return try {
                 val response = characterApiService.getCharacters(missingCharactersIdsString)
                 val remoteCharacters: List<CharacterRemoteModel>? = response.body()
                 if (response.isSuccessful && remoteCharacters != null) {
@@ -95,9 +94,8 @@ internal class CharacterRepositoryImpl(
         }
     }
 
-    private suspend fun getCharacterFromRemote(characterId: Int): Result<Character> =
-        withContext(Dispatchers.IO) {
-            try {
+    private suspend fun getCharacterFromRemote(characterId: Int): Result<Character> {
+          return  try {
                 val response = characterApiService.getCharacter(characterId)
                 val remoteCharacter: CharacterRemoteModel? = response.body()
                 if (response.isSuccessful && remoteCharacter != null) {
